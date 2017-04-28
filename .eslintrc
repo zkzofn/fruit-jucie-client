@@ -1,0 +1,26 @@
+{
+    "parser": "babel-eslint",
+    "plugins": [
+        "react"
+    ],
+    "settings": {
+    "react": {
+      "createClass": "createClass", // Regex for Component Factory to use, default to "createClass"
+      "pragma": "React",  // Pragma to use, default to "React"
+      "version": "15.0" // React version, default to the latest React stable release
+    }
+  },
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "rules": {
+    "react/jsx-uses-react": "error",
+    "react/jsx-uses-vars": "error",
+    "react/jsx-indent": ["error", 2],
+    "react/jsx-indent-props": ["error", 2],
+    "react/jsx-tag-spacing": "error",
+    "react/jsx-no-undef": "error"
+  }
+}
