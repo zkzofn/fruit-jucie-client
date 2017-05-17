@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import AreaLink from './AreaLink'
-import AreaLogo from './AreaLogo'
-import SectionNavbar from './SectionNavbar'
+import HeaderTop from '../components/HeaderTop'
+import HeaderLogo from '../components/HeaderLogo'
+import HeaderNav from '../components/HeaderNav'
 
-export default class index extends React.Component {
+export default class Header extends Component {
   render() {
     // const headerStyle = {
     //   position: 'relative',
@@ -18,11 +18,11 @@ export default class index extends React.Component {
     return (
       // <div style={headerStyle}>
       <div>
-        <AreaLink />
+        <HeaderTop />
         <br />
-        <AreaLogo />
+        <HeaderLogo />
         <br />
-        <SectionNavbar />
+        <HeaderNav />
       </div>
     )
   }

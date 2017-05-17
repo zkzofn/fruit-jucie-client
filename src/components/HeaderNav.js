@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import FlatButton from 'material-ui/FlatButton';
 
-export default class index extends React.Component {
+export default class HeaderNav extends React.Component {
   render() {
     const style = {
       'float': 'center',

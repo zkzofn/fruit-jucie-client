@@ -22,3 +22,39 @@
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
 }
+
+@media (max-width: 767px) {
+    .mainPic {
+        height: 400px;
+    }
+    .secPic {
+        height: 250px;
+    }
+}
+
+@media (min-width: 768px) {
+    .mainPic {
+        height: 400px;
+    }
+    .secPic {
+        height: 400px;
+    }
+}
+
+@media (min-width: 992px) {
+    .mainPic {
+        height: 600px;
+    }
+    .secPic {
+        height: 400px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .mainPic {
+        height: 800px;
+    }
+    .secPic {
+        height: 350px;
+    }
+}

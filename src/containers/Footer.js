@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-export default class index extends React.Component {
+export default class Footer extends Component {
   render() {
     const style = {
       'width': '100%'

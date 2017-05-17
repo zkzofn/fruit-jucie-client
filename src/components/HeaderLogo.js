@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-export default class index extends React.Component {
+export default class HeaderLogo extends React.Component {
   render() {
     const style = {
       'textAlign': 'center',

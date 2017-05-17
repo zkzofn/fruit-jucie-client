@@ -8,9 +8,10 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import promise from 'redux-promise';
 
 import reducers from './reducers';
-import Header from './containers/header/index'
-import Body from './containers/body/index'
-import Footer from './containers/footer/index'
+
+import Header from './containers/Header'
+import Body from './containers/Body'
+import Footer from './containers/Footer'
 
 const createStoreWithMiddleware = applyMiddleware(
   promise
@@ -30,6 +31,5 @@ ReactDOM.render(
       </Router>
     </MuiThemeProvider>
   </Provider>
-  , document.querySelector('.container'));
+  , document.querySelector('#main'));
 
-// <Route exact path="/" component={Index}/>
