@@ -21,6 +21,7 @@ export default class Body extends React.Component {
           className="secPic col-md-4 col-sm-12 col-xs-12"
           path="http://res.heraldm.com/content/orga/2017/05/02/20170502102821476440.jpg"
         />
+        
       </div>
     )
   }

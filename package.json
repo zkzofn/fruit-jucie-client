@@ -28,8 +28,8 @@
     "webpack": "^1.12.9"
   },
   "scripts": {
-    "start": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js",
-    "build": "react-scripts build",
+    "start": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot",
+    "build": "node ./node_modules/webpack/bin/webpack.js",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   }

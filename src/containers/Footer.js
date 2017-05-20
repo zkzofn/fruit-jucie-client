@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import FooterCS from '../components/FooterCS';
+import FooterBottom from '../components/FooterBottom';
 
 export default class Footer extends Component {
   render() {
@@ -8,9 +10,11 @@ export default class Footer extends Component {
 
     return (
       <div>
-        <img className src="http://placehold.it/1600x300" style={style} />
+        <FooterCS />
+        <FooterBottom />
       </div>
     )
   }
 }
+
 
