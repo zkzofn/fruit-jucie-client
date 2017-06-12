@@ -1,4 +1,4 @@
-.App {
+.alignCenter {
     text-align: center;
 }
 
@@ -62,4 +62,110 @@
 .footerCS {
     background-color: #f9f9f9;
     border-bottom: 1px solid #ededed;
+}
+
+.mt-2 {
+    margin-top: 8px !important;
+}
+
+.mr-2 {
+    margin-right: 8px !important;
+}
+
+.mb-2 {
+    margin-bottom: 8px !important;
+}
+
+.ml-2 {
+    margin-left: 8px !important;
+}
+
+.mt-4 {
+    margin-top: 24px !important;
+}
+
+.mr-4 {
+    margin-right: 24px !important;
+}
+
+.mb-4 {
+    margin-bottom: 24px !important;
+}
+
+.ml-4 {
+    margin-left: 24px !important;
+}
+
+.mx-2 {
+    margin-left: 8px !important;
+    margin-right: 8px !important;
+}
+
+.my-2 {
+    margin-top: 8px !important;
+    margin-bottom: 8px !important;
+}
+
+.mx-4 {
+    margin-right: 24px !important;
+    margin-left: 24px !important;
+}
+
+.col-12 {
+    width: 100%;
+}
+.col-11 {
+    width: 91.66666667%;
+}
+.col-10 {
+    width: 83.33333333%;
+}
+.col-9 {
+    width: 75%;
+}
+.col-8 {
+    width: 66.66666667%;
+}
+.col-7 {
+    width: 58.33333333%;
+}
+.col-6 {
+    width: 50%;
+}
+.col-5 {
+    width: 41.66666667%;
+}
+.col-4 {
+    width: 33.33333333%;
+}
+.col-3 {
+    width: 25%;
+}
+.col-2 {
+    width: 16.66666667%;
+}
+.col-1 {
+    width: 8.33333333%;
+}
+
+.floatRight {
+    float: right;
+}
+
+@media (min-width: 992px) {
+    .visible-over-block {
+        display: block !important;
+    }
+    .visible-under-flex {
+        display: none !important;
+    }
+}
+
+@media (max-width: 991px) {
+    .visible-over-block {
+        display: none !important;
+    }
+    .visible-under-flex {
+        display: flex !important;
+    }
 }

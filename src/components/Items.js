@@ -5,7 +5,7 @@ import Item from './Item';
 export default class Items extends Component {
   render() {
     return (
-      <div>
+      <div className="container">
         <Item className="col-md-4 col-sm-6" />
         <Item className="col-md-4 col-sm-6" />
         <Item className="col-md-4 col-sm-6" />

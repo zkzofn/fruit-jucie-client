@@ -6,13 +6,16 @@ import { Router, Route } from 'react-router';
 import { createBrowserHistory } from 'history';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import promise from 'redux-promise';
-
+import injectTapEventPlugin from 'react-tap-event-plugin';
 import reducers from './reducers';
 
 import Header from './containers/Header';
 import Home from './containers/Home';
 import Footer from './containers/Footer';
 import Items from './components/Items';
+import SignIn from './components/SignIn';
+
+injectTapEventPlugin();
 
 const createStoreWithMiddleware = applyMiddleware(
   promise
@@ -28,6 +31,7 @@ ReactDOM.render(
           <Header />
           <Route exact path="/" component={Home} />
           <Route path="/items" component={Items} />
+          <Route path="/signin" component={SignIn} />
           <Footer />
         </div>
       </Router>

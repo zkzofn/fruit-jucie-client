@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Logo from './logo';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import MyAwesomeReactComponent from './MyAwesomeReactComponent';
-import Login from './Login';
+import Login from './SignIn';
 
 
 export default class Home extends Component {

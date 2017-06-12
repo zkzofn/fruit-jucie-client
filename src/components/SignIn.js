@@ -3,8 +3,14 @@ import {TextField} from 'material-ui';
 
 export default class Login extends React.Component {
   render() {
+    const styles = {
+      signInStyle: {
+        width: 256
+      }
+    }
+
     return (
-      <div>
+      <div className="container" style={styles.signInStyle}>
         <TextField
           hintText="example@email.com"
           floatingLabelText="Email"

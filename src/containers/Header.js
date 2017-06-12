@@ -1,4 +1,5 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+import { AppBar } from 'material-ui'
 import HeaderTop from '../components/HeaderTop'
 import HeaderLogo from '../components/HeaderLogo'
 import HeaderNav from '../components/HeaderNav'
@@ -18,11 +19,22 @@ export default class Header extends Component {
     return (
       // <div style={headerStyle}>
       <div>
-        <HeaderTop />
-        <br />
-        <HeaderLogo />
-        <br />
-        <HeaderNav />
+        <AppBar
+          className="visible-under-flex"
+          title="땡이네 과일가게"
+        />
+        <Drawer>
+
+        </Drawer>
+
+        <div className="visible-over-block">
+          <HeaderTop />
+          <br />
+          <HeaderLogo />
+          <br />
+          <HeaderNav />
+        </div>
+
       </div>
     )
   }

@@ -8,7 +8,7 @@ export default class Item2 extends Component {
   };
 
   onMouseOver () {
-    this.setState({ opacity: 1.6 })
+    this.setState({ opacity: 0.4 })
   }
 
   onMouseOut () {
@@ -19,14 +19,12 @@ export default class Item2 extends Component {
     const styles = {
       imgStyle: {
         opacity: this.state.opacity,
-        backgoundColor: 'black',
-        bakcgoundOpacity: this.state.opacity,
       }
-    }
+    };
 
     return (
-      <Card
-        className={this.props.className}
+      <div
+        className={`my-2 ${this.props.className}`}
         onMouseOver={this.onMouseOver.bind(this)}
         onMouseOut={this.onMouseOut.bind(this)}
         style={styles.imgStyle}
@@ -35,7 +33,7 @@ export default class Item2 extends Component {
           <img src="http://res.heraldm.com/content/orga/2017/01/19/20170119165813_orgafd_image1_211_54_35_200_7435.jpg" alt="" />
         </CardMedia>
         <CardTitle style={{textAlign: 'center'}} title="쫀득한 군고구마" subtitle="14,800원" />
-      </Card>
+      </div>
     )
   }
 }
