@@ -9,9 +9,10 @@ import promise from 'redux-promise';
 
 import reducers from './reducers';
 
-import Header from './containers/Header'
-import Body from './containers/Body'
-import Footer from './containers/Footer'
+import Header from './containers/Header';
+import Home from './containers/Home';
+import Footer from './containers/Footer';
+import Items from './components/Items';
 
 const createStoreWithMiddleware = applyMiddleware(
   promise
@@ -25,7 +26,8 @@ ReactDOM.render(
       <Router history={customHistory}>
         <div>
           <Header />
-          <Body />
+          <Route exact path="/" component={Home} />
+          <Route path="/items" component={Items} />
           <Footer />
         </div>
       </Router>
