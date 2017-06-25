@@ -1,15 +1,13 @@
-import React, {Component} from 'react';
-import FlatButton from 'material-ui/FlatButton';
+import React, { Component } from 'react';
+import { FlatButton } from 'material-ui';
 
 export default class HeaderNav extends React.Component {
   render() {
     return (
-      <div>
-        <FlatButton label="고구마파뤠" primary={true} href="/items"/>
-        <FlatButton label="item" primary={true} disabled={true} />
-        <FlatButton label="item" primary={true} disabled={true} />
-        <FlatButton label="item" primary={true} disabled={true} />
-        <FlatButton label="item" primary={true} disabled={true} />
+      <div className="pt-4">
+        <FlatButton label="Green" primary={true} href="/items"/>
+        <FlatButton label="Soup" primary={true} disabled={true} />
+        <FlatButton label="Salad" primary={true} disabled={true} />
       </div>
     )
   }

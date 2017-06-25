@@ -6,12 +6,12 @@ export default class Items extends Component {
   render() {
     return (
       <div className="container">
-        <Item className="col-md-4 col-sm-6" />
-        <Item className="col-md-4 col-sm-6" />
-        <Item className="col-md-4 col-sm-6" />
-        <Item className="col-md-4 col-sm-6" />
-        <Item className="col-md-4 col-sm-6" />
-        <Item className="col-md-4 col-sm-6" />
+        <Item />
+        <Item />
+        <Item />
+        <Item />
+        <Item />
+        <Item />
       </div>
     )
   }

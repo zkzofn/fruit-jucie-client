@@ -30,6 +30,7 @@ ReactDOM.render(
         <div>
           <Header />
           <Route exact path="/" component={Home} />
+          <Route path="/items/:id" component={} />
           <Route path="/items" component={Items} />
           <Route path="/signin" component={SignIn} />
           <Footer />
