@@ -48,7 +48,7 @@ export default class Header extends Component {
       <div>
         <AppBar
           className="visible-under-flex"
-          title={<span className="cursorPointer">Eat More Green</span>}
+          title={<span className="cursorPointer">Eat More</span>}
           onTitleTouchTap={this.titleTouch.bind(this)}
           onLeftIconButtonTouchTap={this.openDrawer.bind(this)}
         >

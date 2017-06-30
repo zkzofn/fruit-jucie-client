@@ -14,6 +14,7 @@ import Home from './containers/Home';
 import Footer from './containers/Footer';
 import Items from './components/Items';
 import SignIn from './components/SignIn';
+import ItemDetail from './components/ItemDetail';
 
 injectTapEventPlugin();
 
@@ -25,18 +26,18 @@ const customHistory = createBrowserHistory();
 
 ReactDOM.render(
   <Provider store={createStoreWithMiddleware(reducers)}>
-    <MuiThemeProvider>
-      <Router history={customHistory}>
+    <Router history={customHistory}>
+      <MuiThemeProvider>
         <div>
           <Header />
           <Route exact path="/" component={Home} />
-          <Route path="/items/:id" component={} />
+          <Route path="/item" component={ItemDetail} />
           <Route path="/items" component={Items} />
           <Route path="/signin" component={SignIn} />
           <Footer />
         </div>
-      </Router>
-    </MuiThemeProvider>
+      </MuiThemeProvider>
+    </Router>
   </Provider>
   , document.querySelector('#main'));
 

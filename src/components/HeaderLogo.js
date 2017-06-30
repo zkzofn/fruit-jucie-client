@@ -3,9 +3,14 @@ import React, {Component} from 'react';
 export default class HeaderLogo extends React.Component {
   render() {
     return (
-      <div className="alignCenter py-4">
+      <div className="alignCenter">
         <a href="/">
-          <h2>Eat More Green</h2>
+          <img
+            style={{width: 300}}
+            className="cursorPointer"
+            src="/assets/img/logo.png"
+            alt=""
+          />
         </a>
       </div>
     )
