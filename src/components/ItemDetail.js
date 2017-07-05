@@ -40,7 +40,7 @@ export default class ItemDetail extends Component {
   render() {
     return (
       <div className="container">
-        <div>
+        <div className="clearfix">
           <div className="col-md-5">
             <img style={{width: "100%"}} src="/assets/img/sweet_potato.jpg" alt=""/>
           </div>
@@ -62,22 +62,100 @@ export default class ItemDetail extends Component {
             </div>
             <div className="py-4">
               <span>옵션</span>
-              <DropDownMenu value={this.state.itemOption} onChange={this.onOptionChange.bind(this)} openImmediately={true}>
+              <DropDownMenu value={this.state.itemOption} onChange={this.onOptionChange.bind(this)}>
                 {this.renderOptions()}
               </DropDownMenu>
             </div>
             <div className="py-2">
-              <RaisedButton style={{width: "50%"}} label="장바구니" icon={<AddCart />} />
-              <RaisedButton style={{width: "50%"}} label="바로구매" icon={<Card />} />
+              <RaisedButton
+                style={{width: "50%"}}
+                label="장바구니"
+                icon={<AddCart />}
+                onTouchTap={() => console.log("여기서 장바구니에 담는 API를 call 해라, 그리고 팝업같은거 띄워서 계속 쇼핑할지, 장바구니로 갈지 정할 수 있도록 나눠")}
+              />
+              <RaisedButton
+                style={{width: "50%"}}
+                label="바로구매"
+                icon={<Card />}
+                onTouchTap={() => console.log("바로구매를 하면 구매 페이지로 바로 넘어갈 수 있게")}
+              />
             </div>
           </div>
         </div>
-        <div>
-          여기에 tab 들어가고
-          종류별로 상품설명, 상품정보, 상품후기, 상품문의 넣어
+        <div id="productDescription">
+          <ul className="detailTab">
+            <li className="detailTabElement detailSelectedTab">
+              <a href="#productDescription">상품설명</a>
+            </li>
+            <li className="detailTabElement">
+              <a href="#productInformation">상품정보</a>
+            </li>
+            <li className="detailTabElement">
+              <a href="#productComment">상품후기</a>
+            </li>
+            <li className="detailTabElement">
+              <a href="#productQuestion">상품문의</a>
+            </li>
+          </ul>
+          <div>
+            <img src="/assets/img/itemDetail_01.png" alt="" width="100%"/>
+          </div>
         </div>
-        <div>
-          <img src="/assets/img/itemDetail.png" alt=""/>
+
+        <div id="productInformation">
+          <ul className="detailTab">
+            <li className="detailTabElement">
+              <a href="#productDescription">상품설명</a>
+            </li>
+            <li className="detailTabElement detailSelectedTab">
+              <a href="#productInformation">상품정보</a>
+            </li>
+            <li className="detailTabElement">
+              <a href="#productComment">상품후기</a>
+            </li>
+            <li className="detailTabElement">
+              <a href="#productQuestion">상품문의</a>
+            </li>
+          </ul>
+          <div>
+            <img src="/assets/img/itemDetail_02.png" alt="" width="100%"/>
+          </div>
+        </div>
+
+        <div id="productComment">
+          <ul className="detailTab">
+            <li className="detailTabElement">
+              <a href="#productDescription">상품설명</a>
+            </li>
+            <li className="detailTabElement">
+              <a href="#productInformation">상품정보</a>
+            </li>
+            <li className="detailTabElement detailSelectedTab">
+              <a href="#productComment">상품후기</a>
+            </li>
+            <li className="detailTabElement">
+              <a href="#productQuestion">상품문의</a>
+            </li>
+          </ul>
+          <p>여기에는 상품후기가 들어갑니다</p>
+        </div>
+
+        <div id="productQuestion">
+          <ul className="detailTab">
+            <li className="detailTabElement">
+              <a href="#productDescription">상품설명</a>
+            </li>
+            <li className="detailTabElement">
+              <a href="#productInformation">상품정보</a>
+            </li>
+            <li className="detailTabElement">
+              <a href="#productComment">상품후기</a>
+            </li>
+            <li className="detailTabElement detailSelectedTab">
+              <a href="#productQuestion">상품문의</a>
+            </li>
+          </ul>
+          <p>여기에는 상품문의가 들어가요</p>
         </div>
 
       </div>

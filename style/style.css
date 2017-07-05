@@ -345,3 +345,39 @@
     word-wrap: break-word;
     white-space: pre;
 }
+
+
+.detailTab {
+    display: table;
+    width: 100%;
+    margin-top: 50px;
+    margin-bottom: 20px;
+    border-bottom: solid 1px #b5b5b5;
+    padding-left: 0;
+}
+
+.detailTabElement {
+    display: table-cell;
+    text-align: center;
+    width: 15%;
+    height: 40px;
+    vertical-align: middle;
+}
+
+.detailTabElement a {
+    color: #4a4a4a;
+    font-size: 14px;
+}
+
+a:hover {
+    color: #4a4a4a !important;
+    text-decoration: none !important;
+}
+
+
+.detailSelectedTab {
+    position: relative;
+    border: solid 1px #b5b5b5;
+    border-top: solid 2px #851d38;
+    border-bottom: 0;
+}
