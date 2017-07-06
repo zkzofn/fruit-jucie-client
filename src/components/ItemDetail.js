@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Divider, DropDownMenu, MenuItem, RaisedButton } from 'material-ui';
 import AddCart from 'material-ui/svg-icons/action/add-shopping-cart';
 import Card from 'material-ui/svg-icons/action/credit-card';
+import { Link, DirectLink, Element, Events, animateScroll, scrollSpy } from 'react-scroll';
+
 
 export default class ItemDetail extends Component {
   constructor(props) {
@@ -23,6 +25,35 @@ export default class ItemDetail extends Component {
         "option 4",
       ]
     })
+
+    Events.scrollEvent.remove("begin");
+    Events.scrollEvent.remove("end");
+  }
+
+  componentDidMount() {
+    Events.scrollEvent.register("begin", (to, element) => {
+      console.log("begin", arguments);
+    });
+    Events.scrollEvent.register("end", (to, element) => {
+      console.log("end", arguments);
+    });
+    scrollSpy.update()
+  }
+
+  scrollToTop() {
+    animateScroll.scrollToTop()
+  }
+
+  scrollToBottom() {
+    animateScroll.scrollToBottom()
+  }
+
+  scrollTo() {
+    animateScroll.scrollTo(100)
+  }
+
+  scrollMore() {
+    animateScroll.scrollMore(100)
   }
 
   onOptionChange(event, index, value) {
@@ -82,81 +113,81 @@ export default class ItemDetail extends Component {
             </div>
           </div>
         </div>
-        <div id="productDescription">
+        <Element name="productDescription" className="product">
           <ul className="detailTab">
             <li className="detailTabElement detailSelectedTab">
-              <a href="#productDescription">상품설명</a>
+              <Link to="productDescription" smooth={true} duration={500}>상품설명</Link>
             </li>
             <li className="detailTabElement">
-              <a href="#productInformation">상품정보</a>
+              <Link to="productInformation" smooth={true} duration={500}>상품정보</Link>
             </li>
             <li className="detailTabElement">
-              <a href="#productComment">상품후기</a>
+              <Link to="productComment" smooth={true} duration={500}>상품후기</Link>
             </li>
             <li className="detailTabElement">
-              <a href="#productQuestion">상품문의</a>
+              <Link to="productQuestion" smooth={true} duration={500}>상품문의</Link>
             </li>
           </ul>
           <div>
             <img src="/assets/img/itemDetail_01.png" alt="" width="100%"/>
           </div>
-        </div>
+        </Element>
 
-        <div id="productInformation">
+        <Element name="productInformation" className="product">
           <ul className="detailTab">
             <li className="detailTabElement">
-              <a href="#productDescription">상품설명</a>
+              <Link to="productDescription" smooth={true} duration={500}>상품설명</Link>
             </li>
             <li className="detailTabElement detailSelectedTab">
-              <a href="#productInformation">상품정보</a>
+              <Link to="productInformation" smooth={true} duration={500}>상품정보</Link>
             </li>
             <li className="detailTabElement">
-              <a href="#productComment">상품후기</a>
+              <Link to="productComment" smooth={true} duration={500}>상품후기</Link>
             </li>
             <li className="detailTabElement">
-              <a href="#productQuestion">상품문의</a>
+              <Link to="productQuestion" smooth={true} duration={500}>상품문의</Link>
             </li>
           </ul>
           <div>
             <img src="/assets/img/itemDetail_02.png" alt="" width="100%"/>
           </div>
-        </div>
+        </Element>
 
-        <div id="productComment">
+        <Element name="productComment" className="product">
           <ul className="detailTab">
             <li className="detailTabElement">
-              <a href="#productDescription">상품설명</a>
+              <Link to="productDescription" smooth={true} duration={500}>상품설명</Link>
             </li>
             <li className="detailTabElement">
-              <a href="#productInformation">상품정보</a>
+              <Link to="productInformation" smooth={true} duration={500}>상품정보</Link>
             </li>
             <li className="detailTabElement detailSelectedTab">
-              <a href="#productComment">상품후기</a>
+              <Link to="productComment" smooth={true} duration={500}>상품후기</Link>
             </li>
             <li className="detailTabElement">
-              <a href="#productQuestion">상품문의</a>
+              <Link to="productQuestion" smooth={true} duration={500}>상품문의</Link>
             </li>
           </ul>
           <p>여기에는 상품후기가 들어갑니다</p>
-        </div>
+        </Element>
 
-        <div id="productQuestion">
+        <Element name="productQuestion" className="product">
           <ul className="detailTab">
             <li className="detailTabElement">
-              <a href="#productDescription">상품설명</a>
+              <Link to="productDescription" smooth={true} duration={500}>상품설명</Link>
             </li>
             <li className="detailTabElement">
-              <a href="#productInformation">상품정보</a>
+              <Link to="productInformation" smooth={true} duration={500}>상품정보</Link>
             </li>
             <li className="detailTabElement">
-              <a href="#productComment">상품후기</a>
+              <Link to="productComment" smooth={true} duration={500}>상품후기</Link>
             </li>
             <li className="detailTabElement detailSelectedTab">
-              <a href="#productQuestion">상품문의</a>
+              <Link to="productQuestion" smooth={true} duration={500}>상품문의</Link>
             </li>
           </ul>
           <p>여기에는 상품문의가 들어가요</p>
-        </div>
+        </Element>
 
       </div>
     )
