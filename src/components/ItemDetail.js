@@ -3,7 +3,7 @@ import { Divider, DropDownMenu, MenuItem, RaisedButton } from 'material-ui';
 import AddCart from 'material-ui/svg-icons/action/add-shopping-cart';
 import Card from 'material-ui/svg-icons/action/credit-card';
 import { Link, DirectLink, Element, Events, animateScroll, scrollSpy } from 'react-scroll';
-
+import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 
 export default class ItemDetail extends Component {
   constructor(props) {
@@ -68,7 +68,76 @@ export default class ItemDetail extends Component {
     })
   }
 
+
+
+  renderTabBar(sequence) {
+    const tabBars = [
+      {name: "상품설명", link: "productDescription"},
+      {name: "상품정보", link: "productInformation"},
+      {name: "상품후기", link: "productComment"},
+      {name: "상품문의", link: "productQuestion"}
+    ];
+
+    const renderTabItem = () => {
+      return tabBars.map((tabBar, index) => {
+        return (
+          <li
+            key={index}
+            className={sequence == index ? "detailTabElement detailSelectedTab" : "detailTabElement"}
+          >
+            <Link
+              to={tabBar.link}
+              smooth={true}
+              duration={500}
+            >
+              {tabBar.name}
+            </Link>
+          </li>
+        )
+      });
+    };
+
+    return (
+      <ul className="detailTab sticky">
+        {renderTabItem()}
+      </ul>
+    )
+  }
+
   render() {
+    const comments = [
+      {id: 1, title: "temp title 1", user: "이장호", date: "2017-07-08", grade: 5},
+      {id: 2, title: "temp title 2ㅈㄷㄹㅈㄷㄹㅈㄷㄹㅈㅈㄷㄷㄹㅈㄷㄹ", user: "이장호", date: "2017/07/08", grade: 5},
+      {id: 3, title: "temp title 3", user: "이장호", date: "2017-07-08", grade: 5},
+      {id: 4, title: "temp title 4", user: "이장호", date: "2017-07-08", grade: 5},
+      {id: 5, title: "temp title 5", user: "이장호", date: "2017-07-08", grade: 5},{id: 1, title: "temp title 1", user: "이장호", date: "2017/07/08", grade: 5},
+      {id: 6, title: "temp title 6", user: "이장호", date: "2017-07-08", grade: 5},
+      {id: 7, title: "temp title 7", user: "이장호", date: "2017-07-08", grade: 5},
+    ];
+
+    const styles = {
+      id: {width: "10%", textAlign: "center"},
+      titleHeader: {width: "60%", textAlign: "center"},
+      title: {width: "60%"},
+      user: {width: "10%", textAlign: "center"},
+      date: {width: "12%", textAlign: "center"},
+      grade: {width: "8%", textAlign: "center"},
+    };
+
+    const renderComments = (comments) => {
+      return comments.map((comment, index) => {
+        return (
+          <TableRow key={index}>
+            <TableRowColumn style={styles.id}>{comment.id}</TableRowColumn>
+            <TableRowColumn style={styles.title}>{comment.title}</TableRowColumn>
+            <TableRowColumn style={styles.user}>{comment.user}</TableRowColumn>
+            <TableRowColumn style={styles.date}>{comment.date}</TableRowColumn>
+            <TableRowColumn style={styles.grade}>{comment.grade}</TableRowColumn>
+          </TableRow>
+        )
+      })
+    };
+
     return (
       <div className="container">
         <div className="clearfix">
@@ -99,10 +168,14 @@ export default class ItemDetail extends Component {
             </div>
             <div className="py-2">
               <RaisedButton
+                href="/cart"
                 style={{width: "50%"}}
                 label="장바구니"
                 icon={<AddCart />}
-                onTouchTap={() => console.log("여기서 장바구니에 담는 API를 call 해라, 그리고 팝업같은거 띄워서 계속 쇼핑할지, 장바구니로 갈지 정할 수 있도록 나눠")}
+                // 여기서 장바구니에 담는 API를 call 해라,
+                // 그리고 팝업같은거 띄워서 계속 쇼핑할지,
+                // 장바구니로 갈지 정할 수 있도록 나눠
+                onTouchTap={() => console.log("")}
               />
               <RaisedButton
                 style={{width: "50%"}}
@@ -113,79 +186,41 @@ export default class ItemDetail extends Component {
             </div>
           </div>
         </div>
-        <Element name="productDescription" className="product">
-          <ul className="detailTab">
-            <li className="detailTabElement detailSelectedTab">
-              <Link to="productDescription" smooth={true} duration={500}>상품설명</Link>
-            </li>
-            <li className="detailTabElement">
-              <Link to="productInformation" smooth={true} duration={500}>상품정보</Link>
-            </li>
-            <li className="detailTabElement">
-              <Link to="productComment" smooth={true} duration={500}>상품후기</Link>
-            </li>
-            <li className="detailTabElement">
-              <Link to="productQuestion" smooth={true} duration={500}>상품문의</Link>
-            </li>
-          </ul>
+        <Element name="productDescription" className="product" >
+          {this.renderTabBar(0)}
           <div>
             <img src="/assets/img/itemDetail_01.png" alt="" width="100%"/>
           </div>
         </Element>
 
         <Element name="productInformation" className="product">
-          <ul className="detailTab">
-            <li className="detailTabElement">
-              <Link to="productDescription" smooth={true} duration={500}>상품설명</Link>
-            </li>
-            <li className="detailTabElement detailSelectedTab">
-              <Link to="productInformation" smooth={true} duration={500}>상품정보</Link>
-            </li>
-            <li className="detailTabElement">
-              <Link to="productComment" smooth={true} duration={500}>상품후기</Link>
-            </li>
-            <li className="detailTabElement">
-              <Link to="productQuestion" smooth={true} duration={500}>상품문의</Link>
-            </li>
-          </ul>
+          {this.renderTabBar(1)}
           <div>
             <img src="/assets/img/itemDetail_02.png" alt="" width="100%"/>
           </div>
         </Element>
 
         <Element name="productComment" className="product">
-          <ul className="detailTab">
-            <li className="detailTabElement">
-              <Link to="productDescription" smooth={true} duration={500}>상품설명</Link>
-            </li>
-            <li className="detailTabElement">
-              <Link to="productInformation" smooth={true} duration={500}>상품정보</Link>
-            </li>
-            <li className="detailTabElement detailSelectedTab">
-              <Link to="productComment" smooth={true} duration={500}>상품후기</Link>
-            </li>
-            <li className="detailTabElement">
-              <Link to="productQuestion" smooth={true} duration={500}>상품문의</Link>
-            </li>
-          </ul>
+          {this.renderTabBar(2)}
           <p>여기에는 상품후기가 들어갑니다</p>
+          <Table>
+            <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+              <TableRow>
+                <TableHeaderColumn style={styles.id}>번호</TableHeaderColumn>
+                <TableHeaderColumn style={styles.titleHeader}>제목</TableHeaderColumn>
+                <TableHeaderColumn style={styles.user}>작성자</TableHeaderColumn>
+                <TableHeaderColumn style={styles.date}>작성일</TableHeaderColumn>
+                <TableHeaderColumn style={styles.grade}>평점</TableHeaderColumn>
+              </TableRow>
+            </TableHeader>
+            <TableBody displayRowCheckbox={false} showRowHover={true}>
+              {renderComments(comments)}
+            </TableBody>
+          </Table>
         </Element>
 
         <Element name="productQuestion" className="product">
-          <ul className="detailTab">
-            <li className="detailTabElement">
-              <Link to="productDescription" smooth={true} duration={500}>상품설명</Link>
-            </li>
-            <li className="detailTabElement">
-              <Link to="productInformation" smooth={true} duration={500}>상품정보</Link>
-            </li>
-            <li className="detailTabElement">
-              <Link to="productComment" smooth={true} duration={500}>상품후기</Link>
-            </li>
-            <li className="detailTabElement detailSelectedTab">
-              <Link to="productQuestion" smooth={true} duration={500}>상품문의</Link>
-            </li>
-          </ul>
+          {this.renderTabBar(3)}
           <p>여기에는 상품문의가 들어가요</p>
         </Element>
 

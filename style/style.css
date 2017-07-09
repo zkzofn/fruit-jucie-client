@@ -1,5 +1,5 @@
 .alignCenter {
-    text-align: center;
+    text-align: center !important;
 }
 
 .App-logo {
@@ -63,6 +63,31 @@
     }
 }
 
+/*desktop page*/
+@media (min-width: 992px) {
+    .visible-over-block {
+        display: block !important;
+    }
+    .visible-under-flex {
+        display: none !important;
+    }
+
+}
+
+/*mobile page*/
+@media (max-width: 991px) {
+    .visible-over-block {
+        display: none !important;
+    }
+    .visible-under-flex {
+        display: flex !important;
+    }
+    .sticky {
+        position: sticky;
+    }
+}
+
+
 .boxed-group {
     border: 1px solid;
     border-color: #d1d5da;
@@ -76,6 +101,12 @@
     /*border: 1px solid rgba(27,31,35,0.15);*/
     /*border-bottom: 0;*/
     /*border-radius: 3px 3px 0 0;*/
+}
+
+.productCount {
+    border-right: 1px solid;
+    border-left: 1px solid;
+    border-color: #d1d5da;
 }
 
 
@@ -275,24 +306,6 @@
     float: right;
 }
 
-@media (min-width: 992px) {
-    .visible-over-block {
-        display: block !important;
-    }
-    .visible-under-flex {
-        display: none !important;
-    }
-}
-
-@media (max-width: 991px) {
-    .visible-over-block {
-        display: none !important;
-    }
-    .visible-under-flex {
-        display: flex !important;
-    }
-}
-
 .cursorPointer {
     cursor: pointer;
 }
@@ -348,12 +361,14 @@
 
 
 .detailTab {
+    top: 0px;
     display: table;
     width: 100%;
     margin-top: 50px;
     margin-bottom: 20px;
     /*border-bottom: solid 1px #b5b5b5;*/
     padding-left: 0;
+    background-color: white;
 }
 
 .detailTabElement {
@@ -378,7 +393,7 @@
     font-size: 14px;
 }
 
-a:hover {
+.detailTabElement > a:hover {
     color: #4a4a4a !important;
     text-decoration: none !important;
 }
@@ -391,3 +406,6 @@ a:hover {
     border-bottom: 0;
 }
 
+td {
+    background-color: transparent !important;
+}
