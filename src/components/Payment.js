@@ -10,7 +10,7 @@ import {
   TableFooter,
 } from 'material-ui/Table';
 
-export default class Cart extends Component {
+export default class Payment extends Component {
   constructor(props) {
     super(props)
 
@@ -97,7 +97,7 @@ export default class Cart extends Component {
     const renderCartListOver = () => {
       return this.state.cartItems.map((cartItem, index) => {
         return (
-          <TableRow key={index}>
+          <TableRow key={index} selectable={false}>
             <TableRowColumn style={styles.title}>
               <img
                 src="../../assets/img/sweet_potato.jpg"
@@ -110,18 +110,8 @@ export default class Cart extends Component {
               </div>
             </TableRowColumn>
             <TableRowColumn style={styles.count}>
-              <div className="boxed-group" role="group" aria-label="Product count" style={{height: 30}}>
-                <div
-                  style={{width: "33.3333333%", verticalAlign: "middle"}}
-                  className="inlineBlock cursorPointer"
-                  onClick={(event) => minusProductCount(event, index)}
-                >-</div>
-                <div style={{width: "33.3333333%", verticalAlign: "middle", height: "100%", paddingTop: 4}} className="inlineBlock productCount">{cartItem.count}</div>
-                <div
-                  style={{width: "33.3333333%", verticalAlign: "middle"}}
-                  className="inlineBlock cursorPointer"
-                  onClick={(event) => plusProductCount(event, index)}
-                >+</div>
+              <div>
+                {cartItem.count}
               </div>
             </TableRowColumn>
             <TableRowColumn style={styles.price}>{cartItem.price.toLocaleString()}원</TableRowColumn>
@@ -139,29 +129,21 @@ export default class Cart extends Component {
               <img
                 src="../../assets/img/sweet_potato.jpg"
                 className="inlineBlock alignCenter"
-                style={{width: "50%"}}
+                style={{width: "45%"}}
               />
-              <div style={{width: "50%", verticalAlign: "middle"}} className="inlineBlock">
+              <div style={{width: "45%", verticalAlign: "middle"}} className="inlineBlock">
                 <div style={{width: "60%"}} className="inlineBlock">
                   <h4>{cartItem.title}</h4>
                   {renderOptions(cartItem.options)}
-                  <div className="boxed-group alignCenter" role="group" aria-label="Product count" style={{width: "70%", height: 30}}>
-                    <div
-                      style={{width: "33.3333333%"}}
-                      className="inlineBlock cursorPointer"
-                      onClick={(event) => minusProductCount(event, index)}
-                    >-</div>
-                    <div style={{width: "33.3333333%", height: "100%", paddingTop: 4}} className="inlineBlock productCount">{cartItem.count}</div>
-                    <div
-                      style={{width: "33.3333333%"}}
-                      className="inlineBlock cursorPointer"
-                      onClick={(event) => plusProductCount(event, index)}
-                    >+</div>
-                  </div>
+                  
+                  
                   <div>
                     개당 판매가 {cartItem.price.toLocaleString()}원
                   </div>
                 </div>
+              </div>
+              <div className="inlineBlock">
+                {cartItem.count}개
               </div>
             </TableRowColumn>
             <TableRowColumn style={{width: "30%"}}>
@@ -180,14 +162,13 @@ export default class Cart extends Component {
     return (
       <div>
         <div className="jumbotron alignCenter">
-          <h1>장바구니</h1>
-          <p>주문하실 상품명 및 수량을 정확하게 확인해 주세요.</p>
-          <p>장바구니에 담은 상품은 일주일 후 자동 삭제됩니다.</p>
+          <h1>바로구매</h1>
+          <p className="pt-2">주문하실 상품명 및 수량을 정확하게 확인해 주세요.</p>
         </div>
         <div className="container pb-4">
           <div className="visible-over-block">
-            <Table selectable={true} multiSelectable={true} allRowsSelected={true}>
-              <TableHeader enableSelectAll={true}>
+            <Table displaySelectAll={false} >
+              <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
                 <TableRow>
                   <TableHeaderColumn style={styles.titleHeader}>상품정보</TableHeaderColumn>
                   <TableHeaderColumn style={styles.count}>수량</TableHeaderColumn>
@@ -195,7 +176,7 @@ export default class Cart extends Component {
                   <TableHeaderColumn style={styles.totalPrice}>금액</TableHeaderColumn>
                 </TableRow>
               </TableHeader>
-              <TableBody showRowHover={true}>
+              <TableBody showRowHover={false} displayRowCheckbox={false}>
                 {renderCartListOver()}
               </TableBody>
               <TableFooter>
@@ -247,7 +228,7 @@ export default class Cart extends Component {
         </div>
 
       </div>
-   )
+    )
   }
 }
 

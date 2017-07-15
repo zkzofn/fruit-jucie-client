@@ -16,6 +16,7 @@ import Items from './components/Items';
 import SignIn from './components/SignIn';
 import ItemDetail from './components/ItemDetail';
 import Cart from './components/Cart';
+import Payment from './components/Payment';
 
 injectTapEventPlugin();
 
@@ -36,6 +37,7 @@ ReactDOM.render(
           <Route path="/items" component={Items} />
           <Route path="/signin" component={SignIn} />
           <Route path="/cart" component={Cart} />
+          <Route path="/payment" component={Payment} />
           <Footer />
         </div>
       </MuiThemeProvider>

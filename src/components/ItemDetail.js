@@ -178,6 +178,7 @@ export default class ItemDetail extends Component {
                 onTouchTap={() => console.log("")}
               />
               <RaisedButton
+                href="/payment"
                 style={{width: "50%"}}
                 label="바로구매"
                 icon={<Card />}
@@ -222,6 +223,20 @@ export default class ItemDetail extends Component {
         <Element name="productQuestion" className="product">
           {this.renderTabBar(3)}
           <p>여기에는 상품문의가 들어가요</p>
+          <Table>
+            <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+              <TableRow>
+                <TableHeaderColumn style={styles.id}>번호</TableHeaderColumn>
+                <TableHeaderColumn style={styles.titleHeader}>제목</TableHeaderColumn>
+                <TableHeaderColumn style={styles.user}>작성자</TableHeaderColumn>
+                <TableHeaderColumn style={styles.date}>작성일</TableHeaderColumn>
+                <TableHeaderColumn style={styles.grade}>평점</TableHeaderColumn>
+              </TableRow>
+            </TableHeader>
+            <TableBody displayRowCheckbox={false} showRowHover={true}>
+              {renderComments(comments)}
+            </TableBody>
+          </Table>
         </Element>
 
       </div>
