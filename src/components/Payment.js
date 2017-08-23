@@ -51,39 +51,6 @@ export default class Payment extends Component {
       })
     };
 
-    const minusProductCount = (event, index) => {
-      event.stopPropagation();
-
-      this.setState({
-        cartItems: update(
-          this.state.cartItems, {
-            [index]: {
-              count: {
-                $set: this.state.cartItems[index].count > 1 ? this.state.cartItems[index].count - 1 : 1
-              }
-            }
-          }
-        )
-      })
-    };
-
-
-    const plusProductCount = (event, index) => {
-      event.stopPropagation();
-
-      this.setState({
-        cartItems: update(
-          this.state.cartItems, {
-            [index]: {
-              count: {
-                $set: this.state.cartItems[index].count + 1
-              }
-            }
-          }
-        )
-      })
-    };
-
     const calcTotalPrice = () => {
       let totalPrice = 0;
 
@@ -156,6 +123,24 @@ export default class Payment extends Component {
       })
     };
 
+    const renderFooter = () => {
+      return (
+        <TableFooter>
+          <TableRow>
+            <TableRowColumn>
+              <div className="pull-right pb-2"><h3>총 삼품 금액 = {calcTotalPrice()}원</h3></div>
+            </TableRowColumn>
+          </TableRow>
+          <TableRow>
+            <TableRowColumn>
+              <div className="pull-right">
+                <button className="btn btn-primary" href="/payment">전체상품주문</button>
+              </div>
+            </TableRowColumn>
+          </TableRow>
+        </TableFooter>
+      )
+    };
 
     // 여기 큰화면이랑 작은화면일때 코드 분할시켜놔
 
@@ -179,50 +164,23 @@ export default class Payment extends Component {
               <TableBody showRowHover={false} displayRowCheckbox={false}>
                 {renderCartListOver()}
               </TableBody>
-              <TableFooter>
-                <TableRow>
-                  <TableRowColumn>
-                    <div className="pull-right pb-2"><h3>총 삼품 금액 = {calcTotalPrice()}원</h3></div>
-                  </TableRowColumn>
-                </TableRow>
-                <TableRow>
-                  <TableRowColumn>
-                    <div className="pull-right">
-                      <button className="btn mr-2">선택상품삭제</button>
-                      <button className="btn mr-2">선택상품주문</button>
-                      <button className="btn btn-primary">전체상품주문</button>
-                    </div>
-                  </TableRowColumn>
-                </TableRow>
-              </TableFooter>
+              {renderFooter()}
             </Table>
           </div>
+
+
+
           <div className="visible-under-flex">
-            <Table selectable={true} multiSelectable={true} allRowsSelected={true}>
-              <TableHeader enableSelectAll={true}>
+            <Table displaySeelctAll={false}>
+              <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
                 <TableRow>
                   <TableHeaderColumn className="alignCenter">상품정보</TableHeaderColumn>
                 </TableRow>
               </TableHeader>
-              <TableBody>
+              <TableBody showRowHover={false} displayRowCheckbox={false} >
                 {renderCartListUnder()}
               </TableBody>
-              <TableFooter>
-                <TableRow>
-                  <TableRowColumn>
-                    <div className="pull-right pb-2"><h3>총 삼품 금액 = {calcTotalPrice()}원</h3></div>
-                  </TableRowColumn>
-                </TableRow>
-                <TableRow>
-                  <TableRowColumn>
-                    <div className="pull-right">
-                      <button className="btn mr-2">선택상품삭제</button>
-                      <button className="btn mr-2">선택상품주문</button>
-                      <button className="btn btn-primary" href="/payment">전체상품주문</button>
-                    </div>
-                  </TableRowColumn>
-                </TableRow>
-              </TableFooter>
+              {renderFooter()}
             </Table>
           </div>
         </div>

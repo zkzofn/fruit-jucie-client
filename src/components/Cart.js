@@ -175,6 +175,27 @@ export default class Cart extends Component {
     };
 
 
+    const renderFooter = () => {
+      return (
+        <TableFooter>
+          <TableRow>
+            <TableRowColumn>
+              <div className="pull-right pb-2"><h3>총 삼품 금액 = {calcTotalPrice()}원</h3></div>
+            </TableRowColumn>
+          </TableRow>
+          <TableRow>
+            <TableRowColumn>
+              <div className="pull-right">
+                <button className="btn mr-2">선택상품삭제</button>
+                <button className="btn mr-2">선택상품주문</button>
+                <button className="btn btn-primary">전체상품주문</button>
+              </div>
+            </TableRowColumn>
+          </TableRow>
+        </TableFooter>
+      )
+    };
+
     // 여기 큰화면이랑 작은화면일때 코드 분할시켜놔
 
     return (
@@ -184,6 +205,7 @@ export default class Cart extends Component {
           <p>주문하실 상품명 및 수량을 정확하게 확인해 주세요.</p>
           <p>장바구니에 담은 상품은 일주일 후 자동 삭제됩니다.</p>
         </div>
+        
         <div className="container pb-4">
           <div className="visible-over-block">
             <Table selectable={true} multiSelectable={true} allRowsSelected={true}>
@@ -198,24 +220,11 @@ export default class Cart extends Component {
               <TableBody showRowHover={true}>
                 {renderCartListOver()}
               </TableBody>
-              <TableFooter>
-                <TableRow>
-                  <TableRowColumn>
-                    <div className="pull-right pb-2"><h3>총 삼품 금액 = {calcTotalPrice()}원</h3></div>
-                  </TableRowColumn>
-                </TableRow>
-                <TableRow>
-                  <TableRowColumn>
-                    <div className="pull-right">
-                      <button className="btn mr-2">선택상품삭제</button>
-                      <button className="btn mr-2">선택상품주문</button>
-                      <button className="btn btn-primary">전체상품주문</button>
-                    </div>
-                  </TableRowColumn>
-                </TableRow>
-              </TableFooter>
+              {renderFooter()}
             </Table>
           </div>
+
+
           <div className="visible-under-flex">
             <Table selectable={true} multiSelectable={true} allRowsSelected={true}>
               <TableHeader enableSelectAll={true}>
@@ -226,22 +235,7 @@ export default class Cart extends Component {
               <TableBody>
                 {renderCartListUnder()}
               </TableBody>
-              <TableFooter>
-                <TableRow>
-                  <TableRowColumn>
-                    <div className="pull-right pb-2"><h3>총 삼품 금액 = {calcTotalPrice()}원</h3></div>
-                  </TableRowColumn>
-                </TableRow>
-                <TableRow>
-                  <TableRowColumn>
-                    <div className="pull-right">
-                      <button className="btn mr-2">선택상품삭제</button>
-                      <button className="btn mr-2">선택상품주문</button>
-                      <button className="btn btn-primary" href="/payment">전체상품주문</button>
-                    </div>
-                  </TableRowColumn>
-                </TableRow>
-              </TableFooter>
+              {renderFooter()}
             </Table>
           </div>
         </div>
