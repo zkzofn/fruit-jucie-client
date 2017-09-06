@@ -1,3 +1,5 @@
+const settings = require('./package.json').settings;
+
 module.exports = {
   entry: [
     './src/index.js'
@@ -20,6 +22,13 @@ module.exports = {
   },
   devServer: {
     historyApiFallback: true,
-    contentBase: './'
+    contentBase: './',
+    proxy: {
+      "/api": {
+        target: settings.serverUrl,
+        secure: false,
+        pathRewrite: { "^/api": "" }
+      }
+    }
   }
 };

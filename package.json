@@ -3,8 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "axios": "^0.16.2",
     "babel-preset-stage-1": "^6.24.1",
     "bootstrap": "^3.3.7",
+    "crypto-js": "^3.1.9-1",
     "history": "^4.6.1",
     "jquery": "^3.2.1",
     "lodash": "^4.17.4",
@@ -37,5 +39,8 @@
     "build": "node ./node_modules/webpack/bin/webpack.js",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "settings": {
+    "serverUrl": "http://localhost:3000"
   }
 }
