@@ -106,13 +106,13 @@ export default class ItemDetail extends Component {
 
   render() {
     const comments = [
-      {id: 1, title: "temp title 1", user: "이장호", date: "2017-07-08", grade: 5},
-      {id: 2, title: "temp title 2ㅈㄷㄹㅈㄷㄹㅈㄷㄹㅈㅈㄷㄷㄹㅈㄷㄹ", user: "이장호", date: "2017/07/08", grade: 5},
-      {id: 3, title: "temp title 3", user: "이장호", date: "2017-07-08", grade: 5},
-      {id: 4, title: "temp title 4", user: "이장호", date: "2017-07-08", grade: 5},
-      {id: 5, title: "temp title 5", user: "이장호", date: "2017-07-08", grade: 5},{id: 1, title: "temp title 1", user: "이장호", date: "2017/07/08", grade: 5},
-      {id: 6, title: "temp title 6", user: "이장호", date: "2017-07-08", grade: 5},
-      {id: 7, title: "temp title 7", user: "이장호", date: "2017-07-08", grade: 5},
+      {id: 1, title: "temp.js title 1", user: "이장호", date: "2017-07-08", grade: 5},
+      {id: 2, title: "temp.js title 2ㅈㄷㄹㅈㄷㄹㅈㄷㄹㅈㅈㄷㄷㄹㅈㄷㄹ", user: "이장호", date: "2017/07/08", grade: 5},
+      {id: 3, title: "temp.js title 3", user: "이장호", date: "2017-07-08", grade: 5},
+      {id: 4, title: "temp.js title 4", user: "이장호", date: "2017-07-08", grade: 5},
+      {id: 5, title: "temp.js title 5", user: "이장호", date: "2017-07-08", grade: 5},{id: 1, title: "temp.js title 1", user: "이장호", date: "2017/07/08", grade: 5},
+      {id: 6, title: "temp.js title 6", user: "이장호", date: "2017-07-08", grade: 5},
+      {id: 7, title: "temp.js title 7", user: "이장호", date: "2017-07-08", grade: 5},
     ];
 
     const styles = {

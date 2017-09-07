@@ -23,6 +23,8 @@ export default class Item extends Component {
       }
     };
 
+    const { product } = this.props;
+
     return (
       <Link to="/item" >
         <div
@@ -32,9 +34,9 @@ export default class Item extends Component {
           style={styles.imgStyle}
         >
           <CardMedia>
-            <img src="/assets/img/sweet_potato.jpg" alt="" />
+            <img src={`/assets/img/${product.image_path}`} alt="" />
           </CardMedia>
-          <CardTitle style={{textAlign: 'center'}} title="쫀득한 군고구마" subtitle="14,800원" />
+          <CardTitle style={{textAlign: 'center'}} title={product.name} subtitle={`${product.price_sale}원`} />
         </div>
       </Link>
     )
