@@ -8,7 +8,14 @@ const singletonEnforcer = Symbol();
 let secretToken = Crypto.SHA1("fRu1t_token_privacy");
 let secretProfile = Crypto.SHA1("fRu1t_profile_privacy");
 
-const END_POINT = "/api";
+let END_POINT;
+
+if (process.env.NODE_ENV ===  "production")
+  END_POINT = "13.124.237.236:3000";
+else if (process.env.NODE_ENV === "develop")
+  END_POINT = "http://localhost:3000";
+else
+  END_POINT = "/api";
 
 export default class SessionManager extends Component {
   customAxios = axios.create();

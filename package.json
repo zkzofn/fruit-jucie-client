@@ -36,11 +36,10 @@
   },
   "scripts": {
     "start": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot",
-    "build": "node ./node_modules/webpack/bin/webpack.js",
+    "build": "node ./node_modules/webpack/bin/webpack.js --config ./webpack.config.js --progress --colors",
+    "build:dev": "set NODE_ENV=develop && npm run build",
+    "build:production": "set NODE_ENV=production && npm run build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
-  },
-  "settings": {
-    "serverUrl": "http://localhost:3000"
   }
 }
