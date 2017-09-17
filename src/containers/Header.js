@@ -68,7 +68,7 @@ export default class Header extends Component {
             장바구니
           </MenuItem>
           <Divider />
-          <MenuItem href="/items" onTouchTap={this.closeDrawer.bind(this)}>Green</MenuItem>
+          <MenuItem href="/products" onTouchTap={this.closeDrawer.bind(this)}>Green</MenuItem>
           <MenuItem disabled={true}>Soup</MenuItem>
           <MenuItem disabled={true}>Salad</MenuItem>
         </Drawer>

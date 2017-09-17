@@ -12,9 +12,9 @@ import reducers from './reducers';
 import Header from './containers/Header';
 import Home from './containers/Home';
 import Footer from './containers/Footer';
-import Items from './components/Items';
+import Products from './components/Products';
 import SignIn from './components/SignIn';
-import ItemDetail from './components/ItemDetail';
+import ProductDetail from './components/ProductDetail';
 import Cart from './components/Cart';
 import Payment from './components/Payment';
 
@@ -31,10 +31,10 @@ ReactDOM.render(
     <Router history={customHistory}>
       <MuiThemeProvider>
         <div>
-          <Header />
+          <Route path="*" component={Header} />
           <Route exact path="/" component={Home} />
-          <Route path="/item" component={ItemDetail} />
-          <Route path="/items" component={Items} />
+          <Route path="/product/:productId" component={ProductDetail} />
+          <Route path="/products" component={Products} />
           <Route path="/signin" component={SignIn} />
           <Route path="/cart" component={Cart} />
           <Route path="/payment" component={Payment} />

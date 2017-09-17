@@ -1,6 +1,7 @@
 import SessionManager from './SessionManager';
 
 export const GET_PRODUCTS = "GET_PRODUCTS";
+export const GET_PRODUCT = "GET_PRODUCT";
 
 // export const getSomethings = ({pageNo, length, indexBy, indexType, values}) => {
 //   const query = {
@@ -27,3 +28,12 @@ export const getProducts = () => {
     payload: request
   }
 };
+
+export const getProduct = (productID) => {
+  const request = SessionManager.instance().get(`/product`, productID);
+
+  return {
+    type: GET_PRODUCT,
+    payload: request
+  }
+}
