@@ -22,6 +22,10 @@ var _shoppingCart = require('material-ui/svg-icons/action/shopping-cart');
 
 var _shoppingCart2 = _interopRequireDefault(_shoppingCart);
 
+var _questionAnswer = require('material-ui/svg-icons/action/question-answer');
+
+var _questionAnswer2 = _interopRequireDefault(_questionAnswer);
+
 var _HeaderTop = require('../components/HeaderTop');
 
 var _HeaderTop2 = _interopRequireDefault(_HeaderTop);
@@ -118,6 +122,12 @@ var Header = function (_Component) {
             null,
             _react2.default.createElement(_shoppingCart2.default, null),
             '\uC7A5\uBC14\uAD6C\uB2C8'
+          ),
+          _react2.default.createElement(
+            _materialUi.MenuItem,
+            null,
+            _react2.default.createElement(_questionAnswer2.default, null),
+            '\uBB38\uC758'
           ),
           _react2.default.createElement(_materialUi.Divider, null),
           _react2.default.createElement(

@@ -138,7 +138,7 @@ var ProductDetail = function (_Component) {
   }, {
     key: 'renderTabBar',
     value: function renderTabBar(sequence) {
-      var tabBars = [{ name: "상품설명", link: "productDescription" }, { name: "상품정보", link: "productInformation" }, { name: "상품후기", link: "productPostScript" }, { name: "상품문의", link: "productQuestion" }];
+      var tabBars = [{ name: "상품설명", link: "productDescription" }, { name: "상품정보", link: "productInformation" }, { name: "상품후기", link: "productPostScript" }];
 
       var renderTabItem = function renderTabItem() {
         return tabBars.map(function (tabBar, index) {
@@ -176,9 +176,6 @@ var ProductDetail = function (_Component) {
 
       if (this.state.product === undefined) return _react2.default.createElement(_CircularProgress2.default, null);
 
-      // 이건 지워도 돼
-      var comments = [{ id: 1, title: "temp.js title 1", user: "이장호", date: "2017-07-08", grade: 5 }, { id: 2, title: "temp.js title 2ㅈㄷㄹㅈㄷㄹㅈㄷㄹㅈㅈㄷㄷㄹㅈㄷㄹ", user: "이장호", date: "2017/07/08", grade: 5 }, { id: 3, title: "temp.js title 3", user: "이장호", date: "2017-07-08", grade: 5 }, { id: 4, title: "temp.js title 4", user: "이장호", date: "2017-07-08", grade: 5 }, { id: 5, title: "temp.js title 5", user: "이장호", date: "2017-07-08", grade: 5 }, { id: 1, title: "temp.js title 1", user: "이장호", date: "2017/07/08", grade: 5 }, { id: 6, title: "temp.js title 6", user: "이장호", date: "2017-07-08", grade: 5 }, { id: 7, title: "temp.js title 7", user: "이장호", date: "2017-07-08", grade: 5 }];
-
       var styles = this.state.styles;
 
 
@@ -211,35 +208,6 @@ var ProductDetail = function (_Component) {
               _Table.TableRowColumn,
               { style: styles.star },
               postScript.star
-            )
-          );
-        });
-      };
-
-      var renderInquiries = function renderInquiries() {
-        return _this3.state.product.inquiry.map(function (inquiry, index) {
-          return _react2.default.createElement(
-            _Table.TableRow,
-            { key: index },
-            _react2.default.createElement(
-              _Table.TableRowColumn,
-              { style: styles.id },
-              inquiry.id
-            ),
-            _react2.default.createElement(
-              _Table.TableRowColumn,
-              { style: styles.title },
-              inquiry.title
-            ),
-            _react2.default.createElement(
-              _Table.TableRowColumn,
-              { style: styles.userName },
-              inquiry.user_name
-            ),
-            _react2.default.createElement(
-              _Table.TableRowColumn,
-              { style: styles.date },
-              inquiry.date
             )
           );
         });
@@ -420,48 +388,6 @@ var ProductDetail = function (_Component) {
               _Table.TableBody,
               { displayRowCheckbox: false, showRowHover: true },
               renderPostScript()
-            )
-          )
-        ),
-        _react2.default.createElement(
-          _reactScroll.Element,
-          { name: 'productQuestion', className: 'product' },
-          this.renderTabBar(3),
-          _react2.default.createElement(
-            _Table.Table,
-            null,
-            _react2.default.createElement(
-              _Table.TableHeader,
-              { displaySelectAll: false, adjustForCheckbox: false },
-              _react2.default.createElement(
-                _Table.TableRow,
-                null,
-                _react2.default.createElement(
-                  _Table.TableHeaderColumn,
-                  { style: styles.id },
-                  '\uBC88\uD638'
-                ),
-                _react2.default.createElement(
-                  _Table.TableHeaderColumn,
-                  { style: styles.titleHeader },
-                  '\uC81C\uBAA9'
-                ),
-                _react2.default.createElement(
-                  _Table.TableHeaderColumn,
-                  { style: styles.user },
-                  '\uC791\uC131\uC790'
-                ),
-                _react2.default.createElement(
-                  _Table.TableHeaderColumn,
-                  { style: styles.date },
-                  '\uC791\uC131\uC77C'
-                )
-              )
-            ),
-            _react2.default.createElement(
-              _Table.TableBody,
-              { displayRowCheckbox: false, showRowHover: true },
-              renderInquiries(comments)
             )
           )
         )

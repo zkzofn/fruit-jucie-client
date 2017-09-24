@@ -94,7 +94,6 @@ class ProductDetail extends Component {
       {name: "상품설명", link: "productDescription"},
       {name: "상품정보", link: "productInformation"},
       {name: "상품후기", link: "productPostScript"},
-      {name: "상품문의", link: "productQuestion"}
     ];
 
     const renderTabItem = () => {
@@ -130,20 +129,7 @@ class ProductDetail extends Component {
     if (this.state.product === undefined)
       return <CircularProgress />;
 
-
-    // 이건 지워도 돼
-    const comments = [
-      {id: 1, title: "temp.js title 1", user: "이장호", date: "2017-07-08", grade: 5},
-      {id: 2, title: "temp.js title 2ㅈㄷㄹㅈㄷㄹㅈㄷㄹㅈㅈㄷㄷㄹㅈㄷㄹ", user: "이장호", date: "2017/07/08", grade: 5},
-      {id: 3, title: "temp.js title 3", user: "이장호", date: "2017-07-08", grade: 5},
-      {id: 4, title: "temp.js title 4", user: "이장호", date: "2017-07-08", grade: 5},
-      {id: 5, title: "temp.js title 5", user: "이장호", date: "2017-07-08", grade: 5},{id: 1, title: "temp.js title 1", user: "이장호", date: "2017/07/08", grade: 5},
-      {id: 6, title: "temp.js title 6", user: "이장호", date: "2017-07-08", grade: 5},
-      {id: 7, title: "temp.js title 7", user: "이장호", date: "2017-07-08", grade: 5},
-    ];
-
     const { styles } = this.state;
-
 
     const renderPostScript = () => {
       return this.state.product.post_script.map((postScript, index) => {
@@ -159,19 +145,6 @@ class ProductDetail extends Component {
       })
     };
 
-
-    const renderInquiries = () => {
-      return this.state.product.inquiry.map((inquiry, index) => {
-        return (
-          <TableRow key={index}>
-            <TableRowColumn style={styles.id}>{inquiry.id}</TableRowColumn>
-            <TableRowColumn style={styles.title}>{inquiry.title}</TableRowColumn>
-            <TableRowColumn style={styles.userName}>{inquiry.user_name}</TableRowColumn>
-            <TableRowColumn style={styles.date}>{inquiry.date}</TableRowColumn>
-          </TableRow>
-        )
-      })
-    };
 
     const { product } = this.state;
 
@@ -252,23 +225,6 @@ class ProductDetail extends Component {
             </TableHeader>
             <TableBody displayRowCheckbox={false} showRowHover={true}>
               {renderPostScript()}
-            </TableBody>
-          </Table>
-        </Element>
-
-        <Element name="productQuestion" className="product">
-          {this.renderTabBar(3)}
-          <Table>
-            <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-              <TableRow>
-                <TableHeaderColumn style={styles.id}>번호</TableHeaderColumn>
-                <TableHeaderColumn style={styles.titleHeader}>제목</TableHeaderColumn>
-                <TableHeaderColumn style={styles.user}>작성자</TableHeaderColumn>
-                <TableHeaderColumn style={styles.date}>작성일</TableHeaderColumn>
-              </TableRow>
-            </TableHeader>
-            <TableBody displayRowCheckbox={false} showRowHover={true}>
-              {renderInquiries(comments)}
             </TableBody>
           </Table>
         </Element>

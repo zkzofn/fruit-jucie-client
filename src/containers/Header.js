@@ -3,6 +3,7 @@ import { PropTypes } from 'prop-types';
 import { AppBar, Drawer, MenuItem, Divider } from 'material-ui';
 import Power from 'material-ui/svg-icons/action/power-settings-new';
 import Cart from 'material-ui/svg-icons/action/shopping-cart';
+import Question from 'material-ui/svg-icons/action/question-answer';
 import HeaderTop from '../components/HeaderTop';
 import HeaderLogo from '../components/HeaderLogo';
 import HeaderNav from '../components/HeaderNav';
@@ -67,6 +68,11 @@ export default class Header extends Component {
             <Cart />
             장바구니
           </MenuItem>
+          <MenuItem>
+            <Question />
+            문의
+          </MenuItem>
+
           <Divider />
           <MenuItem href="/products" onTouchTap={this.closeDrawer.bind(this)}>Green</MenuItem>
           <MenuItem disabled={true}>Soup</MenuItem>
