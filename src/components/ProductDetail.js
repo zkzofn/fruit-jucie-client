@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getProduct } from '../actions/RequestManager';
-import { Divider, DropDownMenu, MenuItem, RaisedButton } from 'material-ui';
+import { Divider, DropDownMenu, Menu, MenuItem, RaisedButton, Popover } from 'material-ui';
 import AddCart from 'material-ui/svg-icons/action/add-shopping-cart';
 import Card from 'material-ui/svg-icons/action/credit-card';
 import { Link, DirectLink, Element, Events, animateScroll, scrollSpy } from 'react-scroll';
@@ -15,7 +15,8 @@ class ProductDetail extends Component {
     super(props);
 
     this.state = {
-      itemOption: 0,
+      openOption: false,
+      selectedOptions: [],
       styles: {
         id: {width: "10%", textAlign: "center"},
         titleHeader: {width: "60%", textAlign: "center"},
@@ -40,54 +41,116 @@ class ProductDetail extends Component {
       });
 
 
-    Events.scrollEvent.remove("begin");
-    Events.scrollEvent.remove("end");
   }
 
-  componentDidMount() {
-    Events.scrollEvent.register("begin", (to, element) => {
-      console.log("begin", arguments);
-    });
-    Events.scrollEvent.register("end", (to, element) => {
-      console.log("end", arguments);
-    });
-    scrollSpy.update()
-  }
+  onOptionTap(event) {
+    event.preventDefault();
 
-  scrollToTop() {
-    animateScroll.scrollToTop()
-  }
-
-  scrollToBottom() {
-    animateScroll.scrollToBottom()
-  }
-
-  scrollTo() {
-    animateScroll.scrollTo(100)
-  }
-
-  scrollMore() {
-    animateScroll.scrollMore(100)
-  }
-
-  onOptionChange(event, index, value) {
-    this.setState({itemOption: value})
-  }
-
-  renderOptions() {
-    const { options } = this.state.product;
-
-    if (options.length == 0)
-      return <MenuItem primaryText={`옵션 없음`} />;
-
-    return options.map((option, index) => {
-      return (
-        <MenuItem key={index} value={index} primaryText={`${option.description} - ${seperatorCommas(option.additional_fee)}원`} />
-      )
+    this.setState({
+      openOption: true,
+      anchorEl: event.currentTarget
     })
   }
 
+  onOptionClose() {
+    this.setState({ openOption: false })
+  }
 
+  onSelectOption(option) {
+    option.count = 1;
+
+    console.log(option);
+
+    this.setState({
+      openOption: false,
+      selectedOptions: [...this.state.selectedOptions, option]
+    })
+  }
+
+  renderOptionsOrCount() {
+    const { options } = this.state.product;
+
+    const renderOptions = options.map((option, index) => {
+      return (
+        <MenuItem
+          key={index}
+          value={index}
+          primaryText={`${option.description} - ${seperatorCommas(option.additional_fee)}원`}
+          onTouchTap={this.onSelectOption.bind(this, option)}
+        />
+      )
+    });
+
+    if (options.length == 0)
+      return (<MenuItem primaryText={`옵션 없음`} />)
+    else
+      return (
+        <div className="py-4">
+          <span>옵션</span>
+          <RaisedButton
+            onClick={this.onOptionTap.bind(this)}
+            className="pull-right"
+            label="옵션 선택"
+          />
+          <Popover
+            open={this.state.openOption}
+            anchorEl={this.state.anchorEl}
+            anchorOrigin={{horizontal: "left", vertical: "bottom"}}
+            targetOrigin={{horizontal: "left", vertical: "top"}}
+            onRequestClose={this.onOptionClose.bind(this)}
+          >
+            <Menu>
+              {renderOptions}
+            </Menu>
+          </Popover>
+        </div>
+      )
+
+
+  }
+
+  renderSelectedOptions() {
+    const styles = {
+      optionName: {
+        width: "50%",
+        float: "left"
+      },
+      count: {
+        fload: "left",
+        textAlign: "center",
+        width: "20%",
+        marginLeft: 30
+      },
+      price: {
+        textAlign: "right",
+        width: "20%",
+        float: "left"
+      }
+    };
+
+    const renderSelectedOption = this.state.selectedOptions.map((option, index) => {
+      return (
+        <div key={index} className="selectedProductsTable">
+          <div style={styles.optionName} className="inlineBlock">
+            {option.description}
+          </div>
+          <div style={styles.count} className="inlineBlock">
+            {option.count}
+          </div>
+          <div style={styles.price} className="inlineBlock">
+            {option.additional_fee}
+          </div>
+        </div>
+      )
+    });
+
+    if (this.state.selectedOptions.length > 0)
+      return (
+        <div>
+          {renderSelectedOption}
+        </div>
+      )
+  }
 
   renderTabBar(sequence) {
     const tabBars = [
@@ -99,18 +162,19 @@ class ProductDetail extends Component {
     const renderTabItem = () => {
       return tabBars.map((tabBar, index) => {
         return (
-          <li
+          <Link
             key={index}
-            className={sequence == index ? "detailTabElement detailSelectedTab" : "detailTabElement"}
+            to={tabBar.link}
+            smooth={true}
+            duration={500}
+            className={sequence == index ? "detailTabElement detailTabBorder detailSelectedTab" : "detailTabElement detailTabBorder"}
           >
-            <Link
-              to={tabBar.link}
-              smooth={true}
-              duration={500}
+            <li
+              className={sequence == index ? "detailTabElement" : "detailTabElement"}
             >
-              {tabBar.name}
-            </Link>
-          </li>
+                {tabBar.name}
+            </li>
+          </Link>
         )
       });
     };
@@ -170,12 +234,8 @@ class ProductDetail extends Component {
               <span>배송</span>
               <span className="pull-right">3만원 이상 무료배송</span>
             </div>
-            <div className="py-4">
-              <span>옵션</span>
-              <DropDownMenu value={this.state.itemOption} onChange={this.onOptionChange.bind(this)}>
-                {this.renderOptions()}
-              </DropDownMenu>
-            </div>
+            {this.renderOptionsOrCount()}
+            {this.renderSelectedOptions()}
             <div className="py-2">
               <RaisedButton
                 href="/cart"
@@ -248,4 +308,5 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductDetail);
+
 

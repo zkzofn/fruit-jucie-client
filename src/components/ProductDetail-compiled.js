@@ -38,6 +38,8 @@ var _separatorCommas = require('./separatorCommas');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -53,7 +55,8 @@ var ProductDetail = function (_Component) {
     var _this = _possibleConstructorReturn(this, (ProductDetail.__proto__ || Object.getPrototypeOf(ProductDetail)).call(this, props));
 
     _this.state = {
-      itemOption: 0,
+      openOption: false,
+      selectedOptions: [],
       styles: {
         id: { width: "10%", textAlign: "center" },
         titleHeader: { width: "60%", textAlign: "center" },
@@ -81,59 +84,129 @@ var ProductDetail = function (_Component) {
 
         _this2.setState({ product: product });
       });
+    }
+  }, {
+    key: 'onOptionTap',
+    value: function onOptionTap(event) {
+      event.preventDefault();
 
-      _reactScroll.Events.scrollEvent.remove("begin");
-      _reactScroll.Events.scrollEvent.remove("end");
+      this.setState({
+        openOption: true,
+        anchorEl: event.currentTarget
+      });
     }
   }, {
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      var _arguments = arguments;
+    key: 'onOptionClose',
+    value: function onOptionClose() {
+      this.setState({ openOption: false });
+    }
+  }, {
+    key: 'onSelectOption',
+    value: function onSelectOption(option) {
+      option.count = 1;
 
-      _reactScroll.Events.scrollEvent.register("begin", function (to, element) {
-        console.log("begin", _arguments);
+      console.log(option);
+
+      this.setState({
+        openOption: false,
+        selectedOptions: [].concat(_toConsumableArray(this.state.selectedOptions), [option])
       });
-      _reactScroll.Events.scrollEvent.register("end", function (to, element) {
-        console.log("end", _arguments);
-      });
-      _reactScroll.scrollSpy.update();
     }
   }, {
-    key: 'scrollToTop',
-    value: function scrollToTop() {
-      _reactScroll.animateScroll.scrollToTop();
-    }
-  }, {
-    key: 'scrollToBottom',
-    value: function scrollToBottom() {
-      _reactScroll.animateScroll.scrollToBottom();
-    }
-  }, {
-    key: 'scrollTo',
-    value: function scrollTo() {
-      _reactScroll.animateScroll.scrollTo(100);
-    }
-  }, {
-    key: 'scrollMore',
-    value: function scrollMore() {
-      _reactScroll.animateScroll.scrollMore(100);
-    }
-  }, {
-    key: 'onOptionChange',
-    value: function onOptionChange(event, index, value) {
-      this.setState({ itemOption: value });
-    }
-  }, {
-    key: 'renderOptions',
-    value: function renderOptions() {
+    key: 'renderOptionsOrCount',
+    value: function renderOptionsOrCount() {
+      var _this3 = this;
+
       var options = this.state.product.options;
 
 
-      if (options.length == 0) return _react2.default.createElement(_materialUi.MenuItem, { primaryText: '\uC635\uC158 \uC5C6\uC74C' });
-
-      return options.map(function (option, index) {
-        return _react2.default.createElement(_materialUi.MenuItem, { key: index, value: index, primaryText: option.description + ' - ' + (0, _separatorCommas.seperatorCommas)(option.additional_fee) + '\uC6D0' });
+      var renderOptions = options.map(function (option, index) {
+        return _react2.default.createElement(_materialUi.MenuItem, {
+          key: index,
+          value: index,
+          primaryText: option.description + ' - ' + (0, _separatorCommas.seperatorCommas)(option.additional_fee) + '\uC6D0',
+          onTouchTap: _this3.onSelectOption.bind(_this3, option)
+        });
       });
+
+      if (options.length == 0) return _react2.default.createElement(_materialUi.MenuItem, { primaryText: '\uC635\uC158 \uC5C6\uC74C' });else return _react2.default.createElement(
+        'div',
+        { className: 'py-4' },
+        _react2.default.createElement(
+          'span',
+          null,
+          '\uC635\uC158'
+        ),
+        _react2.default.createElement(_materialUi.RaisedButton, {
+          onClick: this.onOptionTap.bind(this),
+          className: 'pull-right',
+          label: '\uC635\uC158 \uC120\uD0DD'
+        }),
+        _react2.default.createElement(
+          _materialUi.Popover,
+          {
+            open: this.state.openOption,
+            anchorEl: this.state.anchorEl,
+            anchorOrigin: { horizontal: "left", vertical: "bottom" },
+            targetOrigin: { horizontal: "left", vertical: "top" },
+            onRequestClose: this.onOptionClose.bind(this)
+          },
+          _react2.default.createElement(
+            _materialUi.Menu,
+            null,
+            renderOptions
+          )
+        )
+      );
+    }
+  }, {
+    key: 'renderSelectedOptions',
+    value: function renderSelectedOptions() {
+      var styles = {
+        optionName: {
+          width: "50%",
+          float: "left"
+        },
+        count: {
+          fload: "left",
+          textAlign: "center",
+          width: "20%",
+          marginLeft: 30
+        },
+        price: {
+          textAlign: "right",
+          width: "20%",
+          float: "left"
+        }
+      };
+
+      var renderSelectedOption = this.state.selectedOptions.map(function (option, index) {
+        return _react2.default.createElement(
+          'div',
+          { key: index, className: 'selectedProductsTable' },
+          _react2.default.createElement(
+            'div',
+            { style: styles.optionName, className: 'inlineBlock' },
+            option.description
+          ),
+          _react2.default.createElement(
+            'div',
+            { style: styles.count, className: 'inlineBlock' },
+            option.count
+          ),
+          _react2.default.createElement(
+            'div',
+            { style: styles.price, className: 'inlineBlock' },
+            option.additional_fee
+          )
+        );
+      });
+
+      if (this.state.selectedOptions.length > 0) return _react2.default.createElement(
+        'div',
+        null,
+        renderSelectedOption
+      );
     }
   }, {
     key: 'renderTabBar',
@@ -143,17 +216,18 @@ var ProductDetail = function (_Component) {
       var renderTabItem = function renderTabItem() {
         return tabBars.map(function (tabBar, index) {
           return _react2.default.createElement(
-            'li',
+            _reactScroll.Link,
             {
               key: index,
-              className: sequence == index ? "detailTabElement detailSelectedTab" : "detailTabElement"
+              to: tabBar.link,
+              smooth: true,
+              duration: 500,
+              className: sequence == index ? "detailTabElement detailTabBorder detailSelectedTab" : "detailTabElement detailTabBorder"
             },
             _react2.default.createElement(
-              _reactScroll.Link,
+              'li',
               {
-                to: tabBar.link,
-                smooth: true,
-                duration: 500
+                className: sequence == index ? "detailTabElement" : "detailTabElement"
               },
               tabBar.name
             )
@@ -170,7 +244,7 @@ var ProductDetail = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      var _this3 = this;
+      var _this4 = this;
 
       console.log(this);
 
@@ -180,7 +254,7 @@ var ProductDetail = function (_Component) {
 
 
       var renderPostScript = function renderPostScript() {
-        return _this3.state.product.post_script.map(function (postScript, index) {
+        return _this4.state.product.post_script.map(function (postScript, index) {
           return _react2.default.createElement(
             _Table.TableRow,
             { key: index },
@@ -283,20 +357,8 @@ var ProductDetail = function (_Component) {
                 '3\uB9CC\uC6D0 \uC774\uC0C1 \uBB34\uB8CC\uBC30\uC1A1'
               )
             ),
-            _react2.default.createElement(
-              'div',
-              { className: 'py-4' },
-              _react2.default.createElement(
-                'span',
-                null,
-                '\uC635\uC158'
-              ),
-              _react2.default.createElement(
-                _materialUi.DropDownMenu,
-                { value: this.state.itemOption, onChange: this.onOptionChange.bind(this) },
-                this.renderOptions()
-              )
-            ),
+            this.renderOptionsOrCount(),
+            this.renderSelectedOptions(),
             _react2.default.createElement(
               'div',
               { className: 'py-2' },
