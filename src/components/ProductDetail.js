@@ -8,7 +8,7 @@ import Card from 'material-ui/svg-icons/action/credit-card';
 import { Link, DirectLink, Element, Events, animateScroll, scrollSpy } from 'react-scroll';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import CircularProgress from './CircularProgress';
-import { seperatorCommas } from './separatorCommas';
+import update from 'react-addons-update';
 
 class ProductDetail extends Component {
   constructor(props) {
@@ -36,11 +36,9 @@ class ProductDetail extends Component {
     this.props.getProduct(params)
       .then(res => {
         const { product } = res.payload.data;
-
+        product.count = 1;
         this.setState({product})
       });
-
-
   }
 
   onOptionTap(event) {
@@ -68,22 +66,64 @@ class ProductDetail extends Component {
   }
 
   renderOptionsOrCount() {
+    const { product } = this.state;
     const { options } = this.state.product;
+
+    const minusProductCount = (event) => {
+      event.stopPropagation();
+
+      product.count -= 1;
+      this.setState({product});
+    };
+
+    const plusProductCount = (event) => {
+      event.stopPropagation();
+
+      product.count += 1;
+      this.setState({product});
+    };
 
     const renderOptions = options.map((option, index) => {
       return (
         <MenuItem
           key={index}
           value={index}
-          primaryText={`${option.description} - ${seperatorCommas(option.additional_fee)}원`}
+          primaryText={`${option.description} - ${option.additional_fee.toLocaleString()}원`}
           onTouchTap={this.onSelectOption.bind(this, option)}
         />
       )
     });
 
-    if (options.length == 0)
-      return (<MenuItem primaryText={`옵션 없음`} />)
-    else
+    if (options.length == 0) {
+      return (
+        <div className="py-4">
+          <span>구매수량</span>
+          <div
+            style={{width: 90}}
+            className="boxed-group inlineBlock pull-right"
+            role="group"
+            aria-label="Product count"
+          >
+            <div
+              style={{width: "33.33333333%"}}
+              className="inlineBlock cursorPointer alignCenter"
+              onClick={event => minusProductCount(event)}
+            >-</div>
+            <div
+              style={{width: "33.3333333%"}}
+              className="inlineBlock productCount alignCenter"
+            >
+              {product.count.toLocaleString()}
+            </div>
+            <div
+              style={{width: "33.3333333%"}}
+              className="inlineBlock cursorPointer alignCenter"
+              onClick={event => plusProductCount(event)}
+            >+</div>
+          </div>
+        </div>
+      );
+    } else {
       return (
         <div className="py-4">
           <span>옵션</span>
@@ -95,8 +135,8 @@ class ProductDetail extends Component {
           <Popover
             open={this.state.openOption}
             anchorEl={this.state.anchorEl}
-            anchorOrigin={{horizontal: "left", vertical: "bottom"}}
-            targetOrigin={{horizontal: "left", vertical: "top"}}
+            anchorOrigin={{horizontal: "right", vertical: "bottom"}}
+            targetOrigin={{horizontal: "right", vertical: "top"}}
             onRequestClose={this.onOptionClose.bind(this)}
           >
             <Menu>
@@ -104,9 +144,8 @@ class ProductDetail extends Component {
             </Menu>
           </Popover>
         </div>
-      )
-
-
+      );
+    }
   }
 
   renderSelectedOptions() {
@@ -116,7 +155,7 @@ class ProductDetail extends Component {
         float: "left"
       },
       count: {
-        fload: "left",
+        float: "left",
         textAlign: "center",
         width: "20%",
         marginLeft: 30
@@ -128,17 +167,59 @@ class ProductDetail extends Component {
       }
     };
 
+    const minusOptionCount = (event, index) => {
+      event.stopPropagation();
+
+      this.setState({
+        selectedOptions: update(
+          this.state.selectedOptions, {
+            [index]: {count: {$set: this.state.selectedOptions[index].count > 1 ? this.state.selectedOptions[index].count - 1 : 1}}
+          }
+        )
+      })
+    };
+
+    const plusOptionCount = (event, index) => {
+      event.stopPropagation();
+
+      this.setState({
+        selectedOptions: update(
+          this.state.selectedOptions, {
+            [index]: {count: {$set: this.state.selectedOptions[index].count + 1}}
+          }
+        )
+      })
+    };
+
     const renderSelectedOption = this.state.selectedOptions.map((option, index) => {
       return (
-        <div key={index} className="selectedProductsTable">
-          <div style={styles.optionName} className="inlineBlock">
+        <div key={index} className="py-2 clearfix">
+          <div style={styles.optionName}>
             {option.description}
           </div>
           <div style={styles.count} className="inlineBlock">
-            {option.count}
+            <div className="boxed-group" role="group" aria-label="Product count">
+              <div
+                style={{width: "33.33333333%", verticalAlign: "middle"}}
+                className="inlineBlock cursorPointer"
+                onClick={event => minusOptionCount(event, index)}
+              >-</div>
+              <div
+                style={{width: "33.3333333%", height: "100%", paddingTop: 4}}
+                className="inlineBlock productCount"
+              >
+                {option.count.toLocaleString()}
+              </div>
+              <div
+                style={{width: "33.3333333%"}}
+                className="inlineBlock cursorPointer"
+                onClick={event => plusOptionCount(event, index)}
+              >+</div>
+            </div>
+
           </div>
           <div style={styles.price} className="inlineBlock">
-            {option.additional_fee}
+            {`${(option.additional_fee * option.count).toLocaleString()}원`}
           </div>
         </div>
       )
@@ -146,10 +227,35 @@ class ProductDetail extends Component {
 
     if (this.state.selectedOptions.length > 0)
       return (
-        <div>
+        <div className="selectedProductsTable clearfix my-4">
           {renderSelectedOption}
         </div>
       )
+  }
+
+  renderTotalPrice() {
+    let totalPrice = 0;
+    let totalCount = 0;
+    const { selectedOptions, product } = this.state;
+
+    if (selectedOptions.length > 0 ) {
+      for (let i = 0; i < selectedOptions.length; i++) {
+        totalPrice += selectedOptions[i].additional_fee * selectedOptions[i].count;
+        totalCount += selectedOptions[i].count;
+      }
+    } else {
+      totalPrice = product.price_sale * product.count;
+      totalCount = product.count;
+    }
+
+    return (
+      <div
+        style={{fontWeight: "bold", fontSize: 20}}
+        className="py-2"
+      >
+        {`총 상품금액: ${totalPrice.toLocaleString()}원 (${totalCount} 개)`}
+      </div>
+    )
   }
 
   renderTabBar(sequence) {
@@ -224,7 +330,7 @@ class ProductDetail extends Component {
             <Divider className="mr-2" />
             <div>
               <span>판매가격</span>
-              <span className="pull-right" style={{color: 'red'}}>{`${seperatorCommas(product.price_sale)}원`}</span>
+              <span className="pull-right" style={{color: 'red'}}>{`${product.price_sale.toLocaleString()}원`}</span>
             </div>
             <div>
               <span>원산지</span>
@@ -236,6 +342,7 @@ class ProductDetail extends Component {
             </div>
             {this.renderOptionsOrCount()}
             {this.renderSelectedOptions()}
+            {this.renderTotalPrice()}
             <div className="py-2">
               <RaisedButton
                 href="/cart"

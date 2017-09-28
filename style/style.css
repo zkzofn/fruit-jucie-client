@@ -411,6 +411,6 @@ td {
 .selectedProductsTable {
     border: 1px solid #dedede;
     background-color: #f9f9f9;
-    padding: 20px 30px 15px 30px;
+    padding: 10px 30px 5px 30px;
     margin-bottom: 15px;
 }
