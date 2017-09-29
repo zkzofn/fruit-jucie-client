@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getProduct } from '../actions/RequestManager';
-import { Divider, DropDownMenu, Menu, MenuItem, RaisedButton, Popover } from 'material-ui';
+import { getProduct, getUser } from '../actions/RequestManager';
+import { Divider, DropDownMenu, Menu, MenuItem, RaisedButton, Popover, Dialog, FlatButton } from 'material-ui';
 import AddCart from 'material-ui/svg-icons/action/add-shopping-cart';
 import Card from 'material-ui/svg-icons/action/credit-card';
 import { Link, DirectLink, Element, Events, animateScroll, scrollSpy } from 'react-scroll';
@@ -24,7 +24,8 @@ class ProductDetail extends Component {
         userName: {width: "10%", textAlign: "center"},
         date: {width: "12%", textAlign: "center"},
         star: {width: "8%", textAlign: "center"},
-      }
+      },
+      cartDialogOpen: false,
     }
   }
 
@@ -292,6 +293,31 @@ class ProductDetail extends Component {
     )
   }
 
+  onOpenCartDialog = () => {
+    this.setState({cartDialogOpen: true});
+  };
+
+  onCloseCartDialog = () => {
+    this.setState({cartDialogOpen: false});
+  };
+
+  onTouchCart() {
+    console.log("clicked cart");
+    console.log(this.state);
+
+    // 여기서 제품 사용자 카트에 담는거 하자
+    // Append to cart API 만들어야해
+    //    어떻게 보낼지 부터 생각하자.
+    //    제품만 있을 때 / 옵션 있을 때, 어떤식으로 넘길지, 서버에서 어떻게 처리할지
+    // cart API call
+    // .then() 성공적으로 call 마쳤을 때 dialog 띄워주고 카트로 이동
+    
+
+    this.onOpenCartDialog()
+  }
+
+
+
 
   render() {
     console.log(this);
@@ -317,6 +343,24 @@ class ProductDetail extends Component {
 
 
     const { product } = this.state;
+
+    const cartDialogActions = [
+      <FlatButton
+        label="장바구니로 이동"
+        primary={true}
+        keyboardFocused={true}
+        onClick={() => {
+          this.onCloseCartDialog()
+          this.props.history.push("/cart")
+        }}
+      />,
+      <FlatButton
+        label="계속 쇼핑하기"
+        primary={true}
+        onClick={this.onCloseCartDialog}
+      />,
+    ];
+
 
     return (
       <div className="container">
@@ -345,15 +389,20 @@ class ProductDetail extends Component {
             {this.renderTotalPrice()}
             <div className="py-2">
               <RaisedButton
-                href="/cart"
                 style={{width: "50%"}}
                 label="장바구니"
                 icon={<AddCart />}
-                // 여기서 장바구니에 담는 API를 call 해라,
-                // 그리고 팝업같은거 띄워서 계속 쇼핑할지,
-                // 장바구니로 갈지 정할 수 있도록 나눠
-                onTouchTap={() => console.log("")}
+                onTouchTap={this.onTouchCart.bind(this)}
               />
+              <Dialog
+                title="장바구니 담기"
+                actions={cartDialogActions}
+                modal={false}
+                open={this.state.cartDialogOpen}
+                onRequestClose={this.onCloseCartDialog}
+              >
+                장바구니에 등록하였습니다. 장바구니로 이동하시겠습니까?
+              </Dialog>
               <RaisedButton
                 href="/payment"
                 style={{width: "50%"}}
@@ -404,7 +453,7 @@ class ProductDetail extends Component {
 
 const mapStateToProps = (state) => {
   return {
-
+    currentUser: state.currentUser.single
   }
 };
 

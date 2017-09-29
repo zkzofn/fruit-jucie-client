@@ -2,6 +2,7 @@ import SessionManager from './SessionManager';
 
 export const GET_PRODUCTS = "GET_PRODUCTS";
 export const GET_PRODUCT = "GET_PRODUCT";
+export const GET_USER = "GET_USER";
 
 // export const getSomethings = ({pageNo, length, indexBy, indexType, values}) => {
 //   const query = {
@@ -29,11 +30,22 @@ export const getProducts = () => {
   }
 };
 
-export const getProduct = (productID) => {
-  const request = SessionManager.instance().get(`/product`, productID);
+export const getProduct = (params) => {
+  const request = SessionManager.instance().get(`/product`, params);
 
   return {
     type: GET_PRODUCT,
     payload: request
   }
-}
+};
+
+export const getUser = (params) => {
+  const request = SessionManager.instance().get(`/user`, params);
+
+  return {
+    type: GET_USER,
+    payload: request
+  }
+};
+
+// export const postCart =
