@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getProduct, getUser } from '../actions/RequestManager';
+import { getProduct, getUser, postCart } from '../actions/RequestManager';
 import { Divider, DropDownMenu, Menu, MenuItem, RaisedButton, Popover, Dialog, FlatButton } from 'material-ui';
 import AddCart from 'material-ui/svg-icons/action/add-shopping-cart';
 import Card from 'material-ui/svg-icons/action/credit-card';
+import Close from 'material-ui/svg-icons/navigation/close';
 import { Link, DirectLink, Element, Events, animateScroll, scrollSpy } from 'react-scroll';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import CircularProgress from './CircularProgress';
@@ -26,6 +27,8 @@ class ProductDetail extends Component {
         star: {width: "8%", textAlign: "center"},
       },
       cartDialogOpen: false,
+      alertDialogOpen: false,
+      alertText: "",
     }
   }
 
@@ -56,14 +59,27 @@ class ProductDetail extends Component {
   }
 
   onSelectOption(option) {
-    option.count = 1;
+    let selectedOption = option;
 
-    console.log(option);
+    selectedOption.count = 1;
 
-    this.setState({
-      openOption: false,
-      selectedOptions: [...this.state.selectedOptions, option]
-    })
+    const checkSelectedOptions = this.state.selectedOptions.filter(selectedOption => {
+      return selectedOption.id === option.id;
+    });
+
+    if (checkSelectedOptions.length === 0) {
+      this.setState({
+        openOption: false,
+        selectedOptions: [...this.state.selectedOptions, selectedOption]
+      })
+    } else {
+      this.setState({
+        openOption: false,
+        alertText: "이미 선택된 옵션입니다.",
+        alertDialogOpen: true,
+      })
+
+    }
   }
 
   renderOptionsOrCount() {
@@ -152,7 +168,7 @@ class ProductDetail extends Component {
   renderSelectedOptions() {
     const styles = {
       optionName: {
-        width: "50%",
+        width: "40%",
         float: "left"
       },
       count: {
@@ -165,6 +181,10 @@ class ProductDetail extends Component {
         textAlign: "right",
         width: "20%",
         float: "left"
+      },
+      close: {
+        float: "right",
+        width: "10%"
       }
     };
 
@@ -191,6 +211,15 @@ class ProductDetail extends Component {
         )
       })
     };
+
+    const onDeleteSelectedOption = (index) => {
+      this.setState({
+        selectedOptions: update(
+          this.state.selectedOptions, {$splice: [[index, 1]]}
+        )
+      })
+    };
+
 
     const renderSelectedOption = this.state.selectedOptions.map((option, index) => {
       return (
@@ -222,6 +251,11 @@ class ProductDetail extends Component {
           <div style={styles.price} className="inlineBlock">
             {`${(option.additional_fee * option.count).toLocaleString()}원`}
           </div>
+          <div className="inlineBlock pull-right cursorPointer">
+            <Close
+              onTouchTap={() => onDeleteSelectedOption(index)}
+            />
+          </div>
         </div>
       )
     });
@@ -239,10 +273,12 @@ class ProductDetail extends Component {
     let totalCount = 0;
     const { selectedOptions, product } = this.state;
 
-    if (selectedOptions.length > 0 ) {
-      for (let i = 0; i < selectedOptions.length; i++) {
-        totalPrice += selectedOptions[i].additional_fee * selectedOptions[i].count;
-        totalCount += selectedOptions[i].count;
+    if (product.options.length > 0) {
+      if (selectedOptions.length > 0 ) {
+        for (let i = 0; i < selectedOptions.length; i++) {
+          totalPrice += selectedOptions[i].additional_fee * selectedOptions[i].count;
+          totalCount += selectedOptions[i].count;
+        }
       }
     } else {
       totalPrice = product.price_sale * product.count;
@@ -293,27 +329,35 @@ class ProductDetail extends Component {
     )
   }
 
-  onOpenCartDialog = () => {
-    this.setState({cartDialogOpen: true});
+  onOpenAlertDialog = () => {
+    this.setState({alertDialogOpen: true});
   };
 
   onCloseCartDialog = () => {
-    this.setState({cartDialogOpen: false});
+    this.setState({
+      cartDialogOpen: false,
+      alertDialogOpen: false,
+    });
   };
 
   onTouchCart() {
-    console.log("clicked cart");
-    console.log(this.state);
+    const postCartBody = {
+      userId: this.props.currentUser.id,
+      product: this.state.product,
+      selectedOptions: this.state.selectedOptions
+    };
 
-    // 여기서 제품 사용자 카트에 담는거 하자
-    // Append to cart API 만들어야해
-    //    어떻게 보낼지 부터 생각하자.
-    //    제품만 있을 때 / 옵션 있을 때, 어떤식으로 넘길지, 서버에서 어떻게 처리할지
-    // cart API call
-    // .then() 성공적으로 call 마쳤을 때 dialog 띄워주고 카트로 이동
-    
+    if (this.state.product.options.length > 0 && this.state.selectedOptions.length === 0) {
+      this.setState({alertText: "하나 이상의 옵션을 선택하셔야 합니다."});
+      this.onOpenAlertDialog();
+    } else {
+      this.props.postCart(postCartBody)
+        .then(res => {
+          console.log(res);
+        });
 
-    this.onOpenCartDialog()
+      this.onOpenAlertDialog();
+    }
   }
 
 
@@ -350,7 +394,7 @@ class ProductDetail extends Component {
         primary={true}
         keyboardFocused={true}
         onClick={() => {
-          this.onCloseCartDialog()
+          this.onCloseCartDialog();
           this.props.history.push("/cart")
         }}
       />,
@@ -359,6 +403,15 @@ class ProductDetail extends Component {
         primary={true}
         onClick={this.onCloseCartDialog}
       />,
+    ];
+
+    const cartAlertDialogActions = [
+      <FlatButton
+        label="확인"
+        primary={true}
+        keyboardFocused={true}
+        onClick={() => this.onCloseCartDialog()}
+      />
     ];
 
 
@@ -394,15 +447,6 @@ class ProductDetail extends Component {
                 icon={<AddCart />}
                 onTouchTap={this.onTouchCart.bind(this)}
               />
-              <Dialog
-                title="장바구니 담기"
-                actions={cartDialogActions}
-                modal={false}
-                open={this.state.cartDialogOpen}
-                onRequestClose={this.onCloseCartDialog}
-              >
-                장바구니에 등록하였습니다. 장바구니로 이동하시겠습니까?
-              </Dialog>
               <RaisedButton
                 href="/payment"
                 style={{width: "50%"}}
@@ -411,6 +455,7 @@ class ProductDetail extends Component {
                 onTouchTap={() => console.log("바로구매를 하면 구매 페이지로 바로 넘어갈 수 있게")}
               />
             </div>
+
           </div>
         </div>
         <Element name="productDescription" className="product" >
@@ -444,7 +489,24 @@ class ProductDetail extends Component {
             </TableBody>
           </Table>
         </Element>
-
+        <Dialog
+          title="장바구니 담기"
+          actions={cartDialogActions}
+          modal={false}
+          open={this.state.cartDialogOpen}
+          onRequestClose={this.onCloseCartDialog}
+        >
+          장바구니에 등록하였습니다. 장바구니로 이동하시겠습니까?
+        </Dialog>
+        <Dialog
+          title="알림메세지"
+          actions={cartAlertDialogActions}
+          modal={false}
+          open={this.state.alertDialogOpen}
+          onRequestClose={this.onCloseCartDialog}
+        >
+          {this.state.alertText}
+        </Dialog>
       </div>
     )
   }
@@ -460,6 +522,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     getProduct,
+    postCart,
   }, dispatch)
 };
 

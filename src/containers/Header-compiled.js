@@ -10,7 +10,9 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = require('prop-types');
+var _reactRedux = require('react-redux');
+
+var _redux = require('redux');
 
 var _materialUi = require('material-ui');
 
@@ -38,6 +40,8 @@ var _HeaderNav = require('../components/HeaderNav');
 
 var _HeaderNav2 = _interopRequireDefault(_HeaderNav);
 
+var _RequestManager = require('../actions/RequestManager');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -61,6 +65,16 @@ var Header = function (_Component) {
   }
 
   _createClass(Header, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+      // 여기서 무조건 userId = 1 로 넣어주는데 이부분은 제대로 설계해서 수정해야한다.
+      var getUserParam = {
+        userId: 1
+      };
+
+      this.props.getUser(getUserParam);
+    }
+  }, {
     key: 'openDrawer',
     value: function openDrawer() {
       this.setState({ open: true });
@@ -73,7 +87,7 @@ var Header = function (_Component) {
   }, {
     key: 'titleTouch',
     value: function titleTouch() {
-      this.context.router.history.push("/");
+      this.props.history.push("/");
     }
   }, {
     key: 'render',
@@ -160,9 +174,16 @@ var Header = function (_Component) {
   return Header;
 }(_react.Component);
 
-Header.contextTypes = {
-  router: _propTypes.PropTypes.object
-};
-exports.default = Header;
+function mapStateToProps(state) {
+  return { currentUser: state.currentUser.single };
+}
+
+function mapDispatchToProps(dispatch) {
+  return (0, _redux.bindActionCreators)({
+    getUser: _RequestManager.getUser
+  }, dispatch);
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Header);
 
 //# sourceMappingURL=Header-compiled.js.map

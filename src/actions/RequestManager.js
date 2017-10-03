@@ -3,6 +3,8 @@ import SessionManager from './SessionManager';
 export const GET_PRODUCTS = "GET_PRODUCTS";
 export const GET_PRODUCT = "GET_PRODUCT";
 export const GET_USER = "GET_USER";
+export const POST_CART = "POST_CART";
+export const GET_CART = "GET_CART";
 
 // export const getSomethings = ({pageNo, length, indexBy, indexType, values}) => {
 //   const query = {
@@ -48,4 +50,21 @@ export const getUser = (params) => {
   }
 };
 
-// export const postCart =
+export const postCart = (params) => {
+  const request = SessionManager.instance().post(`/cart`, params);
+
+  return {
+    type: POST_CART,
+    payload: request
+  }
+};
+
+export const getCart = (params) => {
+  const request = SessionManager.instance().get(`/cart`, params);
+
+  return {
+    type: GET_CART,
+    payload: request
+  }
+};
+

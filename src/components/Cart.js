@@ -1,18 +1,14 @@
 import React, { Component } from 'react';
 import update from 'react-addons-update';
-import {
-  Table,
-  TableBody,
-  TableHeader,
-  TableHeaderColumn,
-  TableRow,
-  TableRowColumn,
-  TableFooter,
-} from 'material-ui/Table';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn, TableFooter } from 'material-ui/Table';
+import { getCart } from '../actions/RequestManager';
+import CircularProgress from './CircularProgress';
 
-export default class Cart extends Component {
+class Cart extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       cartItems: []
@@ -22,6 +18,25 @@ export default class Cart extends Component {
   // 장바구니에서 구매페이지로 넘어갈 때 재고도 한번 확인하고 넘어가
 
   componentWillMount() {
+    // 여기서 setTimeout을 주는 이유는 매번
+    setTimeout(() => {
+      const params = {
+        userId: this.props.currentUser.id
+      };
+
+      this.props.getCart(params)
+        .then(res => {
+          const { cart } = res.payload.data;
+
+          console.log(cart);
+
+          this.setState({cart});
+        });
+    }, 200);
+
+
+
+
     this.setState({
       cartItems: [
         {id: 1, title: "짤깃한 고구마", options: ["짤깃한맛", "고소한맛"], price: 5800, count: 5},
@@ -32,6 +47,10 @@ export default class Cart extends Component {
   }
 
   render() {
+    if (this.state.cart === undefined)
+      return <CircularProgress />;
+
+
     const styles = {
       id: {width: "10%", textAlign: "center"},
       titleHeader: {width: "54%", textAlign: "center"},
@@ -244,4 +263,21 @@ export default class Cart extends Component {
    )
   }
 }
+
+
+
+const mapStateToProps = (state) => {
+  return {
+    currentUser: state.currentUser.single
+  }
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({
+    getCart,
+  }, dispatch)
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Cart);
+
 

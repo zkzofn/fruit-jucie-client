@@ -26,6 +26,10 @@ var _creditCard = require('material-ui/svg-icons/action/credit-card');
 
 var _creditCard2 = _interopRequireDefault(_creditCard);
 
+var _close = require('material-ui/svg-icons/navigation/close');
+
+var _close2 = _interopRequireDefault(_close);
+
 var _reactScroll = require('react-scroll');
 
 var _Table = require('material-ui/Table');
@@ -34,9 +38,13 @@ var _CircularProgress = require('./CircularProgress');
 
 var _CircularProgress2 = _interopRequireDefault(_CircularProgress);
 
-var _separatorCommas = require('./separatorCommas');
+var _reactAddonsUpdate = require('react-addons-update');
+
+var _reactAddonsUpdate2 = _interopRequireDefault(_reactAddonsUpdate);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
@@ -54,6 +62,17 @@ var ProductDetail = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, (ProductDetail.__proto__ || Object.getPrototypeOf(ProductDetail)).call(this, props));
 
+    _this.onOpenAlertDialog = function () {
+      _this.setState({ alertDialogOpen: true });
+    };
+
+    _this.onCloseCartDialog = function () {
+      _this.setState({
+        cartDialogOpen: false,
+        alertDialogOpen: false
+      });
+    };
+
     _this.state = {
       openOption: false,
       selectedOptions: [],
@@ -64,7 +83,10 @@ var ProductDetail = function (_Component) {
         userName: { width: "10%", textAlign: "center" },
         date: { width: "12%", textAlign: "center" },
         star: { width: "8%", textAlign: "center" }
-      }
+      },
+      cartDialogOpen: false,
+      alertDialogOpen: false,
+      alertText: ""
     };
     return _this;
   }
@@ -81,7 +103,7 @@ var ProductDetail = function (_Component) {
       this.props.getProduct(params).then(function (res) {
         var product = res.payload.data.product;
 
-
+        product.count = 1;
         _this2.setState({ product: product });
       });
     }
@@ -103,72 +125,152 @@ var ProductDetail = function (_Component) {
   }, {
     key: 'onSelectOption',
     value: function onSelectOption(option) {
-      option.count = 1;
+      var selectedOption = option;
 
-      console.log(option);
+      selectedOption.count = 1;
 
-      this.setState({
-        openOption: false,
-        selectedOptions: [].concat(_toConsumableArray(this.state.selectedOptions), [option])
+      var checkSelectedOptions = this.state.selectedOptions.filter(function (selectedOption) {
+        return selectedOption.id === option.id;
       });
+
+      if (checkSelectedOptions.length === 0) {
+        this.setState({
+          openOption: false,
+          selectedOptions: [].concat(_toConsumableArray(this.state.selectedOptions), [selectedOption])
+        });
+      } else {
+        this.setState({
+          openOption: false,
+          alertText: "이미 선택된 옵션입니다.",
+          alertDialogOpen: true
+        });
+      }
     }
   }, {
     key: 'renderOptionsOrCount',
     value: function renderOptionsOrCount() {
       var _this3 = this;
 
+      var product = this.state.product;
       var options = this.state.product.options;
 
+
+      var minusProductCount = function minusProductCount(event) {
+        event.stopPropagation();
+
+        product.count -= 1;
+        _this3.setState({ product: product });
+      };
+
+      var plusProductCount = function plusProductCount(event) {
+        event.stopPropagation();
+
+        product.count += 1;
+        _this3.setState({ product: product });
+      };
 
       var renderOptions = options.map(function (option, index) {
         return _react2.default.createElement(_materialUi.MenuItem, {
           key: index,
           value: index,
-          primaryText: option.description + ' - ' + (0, _separatorCommas.seperatorCommas)(option.additional_fee) + '\uC6D0',
+          primaryText: option.description + ' - ' + option.additional_fee.toLocaleString() + '\uC6D0',
           onTouchTap: _this3.onSelectOption.bind(_this3, option)
         });
       });
 
-      if (options.length == 0) return _react2.default.createElement(_materialUi.MenuItem, { primaryText: '\uC635\uC158 \uC5C6\uC74C' });else return _react2.default.createElement(
-        'div',
-        { className: 'py-4' },
-        _react2.default.createElement(
-          'span',
-          null,
-          '\uC635\uC158'
-        ),
-        _react2.default.createElement(_materialUi.RaisedButton, {
-          onClick: this.onOptionTap.bind(this),
-          className: 'pull-right',
-          label: '\uC635\uC158 \uC120\uD0DD'
-        }),
-        _react2.default.createElement(
-          _materialUi.Popover,
-          {
-            open: this.state.openOption,
-            anchorEl: this.state.anchorEl,
-            anchorOrigin: { horizontal: "left", vertical: "bottom" },
-            targetOrigin: { horizontal: "left", vertical: "top" },
-            onRequestClose: this.onOptionClose.bind(this)
-          },
+      if (options.length == 0) {
+        return _react2.default.createElement(
+          'div',
+          { className: 'py-4' },
           _react2.default.createElement(
-            _materialUi.Menu,
+            'span',
             null,
-            renderOptions
+            '\uAD6C\uB9E4\uC218\uB7C9'
+          ),
+          _react2.default.createElement(
+            'div',
+            {
+              style: { width: 90 },
+              className: 'boxed-group inlineBlock pull-right',
+              role: 'group',
+              'aria-label': 'Product count'
+            },
+            _react2.default.createElement(
+              'div',
+              {
+                style: { width: "33.33333333%" },
+                className: 'inlineBlock cursorPointer alignCenter',
+                onClick: function onClick(event) {
+                  return minusProductCount(event);
+                }
+              },
+              '-'
+            ),
+            _react2.default.createElement(
+              'div',
+              {
+                style: { width: "33.3333333%" },
+                className: 'inlineBlock productCount alignCenter'
+              },
+              product.count.toLocaleString()
+            ),
+            _react2.default.createElement(
+              'div',
+              {
+                style: { width: "33.3333333%" },
+                className: 'inlineBlock cursorPointer alignCenter',
+                onClick: function onClick(event) {
+                  return plusProductCount(event);
+                }
+              },
+              '+'
+            )
           )
-        )
-      );
+        );
+      } else {
+        return _react2.default.createElement(
+          'div',
+          { className: 'py-4' },
+          _react2.default.createElement(
+            'span',
+            null,
+            '\uC635\uC158'
+          ),
+          _react2.default.createElement(_materialUi.RaisedButton, {
+            onClick: this.onOptionTap.bind(this),
+            className: 'pull-right',
+            label: '\uC635\uC158 \uC120\uD0DD'
+          }),
+          _react2.default.createElement(
+            _materialUi.Popover,
+            {
+              open: this.state.openOption,
+              anchorEl: this.state.anchorEl,
+              anchorOrigin: { horizontal: "right", vertical: "bottom" },
+              targetOrigin: { horizontal: "right", vertical: "top" },
+              onRequestClose: this.onOptionClose.bind(this)
+            },
+            _react2.default.createElement(
+              _materialUi.Menu,
+              null,
+              renderOptions
+            )
+          )
+        );
+      }
     }
   }, {
     key: 'renderSelectedOptions',
     value: function renderSelectedOptions() {
+      var _this4 = this;
+
       var styles = {
         optionName: {
-          width: "50%",
+          width: "40%",
           float: "left"
         },
         count: {
-          fload: "left",
+          float: "left",
           textAlign: "center",
           width: "20%",
           marginLeft: 30
@@ -177,35 +279,134 @@ var ProductDetail = function (_Component) {
           textAlign: "right",
           width: "20%",
           float: "left"
+        },
+        close: {
+          float: "right",
+          width: "10%"
         }
+      };
+
+      var minusOptionCount = function minusOptionCount(event, index) {
+        event.stopPropagation();
+
+        _this4.setState({
+          selectedOptions: (0, _reactAddonsUpdate2.default)(_this4.state.selectedOptions, _defineProperty({}, index, { count: { $set: _this4.state.selectedOptions[index].count > 1 ? _this4.state.selectedOptions[index].count - 1 : 1 } }))
+        });
+      };
+
+      var plusOptionCount = function plusOptionCount(event, index) {
+        event.stopPropagation();
+
+        _this4.setState({
+          selectedOptions: (0, _reactAddonsUpdate2.default)(_this4.state.selectedOptions, _defineProperty({}, index, { count: { $set: _this4.state.selectedOptions[index].count + 1 } }))
+        });
+      };
+
+      var onDeleteSelectedOption = function onDeleteSelectedOption(index) {
+        _this4.setState({
+          selectedOptions: (0, _reactAddonsUpdate2.default)(_this4.state.selectedOptions, { $splice: [[index, 1]] })
+        });
       };
 
       var renderSelectedOption = this.state.selectedOptions.map(function (option, index) {
         return _react2.default.createElement(
           'div',
-          { key: index, className: 'selectedProductsTable' },
+          { key: index, className: 'py-2 clearfix' },
           _react2.default.createElement(
             'div',
-            { style: styles.optionName, className: 'inlineBlock' },
+            { style: styles.optionName },
             option.description
           ),
           _react2.default.createElement(
             'div',
             { style: styles.count, className: 'inlineBlock' },
-            option.count
+            _react2.default.createElement(
+              'div',
+              { className: 'boxed-group', role: 'group', 'aria-label': 'Product count' },
+              _react2.default.createElement(
+                'div',
+                {
+                  style: { width: "33.33333333%", verticalAlign: "middle" },
+                  className: 'inlineBlock cursorPointer',
+                  onClick: function onClick(event) {
+                    return minusOptionCount(event, index);
+                  }
+                },
+                '-'
+              ),
+              _react2.default.createElement(
+                'div',
+                {
+                  style: { width: "33.3333333%", height: "100%", paddingTop: 4 },
+                  className: 'inlineBlock productCount'
+                },
+                option.count.toLocaleString()
+              ),
+              _react2.default.createElement(
+                'div',
+                {
+                  style: { width: "33.3333333%" },
+                  className: 'inlineBlock cursorPointer',
+                  onClick: function onClick(event) {
+                    return plusOptionCount(event, index);
+                  }
+                },
+                '+'
+              )
+            )
           ),
           _react2.default.createElement(
             'div',
             { style: styles.price, className: 'inlineBlock' },
-            option.additional_fee
+            (option.additional_fee * option.count).toLocaleString() + '\uC6D0'
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'inlineBlock pull-right cursorPointer' },
+            _react2.default.createElement(_close2.default, {
+              onTouchTap: function onTouchTap() {
+                return onDeleteSelectedOption(index);
+              }
+            })
           )
         );
       });
 
       if (this.state.selectedOptions.length > 0) return _react2.default.createElement(
         'div',
-        null,
+        { className: 'selectedProductsTable clearfix my-4' },
         renderSelectedOption
+      );
+    }
+  }, {
+    key: 'renderTotalPrice',
+    value: function renderTotalPrice() {
+      var totalPrice = 0;
+      var totalCount = 0;
+      var _state = this.state,
+          selectedOptions = _state.selectedOptions,
+          product = _state.product;
+
+
+      if (product.options.length > 0) {
+        if (selectedOptions.length > 0) {
+          for (var i = 0; i < selectedOptions.length; i++) {
+            totalPrice += selectedOptions[i].additional_fee * selectedOptions[i].count;
+            totalCount += selectedOptions[i].count;
+          }
+        }
+      } else {
+        totalPrice = product.price_sale * product.count;
+        totalCount = product.count;
+      }
+
+      return _react2.default.createElement(
+        'div',
+        {
+          style: { fontWeight: "bold", fontSize: 20 },
+          className: 'py-2'
+        },
+        '\uCD1D \uC0C1\uD488\uAE08\uC561: ' + totalPrice.toLocaleString() + '\uC6D0 (' + totalCount + ' \uAC1C)'
       );
     }
   }, {
@@ -242,9 +443,29 @@ var ProductDetail = function (_Component) {
       );
     }
   }, {
+    key: 'onTouchCart',
+    value: function onTouchCart() {
+      var postCartBody = {
+        userId: this.props.currentUser.id,
+        product: this.state.product,
+        selectedOptions: this.state.selectedOptions
+      };
+
+      if (this.state.product.options.length > 0 && this.state.selectedOptions.length === 0) {
+        this.setState({ alertText: "하나 이상의 옵션을 선택하셔야 합니다." });
+        this.onOpenAlertDialog();
+      } else {
+        this.props.postCart(postCartBody).then(function (res) {
+          console.log(res);
+        });
+
+        this.onOpenAlertDialog();
+      }
+    }
+  }, {
     key: 'render',
     value: function render() {
-      var _this4 = this;
+      var _this5 = this;
 
       console.log(this);
 
@@ -254,7 +475,7 @@ var ProductDetail = function (_Component) {
 
 
       var renderPostScript = function renderPostScript() {
-        return _this4.state.product.post_script.map(function (postScript, index) {
+        return _this5.state.product.post_script.map(function (postScript, index) {
           return _react2.default.createElement(
             _Table.TableRow,
             { key: index },
@@ -289,6 +510,29 @@ var ProductDetail = function (_Component) {
 
       var product = this.state.product;
 
+
+      var cartDialogActions = [_react2.default.createElement(_materialUi.FlatButton, {
+        label: '\uC7A5\uBC14\uAD6C\uB2C8\uB85C \uC774\uB3D9',
+        primary: true,
+        keyboardFocused: true,
+        onClick: function onClick() {
+          _this5.onCloseCartDialog();
+          _this5.props.history.push("/cart");
+        }
+      }), _react2.default.createElement(_materialUi.FlatButton, {
+        label: '\uACC4\uC18D \uC1FC\uD551\uD558\uAE30',
+        primary: true,
+        onClick: this.onCloseCartDialog
+      })];
+
+      var cartAlertDialogActions = [_react2.default.createElement(_materialUi.FlatButton, {
+        label: '\uD655\uC778',
+        primary: true,
+        keyboardFocused: true,
+        onClick: function onClick() {
+          return _this5.onCloseCartDialog();
+        }
+      })];
 
       return _react2.default.createElement(
         'div',
@@ -326,7 +570,7 @@ var ProductDetail = function (_Component) {
               _react2.default.createElement(
                 'span',
                 { className: 'pull-right', style: { color: 'red' } },
-                (0, _separatorCommas.seperatorCommas)(product.price_sale) + '\uC6D0'
+                product.price_sale.toLocaleString() + '\uC6D0'
               )
             ),
             _react2.default.createElement(
@@ -359,20 +603,15 @@ var ProductDetail = function (_Component) {
             ),
             this.renderOptionsOrCount(),
             this.renderSelectedOptions(),
+            this.renderTotalPrice(),
             _react2.default.createElement(
               'div',
               { className: 'py-2' },
               _react2.default.createElement(_materialUi.RaisedButton, {
-                href: '/cart',
                 style: { width: "50%" },
                 label: '\uC7A5\uBC14\uAD6C\uB2C8',
-                icon: _react2.default.createElement(_addShoppingCart2.default, null)
-                // 여기서 장바구니에 담는 API를 call 해라,
-                // 그리고 팝업같은거 띄워서 계속 쇼핑할지,
-                // 장바구니로 갈지 정할 수 있도록 나눠
-                , onTouchTap: function onTouchTap() {
-                  return console.log("");
-                }
+                icon: _react2.default.createElement(_addShoppingCart2.default, null),
+                onTouchTap: this.onTouchCart.bind(this)
               }),
               _react2.default.createElement(_materialUi.RaisedButton, {
                 href: '/payment',
@@ -452,6 +691,28 @@ var ProductDetail = function (_Component) {
               renderPostScript()
             )
           )
+        ),
+        _react2.default.createElement(
+          _materialUi.Dialog,
+          {
+            title: '\uC7A5\uBC14\uAD6C\uB2C8 \uB2F4\uAE30',
+            actions: cartDialogActions,
+            modal: false,
+            open: this.state.cartDialogOpen,
+            onRequestClose: this.onCloseCartDialog
+          },
+          '\uC7A5\uBC14\uAD6C\uB2C8\uC5D0 \uB4F1\uB85D\uD558\uC600\uC2B5\uB2C8\uB2E4. \uC7A5\uBC14\uAD6C\uB2C8\uB85C \uC774\uB3D9\uD558\uC2DC\uACA0\uC2B5\uB2C8\uAE4C?'
+        ),
+        _react2.default.createElement(
+          _materialUi.Dialog,
+          {
+            title: '\uC54C\uB9BC\uBA54\uC138\uC9C0',
+            actions: cartAlertDialogActions,
+            modal: false,
+            open: this.state.alertDialogOpen,
+            onRequestClose: this.onCloseCartDialog
+          },
+          this.state.alertText
         )
       );
     }
@@ -461,12 +722,15 @@ var ProductDetail = function (_Component) {
 }(_react.Component);
 
 var mapStateToProps = function mapStateToProps(state) {
-  return {};
+  return {
+    currentUser: state.currentUser.single
+  };
 };
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return (0, _redux.bindActionCreators)({
-    getProduct: _RequestManager.getProduct
+    getProduct: _RequestManager.getProduct,
+    postCart: _RequestManager.postCart
   }, dispatch);
 };
 

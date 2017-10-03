@@ -38,10 +38,10 @@ var secretProfile = Crypto.SHA1("fRu1t_profile_privacy");
 // const END_POINT = "13.124.237.236:3000";
 
 // For dev-web-server
-var END_POINT = "http://localhost:3000";
+// const END_POINT = "http://localhost:3000";
 
 // For React dev server
-// const END_POINT = "/api";
+var END_POINT = "/api";
 
 var SessionManager = function (_Component) {
   _inherits(SessionManager, _Component);
