@@ -8,7 +8,7 @@ module.exports = {
     path: __dirname,
     filename: 'bundle.js'
   },
-  pulgins: [
+  plugins: [
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.UglifyJsPlugin({
       minimize: true,
