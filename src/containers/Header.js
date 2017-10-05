@@ -55,7 +55,7 @@ class Header extends Component {
     return (
       <div>
         <AppBar
-          className="visible-under-flex"
+          className="appBar"
           title={<span className="cursorPointer">Eat More</span>}
           onTitleTouchTap={this.titleTouch.bind(this)}
           onLeftIconButtonTouchTap={this.openDrawer.bind(this)}
@@ -67,11 +67,17 @@ class Header extends Component {
           docked={false}
           onRequestChange={open => this.setState({open})}
         >
-          <MenuItem href="/signin">
+          <MenuItem onTouchTap={() => {
+            this.props.history.push("/signin");
+            this.closeDrawer();
+          }}>
             <Power />
             Sign In
           </MenuItem>
-          <MenuItem>
+          <MenuItem onTouchTap={() => {
+            this.props.history.push("/cart");
+            this.closeDrawer();
+          }}>
             <Cart />
             장바구니
           </MenuItem>

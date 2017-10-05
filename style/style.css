@@ -71,17 +71,46 @@
     .visible-under-flex {
         display: none !important;
     }
-
+    .visible-small-flex {
+        display: none !important;
+    }
+    .appBar {
+        display: none !important;
+    }
 }
 
 /*mobile page*/
-@media (max-width: 991px) {
+@media (min-width: 768px) and (max-width: 991px) {
     .visible-over-block {
         display: none !important;
     }
     .visible-under-flex {
         display: flex !important;
     }
+    .visible-small-flex {
+        display: none !important;
+    }
+    .appBar {
+        display: flex !important;
+    }
+    .sticky {
+        position: sticky;
+    }
+}
+
+@media (max-width: 767px) {
+    .visible-over-block {
+        display: none !important;
+    }
+    .visible-under-flex {
+        display: none !important;
+    }
+    .visible-small-flex {
+        display: flex !important;
+    }
+    .appBar {
+         display: flex !important;
+     }
     .sticky {
         position: sticky;
     }

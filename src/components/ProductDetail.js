@@ -333,6 +333,10 @@ class ProductDetail extends Component {
     this.setState({alertDialogOpen: true});
   };
 
+  onOpenCartDialog = () => {
+    this.setState({cartDialogOpen: true})
+  }
+
   onCloseCartDialog = () => {
     this.setState({
       cartDialogOpen: false,
@@ -356,7 +360,7 @@ class ProductDetail extends Component {
           console.log(res);
         });
 
-      this.onOpenAlertDialog();
+      this.onOpenCartDialog();
     }
   }
 

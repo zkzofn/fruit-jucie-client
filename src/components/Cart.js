@@ -2,60 +2,52 @@ import React, { Component } from 'react';
 import update from 'react-addons-update';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Divider } from 'material-ui';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn, TableFooter } from 'material-ui/Table';
-import { getCart } from '../actions/RequestManager';
+import { getCart, patchCart, delCart } from '../actions/RequestManager';
 import CircularProgress from './CircularProgress';
 
 class Cart extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      cartItems: []
-    }
+    this.state = {}
+
   }
 
   // 장바구니에서 구매페이지로 넘어갈 때 재고도 한번 확인하고 넘어가
 
   componentWillMount() {
-    // 여기서 setTimeout을 주는 이유는 매번
     setTimeout(() => {
       const params = {
-        userId: this.props.currentUser.id
+        // userId: this.props.currentUser.id
+        userId: 1
       };
 
       this.props.getCart(params)
         .then(res => {
           const { cart } = res.payload.data;
 
-          console.log(cart);
-
-          this.setState({cart});
+          this.setState({cartItems: cart});
         });
     }, 200);
-
-
-
-
-    this.setState({
-      cartItems: [
-        {id: 1, title: "짤깃한 고구마", options: ["짤깃한맛", "고소한맛"], price: 5800, count: 5},
-        {id: 2, title: "짤깃한 고구마", options: ["매운맛", "고소한맛"], price: 5800, count: 5},
-        {id: 3, title: "짤깃한 고구마", options: ["단맛"], price: 5800, count: 15},
-      ]
-    })
   }
 
-  render() {
-    if (this.state.cart === undefined)
-      return <CircularProgress />;
 
+
+  render() {
+    console.log(this);
+
+    // 여기서는 장바구니 내용 없다고 보여줘야해
+    if (this.state.cartItems === undefined)
+      return <CircularProgress />;
 
     const styles = {
       id: {width: "10%", textAlign: "center"},
       titleHeader: {width: "54%", textAlign: "center"},
       title: {width: "54%"},
       count: {width: "11%", textAlign: "center"},
+      delete: {width: "11%", textAlign: "center"},
       price: {width: "12%", textAlign: "center"},
       totalPrice: {width: "12%", textAlign: "center"},
     };
@@ -65,127 +57,317 @@ class Cart extends Component {
     const renderOptions = (options) => {
       return options.map((option, index) => {
         return (
-          <p key={index}>{option}</p>
+          <p key={index}>{option.description}</p>
         )
       })
     };
 
-    const minusProductCount = (event, index) => {
-      event.stopPropagation();
 
-      this.setState({
-        cartItems: update(
-          this.state.cartItems, {
-            [index]: {
-              count: {
-                $set: this.state.cartItems[index].count > 1 ? this.state.cartItems[index].count - 1 : 1
+
+
+
+
+    const renderCount = (cartId, count, index, optionIndex = null) => {
+      const minusProductCount = (event, index, optionIndex, cartId) => {
+        event.stopPropagation();
+
+        const params = {
+          cartId: cartId,
+          value: -1
+        };
+
+        if (optionIndex === null) {
+          if (this.state.cartItems[index].product.count > 1)
+            patchCart(params);
+
+          this.setState({
+            cartItems: update(
+              this.state.cartItems, {
+                [index]: {
+                  product: {
+                    count: {
+                      $set: this.state.cartItems[index].product.count > 1 ? this.state.cartItems[index].product.count - 1 : 1
+                    }
+                  }
+                }
               }
-            }
-          }
-        )
-      })
-    };
+            )
+          })
+        } else {
+          if (this.state.cartItems[index].options[optionIndex].count > 1)
+            patchCart(params);
 
-
-    const plusProductCount = (event, index) => {
-      event.stopPropagation();
-
-      this.setState({
-        cartItems: update(
-          this.state.cartItems, {
-            [index]: {
-              count: {
-                $set: this.state.cartItems[index].count + 1
+          this.setState({
+            cartItems: update(
+              this.state.cartItems, {
+                [index]: {
+                  options: {
+                    [optionIndex]: {
+                      count: {
+                        $set: this.state.cartItems[index].options[optionIndex].count > 1 ? this.state.cartItems[index].options[optionIndex].count - 1 : 1
+                      }
+                    }
+                  }
+                }
               }
-            }
-          }
-        )
-      })
+            )
+          })
+        }
+      };
+
+      const plusProductCount = (event, index, optionIndex, cartId) => {
+        event.stopPropagation();
+
+        const params = {
+          cartId: cartId,
+          value: 1
+        };
+
+        patchCart(params);
+
+        if (optionIndex === null) {
+          this.setState({
+            cartItems: update(
+              this.state.cartItems, {
+                [index]: {
+                  product: {
+                    count: {
+                      $set: this.state.cartItems[index].product.count + 1
+                    }
+                  }
+                }
+              }
+            )
+          })
+        } else {
+          this.setState({
+            cartItems: update(
+              this.state.cartItems, {
+                [index]: {
+                  options: {
+                    [optionIndex]: {
+                      count: {
+                        $set: this.state.cartItems[index].options[optionIndex].count + 1
+                      }
+                    }
+                  }
+                }
+              }
+            )
+          })
+        }
+      };
+
+      return (
+        <div key={optionIndex} className="boxed-group" role="group" aria-label="Product count" style={{height: 25, marginBottom: 3}}>
+          <div
+            style={{width: "33.3333333%", verticalAlign: "middle"}}
+            className="inlineBlock cursorPointer"
+            onClick={(event) => minusProductCount(event, index, optionIndex, cartId)}
+          >-</div>
+          <div style={{width: "33.3333333%", verticalAlign: "middle", height: "100%", paddingTop: 4}} className="inlineBlock productCount">{count}</div>
+          <div
+            style={{width: "33.3333333%", verticalAlign: "middle"}}
+            className="inlineBlock cursorPointer"
+            onClick={(event) => plusProductCount(event, index, optionIndex, cartId)}
+          >+</div>
+        </div>
+      )
     };
 
-    const calcTotalPrice = () => {
-      let totalPrice = 0;
-
-      for (let i = 0; i < this.state.cartItems.length; i++) {
-        totalPrice += this.state.cartItems[i].price * this.state.cartItems[i].count;
+    const renderCounts = (cartItem, index) => {
+      // option이 없는 단품일 경우
+      if (cartItem.options.length === 0) {
+        return renderCount(cartItem.id, cartItem.product.count, index);
+      } else { // option이 있는 제품일 경우
+        return cartItem.options.map((option, optionIndex) => {
+          return renderCount(option.cartId, option.count, index, optionIndex);
+        })
       }
+    };
 
-      return totalPrice.toLocaleString();
+
+    const onDeleteCart = (event, cartId, cartItem, index, optionIndex) => {
+      event.stopPropagation();
+
+      const params = { cartId };
+
+      delCart(params);
+
+      if (optionIndex === null || cartItem.options.length === 1) {
+        this.setState({
+          cartItems: this.state.cartItems.filter(stateCartItem => {
+            return stateCartItem.product_id !== cartItem.product_id;
+          })
+        })
+      } else {
+        this.setState({
+          cartItems: update(
+            this.state.cartItems, {
+              [index]: {
+                options: {
+                  $set: cartItem.options.filter(stateOption => {
+                    return stateOption.cartId !== cartId;
+                  })
+                }
+              }
+            }
+          )
+        })
+      }
+    };
+
+
+    const renderDelButton = (cartId, cartItem, index, optionIndex = null) => {
+      return (
+        <div
+          key={optionIndex}
+          className="boxed-group cursorPointer"
+          style={{height: 22, marginBottom: 3}}
+          onClick={event => onDeleteCart(event, cartId, cartItem, index, optionIndex)}
+        >
+          삭제
+        </div>
+      )
+    };
+
+
+    const renderDeleteButton = (cartItem, index) => {
+      if (cartItem.options.length === 0) {
+        return renderDelButton(cartItem.id, cartItem, index);
+      } else {
+        return cartItem.options.map((option, optionIndex) => {
+          return renderDelButton(option.cartId, cartItem, index, optionIndex)
+        })
+      }
+    };
+
+    const renderEachPrice = (cartItem) => {
+      if (cartItem.options.length === 0) {
+        return <p>{cartItem.product.price_sale.toLocaleString()}원</p>
+      } else {
+        return cartItem.options.map((option, index) => {
+          const marginTop = index === 0 ? 39 : 0;
+
+          return <p key={index} style={{marginTop}}>{option.additional_fee.toLocaleString()}원</p>
+        })
+      }
+    };
+
+    const renderLinePrice = (cartItem) => {
+      let linePrice = 0;
+
+      if (cartItem.options.length === 0) {
+        linePrice = cartItem.product.count * cartItem.product.price_sale
+      } else {
+        cartItem.options.forEach(option => {
+          linePrice += option.additional_fee * option.count;
+        });
+      }
+      return <h4 style={{fontWeight: "bold", marginTop: 20}}>{linePrice.toLocaleString()}원</h4>
+    };
+
+    const renderProductOptions = (cartItem) => {
+      return (
+        <div>
+          <h4>{cartItem.product.name}</h4>
+          {renderOptions(cartItem.options)}
+        </div>
+      )
     };
 
     const renderCartListOver = () => {
+      console.log(this.state.cartItems);
       return this.state.cartItems.map((cartItem, index) => {
+        const marginTop = cartItem.options.length === 0 ? 0 : 39;
+
         return (
           <TableRow key={index}>
             <TableRowColumn style={styles.title}>
               <img
-                src="../../assets/img/sweet_potato.jpg"
+                src={`../../assets/img/${cartItem.product.image_path}`}
                 className="inlineBlock alignCenter"
                 style={{width: "50%"}}
               />
               <div style={{width: "50%", verticalAlign: "middle"}} className="inlineBlock">
-                <h4>{cartItem.title}</h4>
-                {renderOptions(cartItem.options)}
+                {renderProductOptions(cartItem)}
               </div>
             </TableRowColumn>
             <TableRowColumn style={styles.count}>
-              <div className="boxed-group" role="group" aria-label="Product count" style={{height: 30}}>
-                <div
-                  style={{width: "33.3333333%", verticalAlign: "middle"}}
-                  className="inlineBlock cursorPointer"
-                  onClick={(event) => minusProductCount(event, index)}
-                >-</div>
-                <div style={{width: "33.3333333%", verticalAlign: "middle", height: "100%", paddingTop: 4}} className="inlineBlock productCount">{cartItem.count}</div>
-                <div
-                  style={{width: "33.3333333%", verticalAlign: "middle"}}
-                  className="inlineBlock cursorPointer"
-                  onClick={(event) => plusProductCount(event, index)}
-                >+</div>
+              <div style={{marginTop}}>
+                {renderCounts(cartItem, index)}
               </div>
             </TableRowColumn>
-            <TableRowColumn style={styles.price}>{cartItem.price.toLocaleString()}원</TableRowColumn>
-            <TableRowColumn style={styles.totalPrice}>{(cartItem.count * cartItem.price).toLocaleString()}원</TableRowColumn>
+            <TableRowColumn style={styles.delete}>
+              <div style={{marginTop}}>
+                {renderDeleteButton(cartItem, index)}
+              </div>
+            </TableRowColumn>
+            <TableRowColumn style={styles.price}>
+              {renderEachPrice(cartItem)}
+            </TableRowColumn>
+            <TableRowColumn style={styles.totalPrice}>
+              {renderLinePrice(cartItem)}
+            </TableRowColumn>
           </TableRow>
         )
       })
+    };
+
+    const renderOptionsUnder = (cartItem, index) => {
+      if (cartItem.options.length === 0) {
+        return (
+          <div className="clearfix py-2">
+            <div className="mb-2">
+              개당 {cartItem.product.price_sale.toLocaleString()}원
+            </div>
+            <div style={{width: 70}} className="pull-left alignCenter">
+              {renderCount(cartItem.id, cartItem.product.count, index)}
+            </div>
+            <div style={{width: 40}} className="pull-right alignCenter">
+              {renderDelButton(cartItem.id, cartItem, index)}
+            </div>
+          </div>
+
+        )
+
+      } else {
+        return cartItem.options.map((option, optionIndex) => {
+          return (
+            <div className="clearfix">
+              {optionIndex > 0 ? <Divider /> : null}
+              <div className="clearfix py-2">
+                <div className="mb-2">
+                  {option.description} / 개당 {option.additional_fee.toLocaleString()}원
+                </div>
+                <div style={{width: 70}} className="pull-left alignCenter">
+                  {renderCount(option.cartId, option.count, index, optionIndex)}
+                </div>
+                <div style={{width: 40}} className="pull-right alignCenter">
+                  {renderDelButton(option.cartId, cartItem, index, optionIndex)}
+                </div>
+              </div>
+            </div>
+          )
+        })
+      }
     };
 
     const renderCartListUnder = () => {
       return this.state.cartItems.map((cartItem, index) => {
         return (
           <TableRow key={index}>
-            <TableRowColumn style={{width: "70%"}}>
+            <TableRowColumn>
               <img
-                src="../../assets/img/sweet_potato.jpg"
+                // 여기서 이미지랑 제품명 클릭했을 때 해당 제품으로 이동할 수 있도록 링크 달아야해
+                src={`../../assets/img/${cartItem.product.image_path}`}
                 className="inlineBlock alignCenter"
                 style={{width: "50%"}}
               />
               <div style={{width: "50%", verticalAlign: "middle"}} className="inlineBlock">
-                <div style={{width: "60%"}} className="inlineBlock">
-                  <h4>{cartItem.title}</h4>
-                  {renderOptions(cartItem.options)}
-                  <div className="boxed-group alignCenter" role="group" aria-label="Product count" style={{width: "70%", height: 30}}>
-                    <div
-                      style={{width: "33.3333333%"}}
-                      className="inlineBlock cursorPointer"
-                      onClick={(event) => minusProductCount(event, index)}
-                    >-</div>
-                    <div style={{width: "33.3333333%", height: "100%", paddingTop: 4}} className="inlineBlock productCount">{cartItem.count}</div>
-                    <div
-                      style={{width: "33.3333333%"}}
-                      className="inlineBlock cursorPointer"
-                      onClick={(event) => plusProductCount(event, index)}
-                    >+</div>
-                  </div>
-                  <div>
-                    개당 판매가 {cartItem.price.toLocaleString()}원
-                  </div>
-                </div>
-              </div>
-            </TableRowColumn>
-            <TableRowColumn style={{width: "30%"}}>
-              <div>
-                <h3>{(cartItem.count * cartItem.price).toLocaleString()}원</h3>
+                <h4>{cartItem.product.name}</h4>
+                {renderOptionsUnder(cartItem, index)}
+
               </div>
             </TableRowColumn>
           </TableRow>
@@ -194,20 +376,57 @@ class Cart extends Component {
     };
 
 
+    const renderCartListXs = () => {
+      return this.state.cartItems.map((cartItem, index) => {
+        return (
+          <TableRow key={index}>
+            <TableRowColumn>
+              <h4 style={{fontWeight: "bold"}}>{cartItem.product.name}</h4>
+              <img
+                // 여기서 이미지랑 제품명 클릭했을 때 해당 제품으로 이동할 수 있도록 링크 달아야해
+                src={`../../assets/img/${cartItem.product.image_path}`}
+                className="alignCenter"
+                style={{width: "100%"}}
+              />
+              <div style={{verticalAlign: "middle"}}>
+                {renderOptionsUnder(cartItem, index)}
+              </div>
+            </TableRowColumn>
+          </TableRow>
+        )
+      })
+    };
+
+
+    const calcTotalPrice = () => {
+      let totalPrice = 0;
+
+      this.state.cartItems.forEach(cartItem => {
+        if (cartItem.options.length === 0) {
+          totalPrice += cartItem.product.count * cartItem.product.price_sale;
+        } else {
+          cartItem.options.forEach(option => {
+            totalPrice += option.count * option.additional_fee;
+          })
+        }
+      });
+
+      return totalPrice.toLocaleString();
+    };
+
     const renderFooter = () => {
       return (
         <TableFooter>
           <TableRow>
             <TableRowColumn>
-              <div className="pull-right pb-2"><h3>총 삼품 금액 = {calcTotalPrice()}원</h3></div>
+              <div className="pull-right pb-2 visible-over-block visible-under-flex"><h3 style={{fontWeight: "bold"}}>총 상품 금액 = {calcTotalPrice()}원</h3></div>
+              <div className="pull-right pb-2 visible-small-flex"><h5 style={{fontWeight: "bold"}}>총 상품 금액 = {calcTotalPrice()}원</h5></div>
             </TableRowColumn>
           </TableRow>
           <TableRow>
             <TableRowColumn>
               <div className="pull-right">
-                <button className="btn mr-2">선택상품삭제</button>
-                <button className="btn mr-2">선택상품주문</button>
-                <button className="btn btn-primary">전체상품주문</button>
+                <button className="btn btn-primary">상품주문</button>
               </div>
             </TableRowColumn>
           </TableRow>
@@ -215,16 +434,22 @@ class Cart extends Component {
       )
     };
 
-    // 여기 큰화면이랑 작은화면일때 코드 분할시켜놔
-
     return (
       <div>
-        <div className="jumbotron alignCenter">
+        <div className="jumbotron alignCenter visible-sm-block visible-md-block visible-lg-block">
           <h1>장바구니</h1>
           <p>주문하실 상품명 및 수량을 정확하게 확인해 주세요.</p>
           <p>장바구니에 담은 상품은 일주일 후 자동 삭제됩니다.</p>
         </div>
-        
+
+        <div
+          className="visible-xs-block alignCenter"
+          style={{backgroundColor: "#eee", paddingTop: 20, paddingBottom: 20}}
+        >
+          <h4 style={{fontWeight: "bold"}}>장바구니</h4>
+          <p>상품명 및 수량을 확인해 주세요.</p>
+        </div>
+
         <div className="container pb-4">
           <div className="visible-over-block">
             <Table selectable={true} multiSelectable={true} allRowsSelected={true}>
@@ -232,7 +457,7 @@ class Cart extends Component {
                 <TableRow>
                   <TableHeaderColumn style={styles.titleHeader}>상품정보</TableHeaderColumn>
                   <TableHeaderColumn style={styles.count}>수량</TableHeaderColumn>
-                  <TableHeaderColumn style={styles.price}>판매가</TableHeaderColumn>
+                  <TableHeaderColumn style={styles.price}>개당 판매가</TableHeaderColumn>
                   <TableHeaderColumn style={styles.totalPrice}>금액</TableHeaderColumn>
                 </TableRow>
               </TableHeader>
@@ -242,7 +467,6 @@ class Cart extends Component {
               {renderFooter()}
             </Table>
           </div>
-
 
           <div className="visible-under-flex">
             <Table selectable={true} multiSelectable={true} allRowsSelected={true}>
@@ -257,6 +481,21 @@ class Cart extends Component {
               {renderFooter()}
             </Table>
           </div>
+
+          <div className="visible-small-flex">
+            <Table selectable={true} multiSelectable={true} allRowsSelected={true}>
+              <TableHeader enableSelectAll={true}>
+                <TableRow>
+                  <TableHeaderColumn className="alignCenter">상품정보</TableHeaderColumn>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {renderCartListXs()}
+              </TableBody>
+              {renderFooter()}
+            </Table>
+          </div>
+
         </div>
 
       </div>

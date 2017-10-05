@@ -5,6 +5,8 @@ export const GET_PRODUCT = "GET_PRODUCT";
 export const GET_USER = "GET_USER";
 export const POST_CART = "POST_CART";
 export const GET_CART = "GET_CART";
+export const PATCH_CART = "PATCH_CART";
+export const DELETE_CART = "DELETE_CART";
 
 // export const getSomethings = ({pageNo, length, indexBy, indexType, values}) => {
 //   const query = {
@@ -68,3 +70,20 @@ export const getCart = (params) => {
   }
 };
 
+export const patchCart = (params) => {
+  const request = SessionManager.instance().patch(`/cart`, params);
+  
+  return {
+    type: PATCH_CART,
+    payload: request
+  }
+};
+
+export const delCart = (params) => {
+  const request = SessionManager.instance().del(`/cart`, params);
+
+  return {
+    type: DELETE_CART,
+    payload: request
+  }
+}
