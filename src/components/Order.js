@@ -7,7 +7,7 @@ import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowCol
 import { getCart, patchCart, delCart } from '../actions/RequestManager';
 import CircularProgress from './CircularProgress';
 
-class Cart extends Component {
+class Order extends Component {
   constructor(props) {
     super(props);
 
@@ -501,7 +501,7 @@ class Cart extends Component {
           </div>
         </div>
       </div>
-   )
+    )
   }
 }
 
@@ -519,6 +519,6 @@ const mapDispatchToProps = (dispatch) => {
   }, dispatch)
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Cart);
+export default connect(mapStateToProps, mapDispatchToProps)(Order);
 
 

@@ -16,6 +16,7 @@ import Products from './components/Products';
 import SignIn from './components/SignIn';
 import ProductDetail from './components/ProductDetail';
 import Cart from './components/Cart';
+import Order from './components/Order';
 import Payment from './components/Payment';
 
 injectTapEventPlugin();
@@ -37,6 +38,7 @@ ReactDOM.render(
           <Route path="/products" component={Products} />
           <Route path="/signin" component={SignIn} />
           <Route path="/cart" component={Cart} />
+          <Route path="/order" component={Order} />
           <Route path="/payment" component={Payment} />
           <Footer />
         </div>
