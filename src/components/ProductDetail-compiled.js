@@ -66,6 +66,10 @@ var ProductDetail = function (_Component) {
       _this.setState({ alertDialogOpen: true });
     };
 
+    _this.onOpenCartDialog = function () {
+      _this.setState({ cartDialogOpen: true });
+    };
+
     _this.onCloseCartDialog = function () {
       _this.setState({
         cartDialogOpen: false,
@@ -459,7 +463,7 @@ var ProductDetail = function (_Component) {
           console.log(res);
         });
 
-        this.onOpenAlertDialog();
+        this.onOpenCartDialog();
       }
     }
   }, {

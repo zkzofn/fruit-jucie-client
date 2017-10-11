@@ -30,28 +30,26 @@ var _CircularProgress2 = _interopRequireDefault(_CircularProgress);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Cart = function (_Component) {
-  _inherits(Cart, _Component);
+var Order = function (_Component) {
+  _inherits(Order, _Component);
 
-  function Cart(props) {
-    _classCallCheck(this, Cart);
+  function Order(props) {
+    _classCallCheck(this, Order);
 
-    var _this = _possibleConstructorReturn(this, (Cart.__proto__ || Object.getPrototypeOf(Cart)).call(this, props));
+    var _this = _possibleConstructorReturn(this, (Order.__proto__ || Object.getPrototypeOf(Order)).call(this, props));
 
     _this.state = {};
 
     return _this;
   }
 
-  _createClass(Cart, [{
+  _createClass(Order, [{
     key: 'componentWillMount',
     value: function componentWillMount() {
       var _this2 = this;
@@ -100,171 +98,14 @@ var Cart = function (_Component) {
         });
       };
 
-      var renderCount = function renderCount(cartId, count, index) {
-        var optionIndex = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
-
-        var minusProductCount = function minusProductCount(event, index, optionIndex, cartId) {
-          event.stopPropagation();
-
-          var params = {
-            cartId: cartId,
-            value: -1
-          };
-
-          if (optionIndex === null) {
-            if (_this3.state.cartItems[index].product.count > 1) (0, _RequestManager.patchCart)(params);
-
-            _this3.setState({
-              cartItems: (0, _reactAddonsUpdate2.default)(_this3.state.cartItems, _defineProperty({}, index, {
-                product: {
-                  count: {
-                    $set: _this3.state.cartItems[index].product.count > 1 ? _this3.state.cartItems[index].product.count - 1 : 1
-                  }
-                }
-              }))
-            });
-          } else {
-            if (_this3.state.cartItems[index].options[optionIndex].count > 1) (0, _RequestManager.patchCart)(params);
-
-            _this3.setState({
-              cartItems: (0, _reactAddonsUpdate2.default)(_this3.state.cartItems, _defineProperty({}, index, {
-                options: _defineProperty({}, optionIndex, {
-                  count: {
-                    $set: _this3.state.cartItems[index].options[optionIndex].count > 1 ? _this3.state.cartItems[index].options[optionIndex].count - 1 : 1
-                  }
-                })
-              }))
-            });
-          }
-        };
-
-        var plusProductCount = function plusProductCount(event, index, optionIndex, cartId) {
-          event.stopPropagation();
-
-          var params = {
-            cartId: cartId,
-            value: 1
-          };
-
-          (0, _RequestManager.patchCart)(params);
-
-          if (optionIndex === null) {
-            _this3.setState({
-              cartItems: (0, _reactAddonsUpdate2.default)(_this3.state.cartItems, _defineProperty({}, index, {
-                product: {
-                  count: {
-                    $set: _this3.state.cartItems[index].product.count + 1
-                  }
-                }
-              }))
-            });
-          } else {
-            _this3.setState({
-              cartItems: (0, _reactAddonsUpdate2.default)(_this3.state.cartItems, _defineProperty({}, index, {
-                options: _defineProperty({}, optionIndex, {
-                  count: {
-                    $set: _this3.state.cartItems[index].options[optionIndex].count + 1
-                  }
-                })
-              }))
-            });
-          }
-        };
-
-        return _react2.default.createElement(
-          'div',
-          { key: optionIndex, className: 'boxed-group', role: 'group', 'aria-label': 'Product count', style: { height: 25, marginBottom: 3 } },
-          _react2.default.createElement(
-            'div',
-            {
-              style: { width: "33.3333333%", verticalAlign: "middle" },
-              className: 'inlineBlock cursorPointer',
-              onClick: function onClick(event) {
-                return minusProductCount(event, index, optionIndex, cartId);
-              }
-            },
-            '-'
-          ),
-          _react2.default.createElement(
-            'div',
-            { style: { width: "33.3333333%", verticalAlign: "middle", height: "100%", paddingTop: 4 }, className: 'inlineBlock productCount' },
-            count
-          ),
-          _react2.default.createElement(
-            'div',
-            {
-              style: { width: "33.3333333%", verticalAlign: "middle" },
-              className: 'inlineBlock cursorPointer',
-              onClick: function onClick(event) {
-                return plusProductCount(event, index, optionIndex, cartId);
-              }
-            },
-            '+'
-          )
-        );
-      };
-
       var renderCounts = function renderCounts(cartItem, index) {
         // option이 없는 단품일 경우
         if (cartItem.options.length === 0) {
-          return renderCount(cartItem.id, cartItem.product.count, index);
+          // return renderCount(cartItem.id, cartItem.product.count, index);
         } else {
           // option이 있는 제품일 경우
           return cartItem.options.map(function (option, optionIndex) {
-            return renderCount(option.cartId, option.count, index, optionIndex);
-          });
-        }
-      };
-
-      var onDeleteCart = function onDeleteCart(event, cartId, cartItem, index, optionIndex) {
-        event.stopPropagation();
-
-        var params = { cartId: cartId };
-
-        (0, _RequestManager.delCart)(params);
-
-        if (optionIndex === null || cartItem.options.length === 1) {
-          _this3.setState({
-            cartItems: _this3.state.cartItems.filter(function (stateCartItem) {
-              return stateCartItem.product_id !== cartItem.product_id;
-            })
-          });
-        } else {
-          _this3.setState({
-            cartItems: (0, _reactAddonsUpdate2.default)(_this3.state.cartItems, _defineProperty({}, index, {
-              options: {
-                $set: cartItem.options.filter(function (stateOption) {
-                  return stateOption.cartId !== cartId;
-                })
-              }
-            }))
-          });
-        }
-      };
-
-      var renderDelButton = function renderDelButton(cartId, cartItem, index) {
-        var optionIndex = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
-
-        return _react2.default.createElement(
-          'div',
-          {
-            key: optionIndex,
-            className: 'boxed-group cursorPointer',
-            style: { height: 22, marginBottom: 3 },
-            onClick: function onClick(event) {
-              return onDeleteCart(event, cartId, cartItem, index, optionIndex);
-            }
-          },
-          '\uC0AD\uC81C'
-        );
-      };
-
-      var renderDeleteButton = function renderDeleteButton(cartItem, index) {
-        if (cartItem.options.length === 0) {
-          return renderDelButton(cartItem.id, cartItem, index);
-        } else {
-          return cartItem.options.map(function (option, optionIndex) {
-            return renderDelButton(option.cartId, cartItem, index, optionIndex);
+            // return renderCount(option.cartId, option.count, index, optionIndex);
           });
         }
       };
@@ -355,15 +196,6 @@ var Cart = function (_Component) {
             ),
             _react2.default.createElement(
               _Table.TableRowColumn,
-              { style: styles.delete },
-              _react2.default.createElement(
-                'div',
-                { style: { marginTop: marginTop } },
-                renderDeleteButton(cartItem, index)
-              )
-            ),
-            _react2.default.createElement(
-              _Table.TableRowColumn,
               { style: styles.price },
               renderEachPrice(cartItem)
             ),
@@ -388,16 +220,7 @@ var Cart = function (_Component) {
               cartItem.product.price_sale.toLocaleString(),
               '\uC6D0'
             ),
-            _react2.default.createElement(
-              'div',
-              { style: { width: 70 }, className: 'pull-left alignCenter' },
-              renderCount(cartItem.id, cartItem.product.count, index)
-            ),
-            _react2.default.createElement(
-              'div',
-              { style: { width: 40 }, className: 'pull-right alignCenter' },
-              renderDelButton(cartItem.id, cartItem, index)
-            )
+            _react2.default.createElement('div', { style: { width: 70 }, className: 'pull-left alignCenter' })
           );
         } else {
           return cartItem.options.map(function (option, optionIndex) {
@@ -416,16 +239,7 @@ var Cart = function (_Component) {
                   option.additional_fee.toLocaleString(),
                   '\uC6D0'
                 ),
-                _react2.default.createElement(
-                  'div',
-                  { style: { width: 70 }, className: 'pull-left alignCenter' },
-                  renderCount(option.cartId, option.count, index, optionIndex)
-                ),
-                _react2.default.createElement(
-                  'div',
-                  { style: { width: 40 }, className: 'pull-right alignCenter' },
-                  renderDelButton(option.cartId, cartItem, index, optionIndex)
-                )
+                _react2.default.createElement('div', { style: { width: 70 }, className: 'pull-left alignCenter' })
               )
             );
           });
@@ -547,25 +361,6 @@ var Cart = function (_Component) {
                   '\uCD1D \uC0C1\uD488 \uAE08\uC561 = ',
                   calcTotalPrice(),
                   '\uC6D0'
-                )
-              )
-            )
-          ),
-          _react2.default.createElement(
-            _Table.TableRow,
-            null,
-            _react2.default.createElement(
-              _Table.TableRowColumn,
-              null,
-              _react2.default.createElement(
-                'div',
-                { className: 'pull-right' },
-                _react2.default.createElement(
-                  'button',
-                  { className: 'btn btn-primary', onTouchTap: function onTouchTap() {
-                      _this3.props.history.push("/order");
-                    } },
-                  '\uC0C1\uD488\uC8FC\uBB38'
                 )
               )
             )
@@ -721,7 +516,7 @@ var Cart = function (_Component) {
     }
   }]);
 
-  return Cart;
+  return Order;
 }(_react.Component);
 
 var mapStateToProps = function mapStateToProps(state) {
@@ -736,6 +531,6 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   }, dispatch);
 };
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Cart);
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Order);
 
-//# sourceMappingURL=Cart-compiled.js.map
+//# sourceMappingURL=Order-compiled.js.map

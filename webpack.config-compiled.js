@@ -8,7 +8,11 @@ module.exports = {
     path: __dirname,
     filename: 'bundle.js'
   },
-  pulgins: [new webpack.optimize.DedupePlugin(), new webpack.optimize.UglifyJsPlugin({
+  pulgins: [new webpack.optimize.DedupePlugin({
+    "process.env": {
+      NODE_ENV: JSON.stringify("production")
+    }
+  }), new webpack.optimize.UglifyJsPlugin({
     minimize: true,
     compress: {
       warnings: false

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getCart = exports.postCart = exports.getUser = exports.getProduct = exports.getProducts = exports.GET_CART = exports.POST_CART = exports.GET_USER = exports.GET_PRODUCT = exports.GET_PRODUCTS = undefined;
+exports.delCart = exports.patchCart = exports.getCart = exports.postCart = exports.getUser = exports.getProduct = exports.getProducts = exports.DELETE_CART = exports.PATCH_CART = exports.GET_CART = exports.POST_CART = exports.GET_USER = exports.GET_PRODUCT = exports.GET_PRODUCTS = undefined;
 
 var _SessionManager = require("./SessionManager");
 
@@ -16,6 +16,8 @@ var GET_PRODUCT = exports.GET_PRODUCT = "GET_PRODUCT";
 var GET_USER = exports.GET_USER = "GET_USER";
 var POST_CART = exports.POST_CART = "POST_CART";
 var GET_CART = exports.GET_CART = "GET_CART";
+var PATCH_CART = exports.PATCH_CART = "PATCH_CART";
+var DELETE_CART = exports.DELETE_CART = "DELETE_CART";
 
 // export const getSomethings = ({pageNo, length, indexBy, indexType, values}) => {
 //   const query = {
@@ -75,6 +77,24 @@ var getCart = exports.getCart = function getCart(params) {
 
   return {
     type: GET_CART,
+    payload: request
+  };
+};
+
+var patchCart = exports.patchCart = function patchCart(params) {
+  var request = _SessionManager2.default.instance().patch("/cart", params);
+
+  return {
+    type: PATCH_CART,
+    payload: request
+  };
+};
+
+var delCart = exports.delCart = function delCart(params) {
+  var request = _SessionManager2.default.instance().del("/cart", params);
+
+  return {
+    type: DELETE_CART,
     payload: request
   };
 };

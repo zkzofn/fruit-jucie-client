@@ -107,7 +107,7 @@ var Header = function (_Component) {
         'div',
         null,
         _react2.default.createElement(_materialUi.AppBar, {
-          className: 'visible-under-flex',
+          className: 'appBar',
           title: _react2.default.createElement(
             'span',
             { className: 'cursorPointer' },
@@ -127,13 +127,19 @@ var Header = function (_Component) {
           },
           _react2.default.createElement(
             _materialUi.MenuItem,
-            { href: '/signin' },
+            { onTouchTap: function onTouchTap() {
+                _this2.props.history.push("/signin");
+                _this2.closeDrawer();
+              } },
             _react2.default.createElement(_powerSettingsNew2.default, null),
             'Sign In'
           ),
           _react2.default.createElement(
             _materialUi.MenuItem,
-            null,
+            { onTouchTap: function onTouchTap() {
+                _this2.props.history.push("/cart");
+                _this2.closeDrawer();
+              } },
             _react2.default.createElement(_shoppingCart2.default, null),
             '\uC7A5\uBC14\uAD6C\uB2C8'
           ),

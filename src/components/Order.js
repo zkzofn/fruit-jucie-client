@@ -62,183 +62,18 @@ class Order extends Component {
 
 
 
-
-
-
-    const renderCount = (cartId, count, index, optionIndex = null) => {
-      const minusProductCount = (event, index, optionIndex, cartId) => {
-        event.stopPropagation();
-
-        const params = {
-          cartId: cartId,
-          value: -1
-        };
-
-        if (optionIndex === null) {
-          if (this.state.cartItems[index].product.count > 1)
-            patchCart(params);
-
-          this.setState({
-            cartItems: update(
-              this.state.cartItems, {
-                [index]: {
-                  product: {
-                    count: {
-                      $set: this.state.cartItems[index].product.count > 1 ? this.state.cartItems[index].product.count - 1 : 1
-                    }
-                  }
-                }
-              }
-            )
-          })
-        } else {
-          if (this.state.cartItems[index].options[optionIndex].count > 1)
-            patchCart(params);
-
-          this.setState({
-            cartItems: update(
-              this.state.cartItems, {
-                [index]: {
-                  options: {
-                    [optionIndex]: {
-                      count: {
-                        $set: this.state.cartItems[index].options[optionIndex].count > 1 ? this.state.cartItems[index].options[optionIndex].count - 1 : 1
-                      }
-                    }
-                  }
-                }
-              }
-            )
-          })
-        }
-      };
-
-      const plusProductCount = (event, index, optionIndex, cartId) => {
-        event.stopPropagation();
-
-        const params = {
-          cartId: cartId,
-          value: 1
-        };
-
-        patchCart(params);
-
-        if (optionIndex === null) {
-          this.setState({
-            cartItems: update(
-              this.state.cartItems, {
-                [index]: {
-                  product: {
-                    count: {
-                      $set: this.state.cartItems[index].product.count + 1
-                    }
-                  }
-                }
-              }
-            )
-          })
-        } else {
-          this.setState({
-            cartItems: update(
-              this.state.cartItems, {
-                [index]: {
-                  options: {
-                    [optionIndex]: {
-                      count: {
-                        $set: this.state.cartItems[index].options[optionIndex].count + 1
-                      }
-                    }
-                  }
-                }
-              }
-            )
-          })
-        }
-      };
-
-      return (
-        <div key={optionIndex} className="boxed-group" role="group" aria-label="Product count" style={{height: 25, marginBottom: 3}}>
-          <div
-            style={{width: "33.3333333%", verticalAlign: "middle"}}
-            className="inlineBlock cursorPointer"
-            onClick={(event) => minusProductCount(event, index, optionIndex, cartId)}
-          >-</div>
-          <div style={{width: "33.3333333%", verticalAlign: "middle", height: "100%", paddingTop: 4}} className="inlineBlock productCount">{count}</div>
-          <div
-            style={{width: "33.3333333%", verticalAlign: "middle"}}
-            className="inlineBlock cursorPointer"
-            onClick={(event) => plusProductCount(event, index, optionIndex, cartId)}
-          >+</div>
-        </div>
-      )
-    };
-
     const renderCounts = (cartItem, index) => {
       // option이 없는 단품일 경우
       if (cartItem.options.length === 0) {
-        return renderCount(cartItem.id, cartItem.product.count, index);
+        // return renderCount(cartItem.id, cartItem.product.count, index);
       } else { // option이 있는 제품일 경우
         return cartItem.options.map((option, optionIndex) => {
-          return renderCount(option.cartId, option.count, index, optionIndex);
+          // return renderCount(option.cartId, option.count, index, optionIndex);
         })
       }
     };
 
 
-    const onDeleteCart = (event, cartId, cartItem, index, optionIndex) => {
-      event.stopPropagation();
-
-      const params = { cartId };
-
-      delCart(params);
-
-      if (optionIndex === null || cartItem.options.length === 1) {
-        this.setState({
-          cartItems: this.state.cartItems.filter(stateCartItem => {
-            return stateCartItem.product_id !== cartItem.product_id;
-          })
-        })
-      } else {
-        this.setState({
-          cartItems: update(
-            this.state.cartItems, {
-              [index]: {
-                options: {
-                  $set: cartItem.options.filter(stateOption => {
-                    return stateOption.cartId !== cartId;
-                  })
-                }
-              }
-            }
-          )
-        })
-      }
-    };
-
-
-    const renderDelButton = (cartId, cartItem, index, optionIndex = null) => {
-      return (
-        <div
-          key={optionIndex}
-          className="boxed-group cursorPointer"
-          style={{height: 22, marginBottom: 3}}
-          onClick={event => onDeleteCart(event, cartId, cartItem, index, optionIndex)}
-        >
-          삭제
-        </div>
-      )
-    };
-
-
-    const renderDeleteButton = (cartItem, index) => {
-      if (cartItem.options.length === 0) {
-        return renderDelButton(cartItem.id, cartItem, index);
-      } else {
-        return cartItem.options.map((option, optionIndex) => {
-          return renderDelButton(option.cartId, cartItem, index, optionIndex)
-        })
-      }
-    };
 
     const renderEachPrice = (cartItem) => {
       if (cartItem.options.length === 0) {
@@ -296,11 +131,6 @@ class Order extends Component {
                 {renderCounts(cartItem, index)}
               </div>
             </TableRowColumn>
-            <TableRowColumn style={styles.delete}>
-              <div style={{marginTop}}>
-                {renderDeleteButton(cartItem, index)}
-              </div>
-            </TableRowColumn>
             <TableRowColumn style={styles.price}>
               {renderEachPrice(cartItem)}
             </TableRowColumn>
@@ -320,10 +150,9 @@ class Order extends Component {
               개당 {cartItem.product.price_sale.toLocaleString()}원
             </div>
             <div style={{width: 70}} className="pull-left alignCenter">
-              {renderCount(cartItem.id, cartItem.product.count, index)}
-            </div>
-            <div style={{width: 40}} className="pull-right alignCenter">
-              {renderDelButton(cartItem.id, cartItem, index)}
+              {
+                // renderCount(cartItem.id, cartItem.product.count, index)
+              }
             </div>
           </div>
 
@@ -339,10 +168,9 @@ class Order extends Component {
                   {option.description} / 개당 {option.additional_fee.toLocaleString()}원
                 </div>
                 <div style={{width: 70}} className="pull-left alignCenter">
-                  {renderCount(option.cartId, option.count, index, optionIndex)}
-                </div>
-                <div style={{width: 40}} className="pull-right alignCenter">
-                  {renderDelButton(option.cartId, cartItem, index, optionIndex)}
+                  {
+                    // renderCount(option.cartId, option.count, index, optionIndex)
+                  }
                 </div>
               </div>
             </div>
@@ -420,13 +248,6 @@ class Order extends Component {
               <div className="pull-right pb-2 visible-over-block"><h3 style={{fontWeight: "bold"}}>총 상품 금액 = {calcTotalPrice()}원</h3></div>
               <div className="pull-right pb-2 visible-under-flex"><h4 style={{fontWeight: "bold"}}>총 상품 금액 = {calcTotalPrice()}원</h4></div>
               <div className="pull-right pb-2 visible-small-flex"><h5 style={{fontWeight: "bold"}}>총 상품 금액 = {calcTotalPrice()}원</h5></div>
-            </TableRowColumn>
-          </TableRow>
-          <TableRow>
-            <TableRowColumn>
-              <div className="pull-right">
-                <button className="btn btn-primary" onTouchTap={() => {this.props.history.push("/order")}}>상품주문</button>
-              </div>
             </TableRowColumn>
           </TableRow>
         </TableFooter>
