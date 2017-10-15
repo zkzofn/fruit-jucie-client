@@ -28,6 +28,10 @@ var _CircularProgress = require('./CircularProgress');
 
 var _CircularProgress2 = _interopRequireDefault(_CircularProgress);
 
+var _jquery = require('jquery/dist/jquery.min');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -44,7 +48,30 @@ var Order = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, (Order.__proto__ || Object.getPrototypeOf(Order)).call(this, props));
 
-    _this.state = {};
+    _this.onAddressDialogOpen = function () {
+      _this.setState({ addressDialogOpen: true });
+    };
+
+    _this.onAddressDialogClose = function () {
+      _this.setState({ addressDialogOpen: false });
+    };
+
+    _this.onSearchAddress = function () {
+      var data = new FormData();
+
+      data.append("confmKey", "U01TX0FVVEgyMDE3MTAxNTIzMDgwNDEwNzQwNTA=");
+      data.append("currentPage", "1");
+      data.append("countPerPage", "10");
+      data.append("keyword", _this.state.addressTerm);
+      data.append("resultType", "json");
+
+      _this.props.getAddress(data);
+    };
+
+    _this.state = {
+      addressDialogOpen: false,
+      addressTerm: ""
+    };
 
     return _this;
   }
@@ -67,6 +94,11 @@ var Order = function (_Component) {
           _this2.setState({ cartItems: cart });
         });
       }, 200);
+    }
+  }, {
+    key: 'onChangeAddress',
+    value: function onChangeAddress(addressTerm) {
+      this.setState({ addressTerm: addressTerm });
     }
   }, {
     key: 'render',
@@ -412,103 +444,189 @@ var Order = function (_Component) {
           { className: 'container pb-4' },
           _react2.default.createElement(
             'div',
-            { className: 'visible-over-block' },
+            null,
             _react2.default.createElement(
-              _Table.Table
-              // selectable={true} multiSelectable={true} allRowsSelected={true}
-              ,
-              null,
+              'div',
+              { className: 'visible-over-block' },
               _react2.default.createElement(
-                _Table.TableHeader
-                //enableSelectAll={true}
+                _Table.Table
+                // selectable={true} multiSelectable={true} allRowsSelected={true}
                 ,
-                { displaySelectAll: false, adjustForCheckbox: false
-                },
+                null,
                 _react2.default.createElement(
-                  _Table.TableRow,
-                  null,
+                  _Table.TableHeader
+                  //enableSelectAll={true}
+                  ,
+                  { displaySelectAll: false, adjustForCheckbox: false
+                  },
                   _react2.default.createElement(
-                    _Table.TableHeaderColumn,
-                    { style: styles.titleHeader },
-                    '\uC0C1\uD488\uC815\uBCF4'
-                  ),
-                  _react2.default.createElement(
-                    _Table.TableHeaderColumn,
-                    { style: styles.count },
-                    '\uC218\uB7C9'
-                  ),
-                  _react2.default.createElement(
-                    _Table.TableHeaderColumn,
-                    { style: styles.price },
-                    '\uAC1C\uB2F9 \uD310\uB9E4\uAC00'
-                  ),
-                  _react2.default.createElement(
-                    _Table.TableHeaderColumn,
-                    { style: styles.totalPrice },
-                    '\uAE08\uC561'
+                    _Table.TableRow,
+                    null,
+                    _react2.default.createElement(
+                      _Table.TableHeaderColumn,
+                      { style: styles.titleHeader },
+                      '\uC0C1\uD488\uC815\uBCF4'
+                    ),
+                    _react2.default.createElement(
+                      _Table.TableHeaderColumn,
+                      { style: styles.count },
+                      '\uC218\uB7C9'
+                    ),
+                    _react2.default.createElement(
+                      _Table.TableHeaderColumn,
+                      { style: styles.price },
+                      '\uAC1C\uB2F9 \uD310\uB9E4\uAC00'
+                    ),
+                    _react2.default.createElement(
+                      _Table.TableHeaderColumn,
+                      { style: styles.totalPrice },
+                      '\uAE08\uC561'
+                    )
                   )
-                )
-              ),
+                ),
+                _react2.default.createElement(
+                  _Table.TableBody,
+                  { displayRowCheckbox: false },
+                  renderCartListOver()
+                ),
+                renderFooter()
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'visible-under-flex' },
               _react2.default.createElement(
-                _Table.TableBody,
-                { displayRowCheckbox: false },
-                renderCartListOver()
-              ),
-              renderFooter()
+                _Table.Table,
+                null,
+                _react2.default.createElement(
+                  _Table.TableHeader,
+                  { displaySelectAll: false, adjustForCheckbox: false },
+                  _react2.default.createElement(
+                    _Table.TableRow,
+                    null,
+                    _react2.default.createElement(
+                      _Table.TableHeaderColumn,
+                      { className: 'alignCenter' },
+                      '\uC0C1\uD488\uC815\uBCF4'
+                    )
+                  )
+                ),
+                _react2.default.createElement(
+                  _Table.TableBody,
+                  { displayRowCheckbox: false },
+                  renderCartListUnder()
+                ),
+                renderFooter()
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'visible-small-flex' },
+              _react2.default.createElement(
+                _Table.Table,
+                null,
+                _react2.default.createElement(
+                  _Table.TableHeader,
+                  { displaySelectAll: false, adjustForCheckbox: false },
+                  _react2.default.createElement(
+                    _Table.TableRow,
+                    null,
+                    _react2.default.createElement(
+                      _Table.TableHeaderColumn,
+                      { className: 'alignCenter' },
+                      '\uC0C1\uD488\uC815\uBCF4'
+                    )
+                  )
+                ),
+                _react2.default.createElement(
+                  _Table.TableBody,
+                  { displayRowCheckbox: false },
+                  renderCartListXs()
+                ),
+                renderFooter()
+              )
             )
           ),
           _react2.default.createElement(
             'div',
-            { className: 'visible-under-flex' },
+            null,
             _react2.default.createElement(
-              _Table.Table,
+              'h4',
               null,
-              _react2.default.createElement(
-                _Table.TableHeader,
-                { displaySelectAll: false, adjustForCheckbox: false },
-                _react2.default.createElement(
-                  _Table.TableRow,
-                  null,
-                  _react2.default.createElement(
-                    _Table.TableHeaderColumn,
-                    { className: 'alignCenter' },
-                    '\uC0C1\uD488\uC815\uBCF4'
-                  )
-                )
-              ),
-              _react2.default.createElement(
-                _Table.TableBody,
-                { displayRowCheckbox: false },
-                renderCartListUnder()
-              ),
-              renderFooter()
+              '\uC8FC\uBB38\uC790 \uC815\uBCF4'
+            ),
+            _react2.default.createElement(_materialUi.Divider, null),
+            _react2.default.createElement(
+              'div',
+              null,
+              _react2.default.createElement(_materialUi.TextField, {
+                hintText: '',
+                floatingLabelText: '\uBCF4\uB0B4\uB294 \uBD84',
+                floatingLabelFixed: true
+              })
+            ),
+            _react2.default.createElement(
+              'div',
+              null,
+              _react2.default.createElement(_materialUi.TextField, {
+                hintText: '',
+                floatingLabelText: '\uD734\uB300\uD3F0 (\'-\' \uC5C6\uC774 \uC22B\uC790\uB9CC \uC785\uB825)',
+                floatingLabelFixed: true
+              })
+            ),
+            _react2.default.createElement(
+              'div',
+              null,
+              _react2.default.createElement(_materialUi.TextField, {
+                hintText: '',
+                floatingLabelText: '\uC774\uBA54\uC77C',
+                floatingLabelFixed: true
+              })
             )
           ),
           _react2.default.createElement(
             'div',
-            { className: 'visible-small-flex' },
+            null,
             _react2.default.createElement(
-              _Table.Table,
+              'h4',
               null,
-              _react2.default.createElement(
-                _Table.TableHeader,
-                { displaySelectAll: false, adjustForCheckbox: false },
-                _react2.default.createElement(
-                  _Table.TableRow,
-                  null,
-                  _react2.default.createElement(
-                    _Table.TableHeaderColumn,
-                    { className: 'alignCenter' },
-                    '\uC0C1\uD488\uC815\uBCF4'
-                  )
-                )
-              ),
-              _react2.default.createElement(
-                _Table.TableBody,
-                { displayRowCheckbox: false },
-                renderCartListXs()
-              ),
-              renderFooter()
+              '\uBC30\uC1A1 \uC815\uBCF4'
+            ),
+            _react2.default.createElement(_materialUi.Divider, null),
+            _react2.default.createElement(_materialUi.TextField, {
+              id: 'address',
+              floatingLabelText: '\uC8FC\uC18C',
+              floatingLabelFixed: true
+            }),
+            _react2.default.createElement(_materialUi.RaisedButton, {
+              label: '\uC6B0\uD3B8\uBC88\uD638 \uCC3E\uAE30',
+              primary: true
+              // onTouchTap={this.onAddressDialogOpen}
+              , onTouchTap: this.onSearchAddress
+            }),
+            _react2.default.createElement(
+              _materialUi.Dialog,
+              {
+                title: '\uC8FC\uC18C\uAC80\uC0C9',
+                modal: false,
+                open: this.state.addressDialogOpen,
+                onRequestClose: this.onAddressDialogClose
+              },
+              _react2.default.createElement(_materialUi.TextField, {
+                floatingLabelText: '\uC8FC\uC18C \uC785\uB825',
+                floatingLabelFixed: true,
+                hintText: '\uAC80\uC0C9\uC5B4 \uC608 : \uB3C4\uB85C\uBA85(\uBC18\uD3EC\uB300\uB85C 58), \uAC74\uBB3C\uBA85(\uB3C5\uB9BD\uAE30\uB150\uAD00), \uC9C0\uBC88(\uC0BC\uC131\uB3D9 25)',
+                fullWidth: true,
+                value: this.state.addressTerm,
+                onChange: function onChange(event) {
+                  return _this3.onChangeAddress(event.target.value);
+                }
+              }),
+              _react2.default.createElement(_materialUi.RaisedButton, {
+                label: 'Search',
+                primary: true,
+                onTouchTap: this.onSearchAddress
+              })
             )
           )
         )
@@ -527,7 +645,8 @@ var mapStateToProps = function mapStateToProps(state) {
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return (0, _redux.bindActionCreators)({
-    getCart: _RequestManager.getCart
+    getCart: _RequestManager.getCart,
+    getAddress: _RequestManager.getAddress
   }, dispatch);
 };
 

@@ -1,13 +1,21 @@
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.delCart = exports.patchCart = exports.getCart = exports.postCart = exports.getUser = exports.getProduct = exports.getProducts = exports.DELETE_CART = exports.PATCH_CART = exports.GET_CART = exports.POST_CART = exports.GET_USER = exports.GET_PRODUCT = exports.GET_PRODUCTS = undefined;
+exports.getAddress = exports.delCart = exports.patchCart = exports.getCart = exports.postCart = exports.getUser = exports.getProduct = exports.getProducts = exports.GET_ADDRESS = exports.DELETE_CART = exports.PATCH_CART = exports.GET_CART = exports.POST_CART = exports.GET_USER = exports.GET_PRODUCT = exports.GET_PRODUCTS = undefined;
 
-var _SessionManager = require("./SessionManager");
+var _SessionManager = require('./SessionManager');
 
 var _SessionManager2 = _interopRequireDefault(_SessionManager);
+
+var _axios = require('axios');
+
+var _axios2 = _interopRequireDefault(_axios);
+
+var _jquery = require('jquery/dist/jquery.min');
+
+var _jquery2 = _interopRequireDefault(_jquery);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -18,6 +26,7 @@ var POST_CART = exports.POST_CART = "POST_CART";
 var GET_CART = exports.GET_CART = "GET_CART";
 var PATCH_CART = exports.PATCH_CART = "PATCH_CART";
 var DELETE_CART = exports.DELETE_CART = "DELETE_CART";
+var GET_ADDRESS = exports.GET_ADDRESS = "GET_ADDRESS";
 
 // export const getSomethings = ({pageNo, length, indexBy, indexType, values}) => {
 //   const query = {
@@ -37,7 +46,7 @@ var DELETE_CART = exports.DELETE_CART = "DELETE_CART";
 // };
 
 var getProducts = exports.getProducts = function getProducts() {
-  var request = _SessionManager2.default.instance().get("/products");
+  var request = _SessionManager2.default.instance().get('/products');
 
   return {
     type: GET_PRODUCTS,
@@ -46,7 +55,7 @@ var getProducts = exports.getProducts = function getProducts() {
 };
 
 var getProduct = exports.getProduct = function getProduct(params) {
-  var request = _SessionManager2.default.instance().get("/product", params);
+  var request = _SessionManager2.default.instance().get('/product', params);
 
   return {
     type: GET_PRODUCT,
@@ -55,7 +64,7 @@ var getProduct = exports.getProduct = function getProduct(params) {
 };
 
 var getUser = exports.getUser = function getUser(params) {
-  var request = _SessionManager2.default.instance().get("/user", params);
+  var request = _SessionManager2.default.instance().get('/user', params);
 
   return {
     type: GET_USER,
@@ -64,7 +73,7 @@ var getUser = exports.getUser = function getUser(params) {
 };
 
 var postCart = exports.postCart = function postCart(params) {
-  var request = _SessionManager2.default.instance().post("/cart", params);
+  var request = _SessionManager2.default.instance().post('/cart', params);
 
   return {
     type: POST_CART,
@@ -73,7 +82,7 @@ var postCart = exports.postCart = function postCart(params) {
 };
 
 var getCart = exports.getCart = function getCart(params) {
-  var request = _SessionManager2.default.instance().get("/cart", params);
+  var request = _SessionManager2.default.instance().get('/cart', params);
 
   return {
     type: GET_CART,
@@ -82,7 +91,7 @@ var getCart = exports.getCart = function getCart(params) {
 };
 
 var patchCart = exports.patchCart = function patchCart(params) {
-  var request = _SessionManager2.default.instance().patch("/cart", params);
+  var request = _SessionManager2.default.instance().patch('/cart', params);
 
   return {
     type: PATCH_CART,
@@ -91,10 +100,32 @@ var patchCart = exports.patchCart = function patchCart(params) {
 };
 
 var delCart = exports.delCart = function delCart(params) {
-  var request = _SessionManager2.default.instance().del("/cart", params);
+  var request = _SessionManager2.default.instance().del('/cart', params);
 
   return {
     type: DELETE_CART,
+    payload: request
+  };
+};
+
+var getAddress = exports.getAddress = function getAddress(data) {
+  var request = (0, _axios2.default)({
+    method: "post",
+    url: "http://www.juso.go.kr/addrlink/addrLinkApi.do",
+    data: data
+  });
+
+  // const request = $.ajax({
+  //   url: "http://www.juso.go.kr/addrlink/addrLinkApi.do",
+  //   type:"post",
+  //   data,
+  //   dataType: "json",
+  //   crossDomain: true
+  // });
+
+
+  return {
+    type: GET_ADDRESS,
     payload: request
   };
 };

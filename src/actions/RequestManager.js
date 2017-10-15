@@ -1,4 +1,6 @@
 import SessionManager from './SessionManager';
+import axios from 'axios';
+import $ from 'jquery/dist/jquery.min';
 
 export const GET_PRODUCTS = "GET_PRODUCTS";
 export const GET_PRODUCT = "GET_PRODUCT";
@@ -7,6 +9,8 @@ export const POST_CART = "POST_CART";
 export const GET_CART = "GET_CART";
 export const PATCH_CART = "PATCH_CART";
 export const DELETE_CART = "DELETE_CART";
+export const GET_ADDRESS = "GET_ADDRESS";
+
 
 // export const getSomethings = ({pageNo, length, indexBy, indexType, values}) => {
 //   const query = {
@@ -86,4 +90,27 @@ export const delCart = (params) => {
     type: DELETE_CART,
     payload: request
   }
-}
+};
+
+export const getAddress = (data) => {
+  const request = axios({
+    method: "post",
+    url: "http://www.juso.go.kr/addrlink/addrLinkApi.do",
+    data
+  });
+
+  // const request = $.ajax({
+  //   url: "http://www.juso.go.kr/addrlink/addrLinkApi.do",
+  //   type:"post",
+  //   data,
+  //   dataType: "json",
+  //   crossDomain: true
+  // });
+
+
+  
+  return {
+    type: GET_ADDRESS,
+    payload: request
+  }
+};

@@ -2,16 +2,20 @@ import React, { Component } from 'react';
 import update from 'react-addons-update';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Divider } from 'material-ui';
+import { Divider, TextField, RaisedButton, Dialog } from 'material-ui';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn, TableFooter } from 'material-ui/Table';
-import { getCart, patchCart, delCart } from '../actions/RequestManager';
+import { getCart, patchCart, delCart, getAddress } from '../actions/RequestManager';
 import CircularProgress from './CircularProgress';
+import $ from 'jquery/dist/jquery.min';
 
 class Order extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {}
+    this.state = {
+      addressDialogOpen: false,
+      addressTerm: ""
+    }
 
   }
 
@@ -31,7 +35,29 @@ class Order extends Component {
     }, 200);
   }
 
+  onAddressDialogOpen = () => {
+    this.setState({addressDialogOpen: true})
+  };
 
+  onAddressDialogClose = () => {
+    this.setState({addressDialogOpen: false})
+  };
+
+  onChangeAddress(addressTerm) {
+    this.setState({addressTerm})
+  };
+
+  onSearchAddress = () => {
+    const data = new FormData();
+
+    data.append("confmKey", "U01TX0FVVEgyMDE3MTAxNTIzMDgwNDEwNzQwNTA=");
+    data.append("currentPage", "1");
+    data.append("countPerPage", "10");
+    data.append("keyword", this.state.addressTerm);
+    data.append("resultType", "json");
+
+    this.props.getAddress(data)
+  };
 
   render() {
     console.log(this);
@@ -271,54 +297,121 @@ class Order extends Component {
         </div>
 
         <div className="container pb-4">
-          <div className="visible-over-block">
-            <Table
-              // selectable={true} multiSelectable={true} allRowsSelected={true}
-            >
-              <TableHeader
-                //enableSelectAll={true}
-                displaySelectAll={false} adjustForCheckbox={false}
+          <div>
+            <div className="visible-over-block">
+              <Table
+                // selectable={true} multiSelectable={true} allRowsSelected={true}
               >
-                <TableRow>
-                  <TableHeaderColumn style={styles.titleHeader}>상품정보</TableHeaderColumn>
-                  <TableHeaderColumn style={styles.count}>수량</TableHeaderColumn>
-                  <TableHeaderColumn style={styles.price}>개당 판매가</TableHeaderColumn>
-                  <TableHeaderColumn style={styles.totalPrice}>금액</TableHeaderColumn>
-                </TableRow>
-              </TableHeader>
-              <TableBody displayRowCheckbox={false}>
-                {renderCartListOver()}
-              </TableBody>
-              {renderFooter()}
-            </Table>
+                <TableHeader
+                  //enableSelectAll={true}
+                  displaySelectAll={false} adjustForCheckbox={false}
+                >
+                  <TableRow>
+                    <TableHeaderColumn style={styles.titleHeader}>상품정보</TableHeaderColumn>
+                    <TableHeaderColumn style={styles.count}>수량</TableHeaderColumn>
+                    <TableHeaderColumn style={styles.price}>개당 판매가</TableHeaderColumn>
+                    <TableHeaderColumn style={styles.totalPrice}>금액</TableHeaderColumn>
+                  </TableRow>
+                </TableHeader>
+                <TableBody displayRowCheckbox={false}>
+                  {renderCartListOver()}
+                </TableBody>
+                {renderFooter()}
+              </Table>
+            </div>
+
+            <div className="visible-under-flex">
+              <Table>
+                <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+                  <TableRow>
+                    <TableHeaderColumn className="alignCenter">상품정보</TableHeaderColumn>
+                  </TableRow>
+                </TableHeader>
+                <TableBody displayRowCheckbox={false}>
+                  {renderCartListUnder()}
+                </TableBody>
+                {renderFooter()}
+              </Table>
+            </div>
+
+            <div className="visible-small-flex">
+              <Table>
+                <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+                  <TableRow>
+                    <TableHeaderColumn className="alignCenter">상품정보</TableHeaderColumn>
+                  </TableRow>
+                </TableHeader>
+                <TableBody displayRowCheckbox={false}>
+                  {renderCartListXs()}
+                </TableBody>
+                {renderFooter()}
+              </Table>
+            </div>
           </div>
 
-          <div className="visible-under-flex">
-            <Table>
-              <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-                <TableRow>
-                  <TableHeaderColumn className="alignCenter">상품정보</TableHeaderColumn>
-                </TableRow>
-              </TableHeader>
-              <TableBody displayRowCheckbox={false}>
-                {renderCartListUnder()}
-              </TableBody>
-              {renderFooter()}
-            </Table>
+          <div>
+            <h4>주문자 정보</h4>
+            <Divider />
+            <div>
+              <TextField
+                hintText=""
+                floatingLabelText="보내는 분"
+                floatingLabelFixed={true}
+              />
+            </div>
+            <div>
+              <TextField
+                hintText=""
+                floatingLabelText="휴대폰 ('-' 없이 숫자만 입력)"
+                floatingLabelFixed={true}
+              />
+            </div>
+            <div>
+              <TextField
+                hintText=""
+                floatingLabelText="이메일"
+                floatingLabelFixed={true}
+              />
+            </div>
+
           </div>
 
-          <div className="visible-small-flex">
-            <Table>
-              <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-                <TableRow>
-                  <TableHeaderColumn className="alignCenter">상품정보</TableHeaderColumn>
-                </TableRow>
-              </TableHeader>
-              <TableBody displayRowCheckbox={false}>
-                {renderCartListXs()}
-              </TableBody>
-              {renderFooter()}
-            </Table>
+          <div>
+            <h4>배송 정보</h4>
+            <Divider />
+            <TextField
+              id="address"
+              floatingLabelText="주소"
+              floatingLabelFixed={true}
+            />
+            <RaisedButton
+              label="우편번호 찾기"
+              primary={true}
+              // onTouchTap={this.onAddressDialogOpen}
+              onTouchTap={this.onSearchAddress}
+            />
+            <Dialog
+              title="주소검색"
+              modal={false}
+              open={this.state.addressDialogOpen}
+              onRequestClose={this.onAddressDialogClose}
+            >
+              <TextField
+                floatingLabelText="주소 입력"
+                floatingLabelFixed={true}
+                hintText="검색어 예 : 도로명(반포대로 58), 건물명(독립기념관), 지번(삼성동 25)"
+                fullWidth={true}
+                value={this.state.addressTerm}
+                onChange={event => this.onChangeAddress(event.target.value)}
+              />
+              <RaisedButton
+                label="Search"
+                primary={true}
+                onTouchTap={this.onSearchAddress}
+              />
+              
+            </Dialog>
+
           </div>
         </div>
       </div>
@@ -337,6 +430,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     getCart,
+    getAddress
   }, dispatch)
 };
 
