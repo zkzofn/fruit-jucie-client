@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Divider, TextField, RaisedButton, Dialog } from 'material-ui';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn, TableFooter } from 'material-ui/Table';
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import { getCart, patchCart, delCart, getAddress } from '../actions/RequestManager';
 import CircularProgress from './CircularProgress';
 import $ from 'jquery/dist/jquery.min';
@@ -14,8 +15,12 @@ class Order extends Component {
 
     this.state = {
       addressDialogOpen: false,
-      addressTerm: ""
+      searchAddressTerm: "",
+      orderAddress: {},
     }
+
+    this.IMP = window.IMP;
+    this.IMP.init("imp08816802");
 
   }
 
@@ -33,6 +38,10 @@ class Order extends Component {
           this.setState({cartItems: cart});
         });
     }, 200);
+
+    console.log(this.IMP)
+    // 여기서 사용자의 저장되어 있는 주소 있으면 불러와서 orderAddress 에 셋팅해줘야 해
+
   }
 
   onAddressDialogOpen = () => {
@@ -43,8 +52,8 @@ class Order extends Component {
     this.setState({addressDialogOpen: false})
   };
 
-  onChangeAddress(addressTerm) {
-    this.setState({addressTerm})
+  onChangeAddress(searchAddressTerm) {
+    this.setState({searchAddressTerm})
   };
 
   onSearchAddress = () => {
@@ -53,11 +62,95 @@ class Order extends Component {
     data.append("confmKey", "U01TX0FVVEgyMDE3MTAxNTIzMDgwNDEwNzQwNTA=");
     data.append("currentPage", "1");
     data.append("countPerPage", "10");
-    data.append("keyword", this.state.addressTerm);
+    data.append("keyword", this.state.searchAddressTerm);
     data.append("resultType", "json");
 
     this.props.getAddress(data)
+      .then(res => {
+        console.log(res);
+        const addressList = res.payload.data.results.juso;
+
+        this.setState({addressList});
+      })
   };
+
+
+  onDialogKeyDown = (event) => {
+    if(event.key === "Enter")
+      this.onSearchAddress();
+  };
+
+  onAddressSelect(orderAddress) {
+    this.setState({orderAddress, addressDialogOpen: false})
+  }
+  
+  renderAddressList() {
+    const styles = {
+      zipCodeHeader: {width: 45},
+      zipCode: { width: 45, fontSize: 8 },
+      addressRoad: {fontSize: 11},
+      addressNumber: {fontSize: 9},
+    };
+
+    const renderAddressElements = () => {
+      return this.state.addressList.map((address, index) => {
+        return (
+          <li key={index} onClick={() => this.onAddressSelect(address)}>
+            <div className="inlineBlock" style={styles.zipCode}>{address.zipNo}</div>
+            <div className="inlineBlock">
+              <p style={styles.addressRoad}>{address.roadAddrPart1}</p>
+              <p style={styles.addressNumber}>{address.jibunAddr}</p>
+            </div>
+          </li>
+        )
+      })
+    };
+
+    if(this.state.addressList) {
+      return (
+        <ul>
+          <li>
+            <div className="inlineBlock" style={styles.zipCodeHeader}>우편번호</div>
+            <div className="inlineBlock" >주소</div>
+          </li>
+          {renderAddressElements()}
+        </ul>
+
+      );
+    }
+  }
+
+  onMyAddressList = () => {
+
+  };
+
+  onRequestPayment() {
+    this.IMP.request_pay({
+      pg : 'inicis', // version 1.1.0부터 지원.
+      pay_method : 'card',
+      merchant_uid : 'merchant_' + new Date().getTime(),
+      name : '주문명:결제테스트',
+      amount : 14000,
+      buyer_email : 'zkzofn@gmail.com',
+      buyer_name : '이장호',
+      buyer_tel : '010-3399-0081',
+      buyer_addr : '서울특별시 강남구 삼성동',
+      buyer_postcode : '123-456',
+      m_redirect_url : 'http://localhost:8000/payment'
+    }, function(rsp) {
+      if ( rsp.success ) {
+        var msg = '결제가 완료되었습니다.';
+        msg += '고유ID : ' + rsp.imp_uid;
+        msg += '상점 거래ID : ' + rsp.merchant_uid;
+        msg += '결제 금액 : ' + rsp.paid_amount;
+        msg += '카드 승인번호 : ' + rsp.apply_num;
+      } else {
+        var msg = '결제에 실패하였습니다.';
+        msg += '에러내용 : ' + rsp.error_msg;
+      }
+      alert(msg);
+    });
+  }
 
   render() {
     console.log(this);
@@ -76,6 +169,10 @@ class Order extends Component {
       totalPrice: {width: "12%", textAlign: "center"},
     };
 
+    const formStyles = {
+      width: 256,
+      margin: "auto"
+    }
 
 
     const renderOptions = (options) => {
@@ -280,6 +377,7 @@ class Order extends Component {
       )
     };
 
+
     return (
       <div>
         <div className="jumbotron alignCenter visible-sm-block visible-md-block visible-lg-block">
@@ -353,25 +451,28 @@ class Order extends Component {
             <h4>주문자 정보</h4>
             <Divider />
             <div>
-              <TextField
-                hintText=""
-                floatingLabelText="보내는 분"
-                floatingLabelFixed={true}
-              />
-            </div>
-            <div>
-              <TextField
-                hintText=""
-                floatingLabelText="휴대폰 ('-' 없이 숫자만 입력)"
-                floatingLabelFixed={true}
-              />
-            </div>
-            <div>
-              <TextField
-                hintText=""
-                floatingLabelText="이메일"
-                floatingLabelFixed={true}
-              />
+              <div>
+                <TextField
+                  hintText=""
+                  floatingLabelText="보내는 분"
+                  floatingLabelFixed={true}
+                />
+              </div>
+              <div>
+                <TextField
+                  hintText=""
+                  floatingLabelText="휴대폰"
+                  floatingLabelFixed={true}
+                />
+              </div>
+              <div>
+                <TextField
+                  hintText=""
+                  floatingLabelText="이메일"
+                  floatingLabelFixed={true}
+                />
+              </div>
+
             </div>
 
           </div>
@@ -379,17 +480,84 @@ class Order extends Component {
           <div>
             <h4>배송 정보</h4>
             <Divider />
-            <TextField
-              id="address"
-              floatingLabelText="주소"
-              floatingLabelFixed={true}
-            />
-            <RaisedButton
-              label="우편번호 찾기"
-              primary={true}
-              // onTouchTap={this.onAddressDialogOpen}
-              onTouchTap={this.onSearchAddress}
-            />
+
+            <div>
+              <RadioButtonGroup
+                className="inlineBlock"
+                defaultSelected="userAddress"
+                name="addressGroup"
+              >
+                <RadioButton
+                  className="inlineBlock"
+                  value="userAddress"
+                  label="주문자 정보와 동일"
+                />
+                <RadioButton
+                  className="inlineBlock"
+                  value="newAddress"
+                  label="새로운 배송지"
+                />
+              </RadioButtonGroup>
+
+              <RaisedButton
+                className="inlineBlock"
+                label="배송지 리스트에서 확인"
+                onTouchTap={this.onMyAddressList}
+                primary={true}
+              />
+
+            </div>
+            <div>
+              <TextField
+                floatingLabelText="받는분"
+                floatingLabelFixed={true}
+                value=""
+              />
+            </div>
+            <div>
+              <TextField
+                style={{width: 100}}
+                floatingLabelText="우편번호"
+                floatingLabelFixed={true}
+                value={this.state.orderAddress.zipNo}
+                disabled={true}
+              />
+              <RaisedButton
+                label="우편번호 찾기"
+                primary={true}
+                onTouchTap={this.onAddressDialogOpen}
+              />
+            </div>
+            <div>
+              <TextField
+                floatingLabelText="주소"
+                floatingLabelFixed={true}
+                value={this.state.orderAddress.roadAddrPart1}
+                disabled={true}
+              />
+            </div>
+            <div>
+              <TextField
+                floatingLabelText="나머지 주소"
+                floatingLabelFixed={true}
+                value=""
+              />
+            </div>
+            <div>
+              <TextField
+                floatingLabelText="휴대폰"
+                floatingLabelFixed={true}
+                value=""
+              />
+            </div>
+            <div>
+              <TextField
+                floatingLabelText="배송 요청사항"
+                floatingLabelFixed={true}
+                value=""
+              />
+            </div>
+
             <Dialog
               title="주소검색"
               modal={false}
@@ -401,18 +569,29 @@ class Order extends Component {
                 floatingLabelFixed={true}
                 hintText="검색어 예 : 도로명(반포대로 58), 건물명(독립기념관), 지번(삼성동 25)"
                 fullWidth={true}
-                value={this.state.addressTerm}
+                value={this.state.searchAddressTerm}
                 onChange={event => this.onChangeAddress(event.target.value)}
+                onKeyPress={this.onDialogKeyDown}
               />
               <RaisedButton
                 label="Search"
                 primary={true}
                 onTouchTap={this.onSearchAddress}
               />
-              
+              {this.renderAddressList()}
             </Dialog>
-
           </div>
+
+          <div>
+            <h4>결제수단</h4>
+            <Divider />
+            <RaisedButton
+              label="결제하기"
+              primary={true}
+              onTouchTap={() => this.onRequestPayment()}
+            />
+          </div>
+
         </div>
       </div>
     )
