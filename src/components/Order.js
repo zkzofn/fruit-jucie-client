@@ -17,11 +17,23 @@ class Order extends Component {
       addressDialogOpen: false,
       searchAddressTerm: "",
       orderAddress: {},
-    }
+      addressDivider: "",
+      orderInfo: {
+        senderName: "",
+        senderPhone: "",
+        senderEmail: "",
+        receiverName: "",
+        receiverNickname: "",
+        receiverZipcode: "",
+        receiverAddress1: "",
+        receiverAddress2: "",
+        receiverPhone: "",
+        receiverRequirement: ""
+      }
+    };
 
     this.IMP = window.IMP;
     this.IMP.init("imp08816802");
-
   }
 
   componentWillMount() {
@@ -37,11 +49,25 @@ class Order extends Component {
 
           this.setState({cartItems: cart});
         });
+
+      const { currentUser } = this.props;
+      this.setState({
+        orderInfo: {
+          senderName: currentUser.name,
+          senderPhone: currentUser.phone,
+          senderEmail: currentUser.email,
+          receiverName: currentUser.name,
+          receiverNickname: currentUser.nickname,
+          receiverZipcode: currentUser.zipcode,
+          receiverAddress1: currentUser.address1,
+          receiverAddress2: currentUser.address2,
+          receiverPhone: currentUser.phone,
+        }
+      })
     }, 200);
 
-    console.log(this.IMP)
     // 여기서 사용자의 저장되어 있는 주소 있으면 불러와서 orderAddress 에 셋팅해줘야 해
-
+    console.log(this)
   }
 
   onAddressDialogOpen = () => {
@@ -80,8 +106,14 @@ class Order extends Component {
       this.onSearchAddress();
   };
 
-  onAddressSelect(orderAddress) {
-    this.setState({orderAddress, addressDialogOpen: false})
+  onAddressSelect(selectedAddress) {
+    this.setState({
+      orderInfo: {
+        receiverZipcode: selectedAddress.zipNo,
+        receiverAddress1: selectedAddress.roadAddrPart1
+      },
+      addressDialogOpen: false
+    })
   }
   
   renderAddressList() {
@@ -120,9 +152,122 @@ class Order extends Component {
     }
   }
 
+  // 배송지 리스트에서 확인 function
   onMyAddressList = () => {
 
   };
+
+  setSenderName = (event) => {
+    this.setState({
+      orderInfo: {
+        senderName: event.target.value
+      }
+    });
+  };
+
+  setSenderPhone = (event) => {
+    this.setState({
+      orderInfo: {
+        senderPhone: event.target.value
+      }
+    })
+  };
+
+  setSenderEmail = (event) => {
+    this.setState({
+      orderInfo: {
+        senderEmail: event.target.value
+      }
+    })
+  };
+
+  setReceiverName = (event) => {
+    this.setState({
+      orderInfo: {
+        receiverName: event.target.value
+      }
+    })
+  };
+
+  setReceiverNickname = (event) => {
+    this.setState({
+      orderInfo: {
+        receiverNickname: event.target.value
+      }
+    })
+  };
+
+  setReceiverZipcode = (event) => {
+    this.setState({
+      orderInfo: {
+        receiverZipcode: event.target.value
+      }
+    })
+  };
+
+  setReceiverAddress1 = (event) => {
+    this.setState({
+      orderInfo: {
+        receiverAddress1: event.target.value
+      }
+    })
+  }
+
+  setReceiverAddress2 = (event) => {
+    this.setState({
+      orderInfo: {
+        receiverAddress2: event.target.value
+      }
+    })
+  };
+
+  setReceiverPhone = (event) => {
+    this.setState({
+      orderInfo: {
+        receiverPhone: event.target.value
+      }
+    })
+  };
+
+  setReceiverRequirement = (event) => {
+    this.setState({
+      orderInfo: {
+        receiverRequirement: event.target.value
+      }
+    })
+  };
+
+
+
+  onSelectAddressDivider(event) {
+    this.setState({addressDivider: event.target.value});
+
+    const { currentUser } = this.props;
+
+    if (event.target.value === "userAddress") {
+      this.setState({
+        orderInfo: {
+          receiverName: currentUser.name,
+          receiverNickname: currentUser.nickname,
+          receiverZipcode: currentUser.zipcode,
+          receiverAddress1: currentUser.address1,
+          receiverAddress2: currentUser.address2,
+          receiverPhone: currentUser.phone,
+        }
+      })
+    } else if (event.target.value === "newAddress") {
+      this.setState({
+        orderInfo: {
+          receiverName: "",
+          receiverNickname: "",
+          receiverZipcode: "",
+          receiverAddress1: "",
+          receiverAddress2: "",
+          receiverPhone: "",
+        }
+      })
+    }
+  }
 
   onRequestPayment() {
     this.IMP.request_pay({
@@ -151,6 +296,8 @@ class Order extends Component {
       alert(msg);
     });
   }
+
+
 
   render() {
     console.log(this);
@@ -456,6 +603,8 @@ class Order extends Component {
                   hintText=""
                   floatingLabelText="보내는 분"
                   floatingLabelFixed={true}
+                  value={this.state.orderInfo.senderName}
+                  onChange={this.setSenderName}
                 />
               </div>
               <div>
@@ -463,6 +612,8 @@ class Order extends Component {
                   hintText=""
                   floatingLabelText="휴대폰"
                   floatingLabelFixed={true}
+                  value={this.state.orderInfo.senderPhone}
+                  onChange={this.setSenderPhone}
                 />
               </div>
               <div>
@@ -470,6 +621,8 @@ class Order extends Component {
                   hintText=""
                   floatingLabelText="이메일"
                   floatingLabelFixed={true}
+                  value={this.state.orderInfo.senderEmail}
+                  onChange={this.setSenderEmail}
                 />
               </div>
 
@@ -486,6 +639,7 @@ class Order extends Component {
                 className="inlineBlock"
                 defaultSelected="userAddress"
                 name="addressGroup"
+                onChange={this.onSelectAddressDivider}
               >
                 <RadioButton
                   className="inlineBlock"
@@ -511,7 +665,16 @@ class Order extends Component {
               <TextField
                 floatingLabelText="받는분"
                 floatingLabelFixed={true}
-                value=""
+                value={this.state.orderInfo.receiverName}
+                onChange={this.setReceiverName}
+              />
+            </div>
+            <div>
+              <TextField
+                floatingLabelText="받는분 닉네임"
+                floatingLabelFixed={true}
+                value={this.state.orderInfo.receiverNickname}
+                onChange={this.setReceiverNickname}
               />
             </div>
             <div>
@@ -519,7 +682,8 @@ class Order extends Component {
                 style={{width: 100}}
                 floatingLabelText="우편번호"
                 floatingLabelFixed={true}
-                value={this.state.orderAddress.zipNo}
+                value={this.state.orderInfo.receiverZipcode}
+                onChange={this.setReceiverZipcode}
                 disabled={true}
               />
               <RaisedButton
@@ -532,7 +696,8 @@ class Order extends Component {
               <TextField
                 floatingLabelText="주소"
                 floatingLabelFixed={true}
-                value={this.state.orderAddress.roadAddrPart1}
+                value={this.state.orderInfo.receiverAddress1}
+                onChange={this.setReceiverAddress1}
                 disabled={true}
               />
             </div>
@@ -540,21 +705,24 @@ class Order extends Component {
               <TextField
                 floatingLabelText="나머지 주소"
                 floatingLabelFixed={true}
-                value=""
+                value={this.state.orderInfo.receiverAddress2}
+                onChange={this.setReceiverAddress2}
               />
             </div>
             <div>
               <TextField
                 floatingLabelText="휴대폰"
                 floatingLabelFixed={true}
-                value=""
+                value={this.state.orderInfo.receiverPhone}
+                onChange={this.setReceiverPhone}
               />
             </div>
             <div>
               <TextField
                 floatingLabelText="배송 요청사항"
                 floatingLabelFixed={true}
-                value=""
+                value={this.state.orderInfo.receiverRequirement}
+                onChange={this.setReceiverRequirement}
               />
             </div>
 
