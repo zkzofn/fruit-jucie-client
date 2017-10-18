@@ -18,18 +18,16 @@ class Order extends Component {
       searchAddressTerm: "",
       orderAddress: {},
       addressDivider: "",
-      orderInfo: {
-        senderName: "",
-        senderPhone: "",
-        senderEmail: "",
-        receiverName: "",
-        receiverNickname: "",
-        receiverZipcode: "",
-        receiverAddress1: "",
-        receiverAddress2: "",
-        receiverPhone: "",
-        receiverRequirement: ""
-      }
+      senderName: "",
+      senderPhone: "",
+      senderEmail: "",
+      receiverName: "",
+      receiverNickname: "",
+      receiverZipcode: "",
+      receiverAddress1: "",
+      receiverAddress2: "",
+      receiverPhone: "",
+      receiverRequirement: ""
     };
 
     this.IMP = window.IMP;
@@ -52,17 +50,15 @@ class Order extends Component {
 
       const { currentUser } = this.props;
       this.setState({
-        orderInfo: {
-          senderName: currentUser.name,
-          senderPhone: currentUser.phone,
-          senderEmail: currentUser.email,
-          receiverName: currentUser.name,
-          receiverNickname: currentUser.nickname,
-          receiverZipcode: currentUser.zipcode,
-          receiverAddress1: currentUser.address1,
-          receiverAddress2: currentUser.address2,
-          receiverPhone: currentUser.phone,
-        }
+        senderName: currentUser.name,
+        senderPhone: currentUser.phone,
+        senderEmail: currentUser.email,
+        receiverName: currentUser.name,
+        receiverNickname: currentUser.nickname,
+        receiverZipcode: currentUser.zipcode,
+        receiverAddress1: currentUser.address1,
+        receiverAddress2: currentUser.address2,
+        receiverPhone: currentUser.phone,
       })
     }, 200);
 
@@ -108,10 +104,8 @@ class Order extends Component {
 
   onAddressSelect(selectedAddress) {
     this.setState({
-      orderInfo: {
-        receiverZipcode: selectedAddress.zipNo,
-        receiverAddress1: selectedAddress.roadAddrPart1
-      },
+      receiverZipcode: selectedAddress.zipNo,
+      receiverAddress1: selectedAddress.roadAddrPart1,
       addressDialogOpen: false
     })
   }
@@ -159,81 +153,59 @@ class Order extends Component {
 
   setSenderName = (event) => {
     this.setState({
-      orderInfo: {
-        senderName: event.target.value
-      }
-    });
+      senderName: event.target.value
+    })
   };
 
   setSenderPhone = (event) => {
     this.setState({
-      orderInfo: {
-        senderPhone: event.target.value
-      }
+      senderPhone: event.target.value
     })
   };
 
   setSenderEmail = (event) => {
     this.setState({
-      orderInfo: {
-        senderEmail: event.target.value
-      }
+      senderEmail: event.target.value
     })
   };
 
   setReceiverName = (event) => {
     this.setState({
-      orderInfo: {
-        receiverName: event.target.value
-      }
+      receiverName: event.target.value
     })
   };
 
   setReceiverNickname = (event) => {
     this.setState({
-      orderInfo: {
-        receiverNickname: event.target.value
-      }
+      receiverNickname: event.target.value
     })
   };
 
   setReceiverZipcode = (event) => {
     this.setState({
-      orderInfo: {
-        receiverZipcode: event.target.value
-      }
+      receiverZipcode: event.target.value
     })
   };
 
   setReceiverAddress1 = (event) => {
-    this.setState({
-      orderInfo: {
-        receiverAddress1: event.target.value
-      }
-    })
+
   }
 
   setReceiverAddress2 = (event) => {
     this.setState({
-      orderInfo: {
-        receiverAddress2: event.target.value
-      }
+      receiverAddress2: event.target.value
     })
   };
 
   setReceiverPhone = (event) => {
     this.setState({
-      orderInfo: {
-        receiverPhone: event.target.value
-      }
+      receiverPhone: event.target.value
     })
   };
 
   setReceiverRequirement = (event) => {
     this.setState({
-      orderInfo: {
-        receiverRequirement: event.target.value
-      }
+      receiverRequirement: event.target.value
     })
   };
 
@@ -246,25 +218,21 @@ class Order extends Component {
 
     if (event.target.value === "userAddress") {
       this.setState({
-        orderInfo: {
-          receiverName: currentUser.name,
-          receiverNickname: currentUser.nickname,
-          receiverZipcode: currentUser.zipcode,
-          receiverAddress1: currentUser.address1,
-          receiverAddress2: currentUser.address2,
-          receiverPhone: currentUser.phone,
-        }
+        receiverName: currentUser.name,
+        receiverNickname: currentUser.nickname,
+        receiverZipcode: currentUser.zipcode,
+        receiverAddress1: currentUser.address1,
+        receiverAddress2: currentUser.address2,
+        receiverPhone: currentUser.phone,
       })
     } else if (event.target.value === "newAddress") {
       this.setState({
-        orderInfo: {
-          receiverName: "",
-          receiverNickname: "",
-          receiverZipcode: "",
-          receiverAddress1: "",
-          receiverAddress2: "",
-          receiverPhone: "",
-        }
+        receiverName: "",
+        receiverNickname: "",
+        receiverZipcode: "",
+        receiverAddress1: "",
+        receiverAddress2: "",
+        receiverPhone:  "",
       })
     }
   }
@@ -603,7 +571,7 @@ class Order extends Component {
                   hintText=""
                   floatingLabelText="보내는 분"
                   floatingLabelFixed={true}
-                  value={this.state.orderInfo.senderName}
+                  value={this.state.senderName}
                   onChange={this.setSenderName}
                 />
               </div>
@@ -612,7 +580,7 @@ class Order extends Component {
                   hintText=""
                   floatingLabelText="휴대폰"
                   floatingLabelFixed={true}
-                  value={this.state.orderInfo.senderPhone}
+                  value={this.state.senderPhone}
                   onChange={this.setSenderPhone}
                 />
               </div>
@@ -621,7 +589,7 @@ class Order extends Component {
                   hintText=""
                   floatingLabelText="이메일"
                   floatingLabelFixed={true}
-                  value={this.state.orderInfo.senderEmail}
+                  value={this.state.senderEmail}
                   onChange={this.setSenderEmail}
                 />
               </div>
@@ -665,7 +633,7 @@ class Order extends Component {
               <TextField
                 floatingLabelText="받는분"
                 floatingLabelFixed={true}
-                value={this.state.orderInfo.receiverName}
+                value={this.state.receiverName}
                 onChange={this.setReceiverName}
               />
             </div>
@@ -673,7 +641,7 @@ class Order extends Component {
               <TextField
                 floatingLabelText="받는분 닉네임"
                 floatingLabelFixed={true}
-                value={this.state.orderInfo.receiverNickname}
+                value={this.state.receiverNickname}
                 onChange={this.setReceiverNickname}
               />
             </div>
@@ -682,7 +650,7 @@ class Order extends Component {
                 style={{width: 100}}
                 floatingLabelText="우편번호"
                 floatingLabelFixed={true}
-                value={this.state.orderInfo.receiverZipcode}
+                value={this.state.receiverZipcode}
                 onChange={this.setReceiverZipcode}
                 disabled={true}
               />
@@ -696,7 +664,7 @@ class Order extends Component {
               <TextField
                 floatingLabelText="주소"
                 floatingLabelFixed={true}
-                value={this.state.orderInfo.receiverAddress1}
+                value={this.state.receiverAddress1}
                 onChange={this.setReceiverAddress1}
                 disabled={true}
               />
@@ -705,7 +673,7 @@ class Order extends Component {
               <TextField
                 floatingLabelText="나머지 주소"
                 floatingLabelFixed={true}
-                value={this.state.orderInfo.receiverAddress2}
+                value={this.state.receiverAddress2}
                 onChange={this.setReceiverAddress2}
               />
             </div>
@@ -713,7 +681,7 @@ class Order extends Component {
               <TextField
                 floatingLabelText="휴대폰"
                 floatingLabelFixed={true}
-                value={this.state.orderInfo.receiverPhone}
+                value={this.state.receiverPhone}
                 onChange={this.setReceiverPhone}
               />
             </div>
@@ -721,7 +689,7 @@ class Order extends Component {
               <TextField
                 floatingLabelText="배송 요청사항"
                 floatingLabelFixed={true}
-                value={this.state.orderInfo.receiverRequirement}
+                value={this.state.receiverRequirement}
                 onChange={this.setReceiverRequirement}
               />
             </div>
