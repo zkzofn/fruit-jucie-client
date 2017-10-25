@@ -16,8 +16,8 @@ class Order extends Component {
     this.state = {
       addressDialogOpen: false,
       searchAddressTerm: "",
-      orderAddress: {},
       addressDivider: "",
+      paymentMethod: "credit",
       senderName: "",
       senderPhone: "",
       senderEmail: "",
@@ -62,8 +62,7 @@ class Order extends Component {
       })
     }, 200);
 
-    // 여기서 사용자의 저장되어 있는 주소 있으면 불러와서 orderAddress 에 셋팅해줘야 해
-    console.log(this)
+    // 여기서 사용자의 저장되어 있는 주소 있으면 불러와서 address 셋팅해줘야 해
   }
 
   onAddressDialogOpen = () => {
@@ -78,6 +77,7 @@ class Order extends Component {
     this.setState({searchAddressTerm})
   };
 
+  // 여기도 페이지별로 가져올 수 있게 수정해야 해
   onSearchAddress = () => {
     const data = new FormData();
 
@@ -189,7 +189,7 @@ class Order extends Component {
 
   setReceiverAddress1 = (event) => {
 
-  }
+  };
 
   setReceiverAddress2 = (event) => {
     this.setState({
@@ -237,7 +237,27 @@ class Order extends Component {
     }
   }
 
+  onSelectPaymentMethod(event) {
+    this.setState({paymentMethod: event.target.value});
+  }
+
   onRequestPayment() {
+    // 결제 전에 값들 다 입력했는지 확인하고 결제로 넘어가야해
+
+    //   paymentMethod: "",
+    //   senderName: "",
+    //   senderPhone: "",
+    //   senderEmail: "",
+    //   receiverName: "",
+    //   receiverNickname: "",
+    //   receiverZipcode: "",
+    //   receiverAddress1: "",
+    //   receiverAddress2: "",
+    //   receiverPhone: "",
+    //   receiverRequirement: ""
+
+    const self = this;
+
     this.IMP.request_pay({
       pg : 'inicis', // version 1.1.0부터 지원.
       pay_method : 'card',
@@ -252,6 +272,8 @@ class Order extends Component {
       m_redirect_url : 'http://localhost:8000/payment'
     }, function(rsp) {
       if ( rsp.success ) {
+        self.setState({rsp});
+
         var msg = '결제가 완료되었습니다.';
         msg += '고유ID : ' + rsp.imp_uid;
         msg += '상점 거래ID : ' + rsp.merchant_uid;
@@ -721,10 +743,47 @@ class Order extends Component {
           <div>
             <h4>결제수단</h4>
             <Divider />
+            <div>
+              <RadioButtonGroup
+                className="inlineBlock"
+                defaultSelected="credit"
+                name="paymentGroup"
+                onChange={this.onSelectPaymentMethod}
+              >
+                <RadioButton
+                  className="inlineBlock"
+                  value="credit"
+                  label="신용카드"
+                />
+                <RadioButton
+                  className="inlineBlock"
+                  value="cash"
+                  label="계좌이체"
+                />
+                <RadioButton
+                  className="inlineBlock"
+                  value="kakao"
+                  label="카카오결제"
+                />
+
+              </RadioButtonGroup>
+            </div>
             <RaisedButton
               label="결제하기"
               primary={true}
               onTouchTap={() => this.onRequestPayment()}
+              disabled={
+                this.state.paymentMethod === "" ||
+                this.state.senderName === "" ||
+                this.state.senderPhone === "" ||
+                this.state.senderEmail === "" ||
+                this.state.receiverName === "" ||
+                this.state.receiverNickname === "" ||
+                this.state.receiverZipcode === "" ||
+                this.state.receiverAddress1 === "" ||
+                this.state.receiverAddress2 === "" ||
+                this.state.receiverPhone === ""
+              }
             />
           </div>
 
