@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getAddress = exports.delCart = exports.patchCart = exports.getCart = exports.postCart = exports.getUser = exports.getProduct = exports.getProducts = exports.GET_ADDRESS = exports.DELETE_CART = exports.PATCH_CART = exports.GET_CART = exports.POST_CART = exports.GET_USER = exports.GET_PRODUCT = exports.GET_PRODUCTS = undefined;
+exports.postOrder = exports.getMyAddressList = exports.getAddressFromAPI = exports.delCart = exports.patchCart = exports.getCart = exports.postCart = exports.getUser = exports.getProduct = exports.getProducts = exports.POST_ORDER = exports.GET_MY_ADDRESS_LIST = exports.GET_ADDRESS_FROM_API = exports.DELETE_CART = exports.PATCH_CART = exports.GET_CART = exports.POST_CART = exports.GET_USER = exports.GET_PRODUCT = exports.GET_PRODUCTS = undefined;
 
 var _SessionManager = require('./SessionManager');
 
@@ -26,7 +26,9 @@ var POST_CART = exports.POST_CART = "POST_CART";
 var GET_CART = exports.GET_CART = "GET_CART";
 var PATCH_CART = exports.PATCH_CART = "PATCH_CART";
 var DELETE_CART = exports.DELETE_CART = "DELETE_CART";
-var GET_ADDRESS = exports.GET_ADDRESS = "GET_ADDRESS";
+var GET_ADDRESS_FROM_API = exports.GET_ADDRESS_FROM_API = "GET_ADDRESS_FROM_API";
+var GET_MY_ADDRESS_LIST = exports.GET_MY_ADDRESS_LIST = "GET_MY_ADDRESS_LIST";
+var POST_ORDER = exports.POST_ORDER = "POST_ORDER";
 
 // export const getSomethings = ({pageNo, length, indexBy, indexType, values}) => {
 //   const query = {
@@ -72,8 +74,8 @@ var getUser = exports.getUser = function getUser(params) {
   };
 };
 
-var postCart = exports.postCart = function postCart(params) {
-  var request = _SessionManager2.default.instance().post('/cart', params);
+var postCart = exports.postCart = function postCart(data) {
+  var request = _SessionManager2.default.instance().post('/cart', data);
 
   return {
     type: POST_CART,
@@ -90,8 +92,8 @@ var getCart = exports.getCart = function getCart(params) {
   };
 };
 
-var patchCart = exports.patchCart = function patchCart(params) {
-  var request = _SessionManager2.default.instance().patch('/cart', params);
+var patchCart = exports.patchCart = function patchCart(data) {
+  var request = _SessionManager2.default.instance().patch('/cart', data);
 
   return {
     type: PATCH_CART,
@@ -108,24 +110,33 @@ var delCart = exports.delCart = function delCart(params) {
   };
 };
 
-var getAddress = exports.getAddress = function getAddress(data) {
+var getAddressFromAPI = exports.getAddressFromAPI = function getAddressFromAPI(data) {
   var request = (0, _axios2.default)({
     method: "post",
     url: "http://www.juso.go.kr/addrlink/addrLinkApi.do",
     data: data
   });
 
-  // const request = $.ajax({
-  //   url: "http://www.juso.go.kr/addrlink/addrLinkApi.do",
-  //   type:"post",
-  //   data,
-  //   dataType: "json",
-  //   crossDomain: true
-  // });
+  return {
+    type: GET_ADDRESS_FROM_API,
+    payload: request
+  };
+};
 
+var getMyAddressList = exports.getMyAddressList = function getMyAddressList(params) {
+  var request = _SessionManager2.default.instance().get('/address', params);
 
   return {
-    type: GET_ADDRESS,
+    type: GET_MY_ADDRESS_LIST,
+    payload: request
+  };
+};
+
+var postOrder = exports.postOrder = function postOrder(data) {
+  var request = _SessionManager2.default.instance().post('/order', data);
+
+  return {
+    type: POST_ORDER,
     payload: request
   };
 };

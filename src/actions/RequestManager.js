@@ -9,8 +9,9 @@ export const POST_CART = "POST_CART";
 export const GET_CART = "GET_CART";
 export const PATCH_CART = "PATCH_CART";
 export const DELETE_CART = "DELETE_CART";
-export const GET_ADDRESS = "GET_ADDRESS";
-
+export const GET_ADDRESS_FROM_API = "GET_ADDRESS_FROM_API";
+export const GET_MY_ADDRESS_LIST = "GET_MY_ADDRESS_LIST";
+export const POST_ORDER = "POST_ORDER";
 
 // export const getSomethings = ({pageNo, length, indexBy, indexType, values}) => {
 //   const query = {
@@ -56,8 +57,8 @@ export const getUser = (params) => {
   }
 };
 
-export const postCart = (params) => {
-  const request = SessionManager.instance().post(`/cart`, params);
+export const postCart = (data) => {
+  const request = SessionManager.instance().post(`/cart`, data);
 
   return {
     type: POST_CART,
@@ -74,8 +75,8 @@ export const getCart = (params) => {
   }
 };
 
-export const patchCart = (params) => {
-  const request = SessionManager.instance().patch(`/cart`, params);
+export const patchCart = (data) => {
+  const request = SessionManager.instance().patch(`/cart`, data);
   
   return {
     type: PATCH_CART,
@@ -92,25 +93,33 @@ export const delCart = (params) => {
   }
 };
 
-export const getAddress = (data) => {
+export const getAddressFromAPI = (data) => {
   const request = axios({
     method: "post",
     url: "http://www.juso.go.kr/addrlink/addrLinkApi.do",
     data
   });
 
-  // const request = $.ajax({
-  //   url: "http://www.juso.go.kr/addrlink/addrLinkApi.do",
-  //   type:"post",
-  //   data,
-  //   dataType: "json",
-  //   crossDomain: true
-  // });
-
-
-  
   return {
-    type: GET_ADDRESS,
+    type: GET_ADDRESS_FROM_API,
+    payload: request
+  }
+};
+
+export const getMyAddressList = (params) => {
+  const request = SessionManager.instance().get(`/address`, params);
+
+  return {
+    type: GET_MY_ADDRESS_LIST,
+    payload: request
+  }
+};
+
+export const postOrder = (data) => {
+  const request = SessionManager.instance().post(`/order`, data);
+
+  return {
+    type: POST_ORDER,
     payload: request
   }
 };

@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { Divider, TextField, RaisedButton, Dialog } from 'material-ui';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn, TableFooter } from 'material-ui/Table';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
-import { getCart, patchCart, delCart, getAddress } from '../actions/RequestManager';
+import { getCart, patchCart, delCart, getAddressFromAPI, getMyAddressList, postOrder } from '../actions/RequestManager';
 import CircularProgress from './CircularProgress';
 import $ from 'jquery/dist/jquery.min';
 
@@ -14,10 +14,11 @@ class Order extends Component {
     super(props);
 
     this.state = {
-      addressDialogOpen: false,
+      searchAddressDialogOpen: false,
+      myAddressListDialogOpen: false,
       searchAddressTerm: "",
       addressDivider: "",
-      paymentMethod: "credit",
+      paymentMethod: "card",
       senderName: "",
       senderPhone: "",
       senderEmail: "",
@@ -27,7 +28,8 @@ class Order extends Component {
       receiverAddress1: "",
       receiverAddress2: "",
       receiverPhone: "",
-      receiverRequirement: ""
+      receiverRequirement: "",
+      myAddressList: []
     };
 
     this.IMP = window.IMP;
@@ -61,16 +63,38 @@ class Order extends Component {
         receiverPhone: currentUser.phone,
       })
     }, 200);
+    //
 
     // 여기서 사용자의 저장되어 있는 주소 있으면 불러와서 address 셋팅해줘야 해
+    const getMyAddressListParams = {
+      userId: 1
+    };
+    this.props.getMyAddressList(getMyAddressListParams)
+      .then(res => {
+        const { myAddressList } = res.payload.data;
+
+        this.setState({myAddressList});
+      })
   }
 
-  onAddressDialogOpen = () => {
-    this.setState({addressDialogOpen: true})
+  componentDidMount() {
+
+  }
+
+  onMyAddressListDialogOpen = () => {
+    this.setState({myAddressListDialogOpen: true})
   };
 
-  onAddressDialogClose = () => {
-    this.setState({addressDialogOpen: false})
+  onMyAddressListDialogClose = () => {
+    this.setState({myAddressListDialogOpen: false})
+  };
+
+  onSearchAddressDialogOpen = () => {
+    this.setState({searchAddressDialogOpen: true})
+  };
+
+  onSearchAddressDialogClose = () => {
+    this.setState({searchAddressDialogOpen: false})
   };
 
   onChangeAddress(searchAddressTerm) {
@@ -87,9 +111,8 @@ class Order extends Component {
     data.append("keyword", this.state.searchAddressTerm);
     data.append("resultType", "json");
 
-    this.props.getAddress(data)
+    this.props.getAddressFromAPI(data)
       .then(res => {
-        console.log(res);
         const addressList = res.payload.data.results.juso;
 
         this.setState({addressList});
@@ -102,13 +125,7 @@ class Order extends Component {
       this.onSearchAddress();
   };
 
-  onAddressSelect(selectedAddress) {
-    this.setState({
-      receiverZipcode: selectedAddress.zipNo,
-      receiverAddress1: selectedAddress.roadAddrPart1,
-      addressDialogOpen: false
-    })
-  }
+
   
   renderAddressList() {
     const styles = {
@@ -117,11 +134,18 @@ class Order extends Component {
       addressRoad: {fontSize: 11},
       addressNumber: {fontSize: 9},
     };
+    const onAddressSelect = (selectedAddress) => {
+      this.setState({
+        receiverZipcode: selectedAddress.zipNo,
+        receiverAddress1: selectedAddress.roadAddrPart1,
+        searchAddressDialogOpen: false
+      })
+    }
 
     const renderAddressElements = () => {
       return this.state.addressList.map((address, index) => {
         return (
-          <li key={index} onClick={() => this.onAddressSelect(address)}>
+          <li key={index} onClick={() => onAddressSelect(address)}>
             <div className="inlineBlock" style={styles.zipCode}>{address.zipNo}</div>
             <div className="inlineBlock">
               <p style={styles.addressRoad}>{address.roadAddrPart1}</p>
@@ -146,45 +170,29 @@ class Order extends Component {
     }
   }
 
-  // 배송지 리스트에서 확인 function
-  onMyAddressList = () => {
-
-  };
 
   setSenderName = (event) => {
-    this.setState({
-      senderName: event.target.value
-    })
+    this.setState({senderName: event.target.value})
   };
 
   setSenderPhone = (event) => {
-    this.setState({
-      senderPhone: event.target.value
-    })
+    this.setState({senderPhone: event.target.value})
   };
 
   setSenderEmail = (event) => {
-    this.setState({
-      senderEmail: event.target.value
-    })
+    this.setState({senderEmail: event.target.value})
   };
 
   setReceiverName = (event) => {
-    this.setState({
-      receiverName: event.target.value
-    })
+    this.setState({receiverName: event.target.value})
   };
 
   setReceiverNickname = (event) => {
-    this.setState({
-      receiverNickname: event.target.value
-    })
+    this.setState({receiverNickname: event.target.value})
   };
 
   setReceiverZipcode = (event) => {
-    this.setState({
-      receiverZipcode: event.target.value
-    })
+    this.setState({receiverZipcode: event.target.value})
   };
 
   setReceiverAddress1 = (event) => {
@@ -192,26 +200,20 @@ class Order extends Component {
   };
 
   setReceiverAddress2 = (event) => {
-    this.setState({
-      receiverAddress2: event.target.value
-    })
+    this.setState({receiverAddress2: event.target.value})
   };
 
   setReceiverPhone = (event) => {
-    this.setState({
-      receiverPhone: event.target.value
-    })
+    this.setState({receiverPhone: event.target.value})
   };
 
   setReceiverRequirement = (event) => {
-    this.setState({
-      receiverRequirement: event.target.value
-    })
+    this.setState({receiverRequirement: event.target.value})
   };
 
 
 
-  onSelectAddressDivider(event) {
+  onSelectAddressDivider = (event) => {
     this.setState({addressDivider: event.target.value});
 
     const { currentUser } = this.props;
@@ -235,11 +237,11 @@ class Order extends Component {
         receiverPhone:  "",
       })
     }
-  }
+  };
 
-  onSelectPaymentMethod(event) {
+  onSelectPaymentMethod = (event) => {
     this.setState({paymentMethod: event.target.value});
-  }
+  };
 
   onRequestPayment() {
     // 결제 전에 값들 다 입력했는지 확인하고 결제로 넘어가야해
@@ -260,7 +262,7 @@ class Order extends Component {
 
     this.IMP.request_pay({
       pg : 'inicis', // version 1.1.0부터 지원.
-      pay_method : 'card',
+      pay_method : this.state.paymentMethod,
       merchant_uid : 'merchant_' + new Date().getTime(),
       name : '주문명:결제테스트',
       amount : 14000,
@@ -272,22 +274,96 @@ class Order extends Component {
       m_redirect_url : 'http://localhost:8000/payment'
     }, function(rsp) {
       if ( rsp.success ) {
-        self.setState({rsp});
+        const paymentData = {
+          user_id: self.props.currentUser.id,
+          sender_name: self.state.senderName,
+          sender_phone: self.state.senderPhone,
+          sender_email: self.state.senderEmail,
+          receiver_name: self.state.receiverName,
+          receiver_nickname: self.state.receiverNickname,
+          receiver_zip_code: self.state.receiverZipcode,
+          receiver_address1: self.state.receiverAddress1,
+          receiver_address2: self.state.receiverAddress2,
+          receiver_phone: self.state.receiverPhone,
+          status: 1,
+          payment_type: self.state.paymentMethod,
+          total_price: rsp.paid_amount,
+          imp_uid: rsp.imp_uid,
+          merchant_uid: rsp.merchant_uid,
+          card_confirm_num: rsp.apply_num
+        };
 
-        var msg = '결제가 완료되었습니다.';
-        msg += '고유ID : ' + rsp.imp_uid;
-        msg += '상점 거래ID : ' + rsp.merchant_uid;
-        msg += '결제 금액 : ' + rsp.paid_amount;
-        msg += '카드 승인번호 : ' + rsp.apply_num;
+        self.props.postOrder(paymentData)
+          .then(res => {
+            console.log(res);
+
+            self.props.history.push("")
+          });
+
+        // var msg = '결제가 완료되었습니다.';
+        // msg += '고유ID : ' + rsp.imp_uid;
+        // msg += '상점 거래ID : ' + rsp.merchant_uid;
+        // msg += '결제 금액 : ' + rsp.paid_amount;
+        // msg += '카드 승인번호 : ' + rsp.apply_num;
       } else {
         var msg = '결제에 실패하였습니다.';
         msg += '에러내용 : ' + rsp.error_msg;
+        msg += '다시 시도해보세요.'
       }
       alert(msg);
     });
   }
 
+  renderMyAddressList() {
+    const styles = {
+      zipCodeHeader: {width: 45},
+      zipCode: { width: 45, fontSize: 8 },
+      addressRoad: {fontSize: 11},
+      addressNumber: {fontSize: 9},
+    };
 
+    const onMyAddressListSelect = (selectedAddress) => {
+      this.setState({
+        receiverZipcode: selectedAddress.zip_code,
+        receiverAddress1: selectedAddress.address1,
+        receiverAddress2: selectedAddress.address2,
+        myAddressListDialogOpen: false
+      })
+    };
+
+    const renderMyAddressListElements = () => {
+      return this.state.myAddressList.map((address, index) => {
+        return (
+          <li key={index} onClick={() => onMyAddressListSelect(address)}>
+            <div className="inlineBlock" style={styles.zipCode}>{address.zip_code}</div>
+            <div className="inlineBlock">
+              <p style={styles.addressRoad}>{address.address1}</p>
+              <p style={styles.addressNumber}>{address.address2}</p>
+            </div>
+          </li>
+        )
+      })
+    };
+
+    if(this.state.myAddressList.length === 0) {
+      return (
+        <div>
+          <p>등록된 주소 목록이 없습니다.</p>
+          <p>My page에서 등록 가능합니다.</p>
+        </div>
+      )
+    } else {
+      return (
+        <ul>
+          <li>
+            <div className="inlineBlock" style={styles.zipCodeHeader}>우편번호</div>
+            <div className="inlineBlock" >주소</div>
+          </li>
+          {renderMyAddressListElements()}
+        </ul>
+      )
+    }
+  }
 
   render() {
     console.log(this);
@@ -401,7 +477,7 @@ class Order extends Component {
         )
       })
     };
-
+//
     const renderOptionsUnder = (cartItem, index) => {
       if (cartItem.options.length === 0) {
         return (
@@ -646,10 +722,17 @@ class Order extends Component {
               <RaisedButton
                 className="inlineBlock"
                 label="배송지 리스트에서 확인"
-                onTouchTap={this.onMyAddressList}
+                onTouchTap={this.onMyAddressListDialogOpen}
                 primary={true}
               />
-
+              <Dialog
+                title="나의 배송지 리스트"
+                modal={false}
+                open={this.state.myAddressListDialogOpen}
+                onRequestClose={this.onMyAddressListDialogClose}
+              >
+                {this.renderMyAddressList()}
+              </Dialog>
             </div>
             <div>
               <TextField
@@ -679,7 +762,7 @@ class Order extends Component {
               <RaisedButton
                 label="우편번호 찾기"
                 primary={true}
-                onTouchTap={this.onAddressDialogOpen}
+                onTouchTap={this.onSearchAddressDialogOpen}
               />
             </div>
             <div>
@@ -719,8 +802,8 @@ class Order extends Component {
             <Dialog
               title="주소검색"
               modal={false}
-              open={this.state.addressDialogOpen}
-              onRequestClose={this.onAddressDialogClose}
+              open={this.state.searchAddressDialogOpen}
+              onRequestClose={this.onSearchAddressDialogClose}
             >
               <TextField
                 floatingLabelText="주소 입력"
@@ -746,13 +829,13 @@ class Order extends Component {
             <div>
               <RadioButtonGroup
                 className="inlineBlock"
-                defaultSelected="credit"
+                defaultSelected="card"
                 name="paymentGroup"
                 onChange={this.onSelectPaymentMethod}
               >
                 <RadioButton
                   className="inlineBlock"
-                  value="credit"
+                  value="card"
                   label="신용카드"
                 />
                 <RadioButton
@@ -804,7 +887,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     getCart,
-    getAddress
+    getAddressFromAPI,
+    getMyAddressList,
+    postOrder,
   }, dispatch)
 };
 

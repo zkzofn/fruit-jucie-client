@@ -50,12 +50,20 @@ var Order = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, (Order.__proto__ || Object.getPrototypeOf(Order)).call(this, props));
 
-    _this.onAddressDialogOpen = function () {
-      _this.setState({ addressDialogOpen: true });
+    _this.onMyAddressListDialogOpen = function () {
+      _this.setState({ myAddressListDialogOpen: true });
     };
 
-    _this.onAddressDialogClose = function () {
-      _this.setState({ addressDialogOpen: false });
+    _this.onMyAddressListDialogClose = function () {
+      _this.setState({ myAddressListDialogOpen: false });
+    };
+
+    _this.onSearchAddressDialogOpen = function () {
+      _this.setState({ searchAddressDialogOpen: true });
+    };
+
+    _this.onSearchAddressDialogClose = function () {
+      _this.setState({ searchAddressDialogOpen: false });
     };
 
     _this.onSearchAddress = function () {
@@ -67,8 +75,7 @@ var Order = function (_Component) {
       data.append("keyword", _this.state.searchAddressTerm);
       data.append("resultType", "json");
 
-      _this.props.getAddress(data).then(function (res) {
-        console.log(res);
+      _this.props.getAddressFromAPI(data).then(function (res) {
         var addressList = res.payload.data.results.juso;
 
         _this.setState({ addressList: addressList });
@@ -79,69 +86,81 @@ var Order = function (_Component) {
       if (event.key === "Enter") _this.onSearchAddress();
     };
 
-    _this.onMyAddressList = function () {};
-
     _this.setSenderName = function (event) {
-      _this.setState({
-        senderName: event.target.value
-      });
+      _this.setState({ senderName: event.target.value });
     };
 
     _this.setSenderPhone = function (event) {
-      _this.setState({
-        senderPhone: event.target.value
-      });
+      _this.setState({ senderPhone: event.target.value });
     };
 
     _this.setSenderEmail = function (event) {
-      _this.setState({
-        senderEmail: event.target.value
-      });
+      _this.setState({ senderEmail: event.target.value });
     };
 
     _this.setReceiverName = function (event) {
-      _this.setState({
-        receiverName: event.target.value
-      });
+      _this.setState({ receiverName: event.target.value });
     };
 
     _this.setReceiverNickname = function (event) {
-      _this.setState({
-        receiverNickname: event.target.value
-      });
+      _this.setState({ receiverNickname: event.target.value });
     };
 
     _this.setReceiverZipcode = function (event) {
-      _this.setState({
-        receiverZipcode: event.target.value
-      });
+      _this.setState({ receiverZipcode: event.target.value });
     };
 
     _this.setReceiverAddress1 = function (event) {};
 
     _this.setReceiverAddress2 = function (event) {
-      _this.setState({
-        receiverAddress2: event.target.value
-      });
+      _this.setState({ receiverAddress2: event.target.value });
     };
 
     _this.setReceiverPhone = function (event) {
-      _this.setState({
-        receiverPhone: event.target.value
-      });
+      _this.setState({ receiverPhone: event.target.value });
     };
 
     _this.setReceiverRequirement = function (event) {
-      _this.setState({
-        receiverRequirement: event.target.value
-      });
+      _this.setState({ receiverRequirement: event.target.value });
+    };
+
+    _this.onSelectAddressDivider = function (event) {
+      _this.setState({ addressDivider: event.target.value });
+
+      var currentUser = _this.props.currentUser;
+
+
+      if (event.target.value === "userAddress") {
+        _this.setState({
+          receiverName: currentUser.name,
+          receiverNickname: currentUser.nickname,
+          receiverZipcode: currentUser.zipcode,
+          receiverAddress1: currentUser.address1,
+          receiverAddress2: currentUser.address2,
+          receiverPhone: currentUser.phone
+        });
+      } else if (event.target.value === "newAddress") {
+        _this.setState({
+          receiverName: "",
+          receiverNickname: "",
+          receiverZipcode: "",
+          receiverAddress1: "",
+          receiverAddress2: "",
+          receiverPhone: ""
+        });
+      }
+    };
+
+    _this.onSelectPaymentMethod = function (event) {
+      _this.setState({ paymentMethod: event.target.value });
     };
 
     _this.state = {
-      addressDialogOpen: false,
+      searchAddressDialogOpen: false,
+      myAddressListDialogOpen: false,
       searchAddressTerm: "",
       addressDivider: "",
-      paymentMethod: "credit",
+      paymentMethod: "card",
       senderName: "",
       senderPhone: "",
       senderEmail: "",
@@ -151,7 +170,8 @@ var Order = function (_Component) {
       receiverAddress1: "",
       receiverAddress2: "",
       receiverPhone: "",
-      receiverRequirement: ""
+      receiverRequirement: "",
+      myAddressList: []
     };
 
     _this.IMP = window.IMP;
@@ -191,9 +211,22 @@ var Order = function (_Component) {
           receiverPhone: currentUser.phone
         });
       }, 200);
+      //
 
       // 여기서 사용자의 저장되어 있는 주소 있으면 불러와서 address 셋팅해줘야 해
+      var getMyAddressListParams = {
+        userId: 1
+      };
+      this.props.getMyAddressList(getMyAddressListParams).then(function (res) {
+        var myAddressList = res.payload.data.myAddressList;
+
+
+        _this2.setState({ myAddressList: myAddressList });
+      });
     }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {}
   }, {
     key: 'onChangeAddress',
     value: function onChangeAddress(searchAddressTerm) {
@@ -202,15 +235,6 @@ var Order = function (_Component) {
 
     // 여기도 페이지별로 가져올 수 있게 수정해야 해
 
-  }, {
-    key: 'onAddressSelect',
-    value: function onAddressSelect(selectedAddress) {
-      this.setState({
-        receiverZipcode: selectedAddress.zipNo,
-        receiverAddress1: selectedAddress.roadAddrPart1,
-        addressDialogOpen: false
-      });
-    }
   }, {
     key: 'renderAddressList',
     value: function renderAddressList() {
@@ -222,13 +246,20 @@ var Order = function (_Component) {
         addressRoad: { fontSize: 11 },
         addressNumber: { fontSize: 9 }
       };
+      var onAddressSelect = function onAddressSelect(selectedAddress) {
+        _this3.setState({
+          receiverZipcode: selectedAddress.zipNo,
+          receiverAddress1: selectedAddress.roadAddrPart1,
+          searchAddressDialogOpen: false
+        });
+      };
 
       var renderAddressElements = function renderAddressElements() {
         return _this3.state.addressList.map(function (address, index) {
           return _react2.default.createElement(
             'li',
             { key: index, onClick: function onClick() {
-                return _this3.onAddressSelect(address);
+                return onAddressSelect(address);
               } },
             _react2.default.createElement(
               'div',
@@ -275,42 +306,6 @@ var Order = function (_Component) {
         );
       }
     }
-
-    // 배송지 리스트에서 확인 function
-
-  }, {
-    key: 'onSelectAddressDivider',
-    value: function onSelectAddressDivider(event) {
-      this.setState({ addressDivider: event.target.value });
-
-      var currentUser = this.props.currentUser;
-
-
-      if (event.target.value === "userAddress") {
-        this.setState({
-          receiverName: currentUser.name,
-          receiverNickname: currentUser.nickname,
-          receiverZipcode: currentUser.zipcode,
-          receiverAddress1: currentUser.address1,
-          receiverAddress2: currentUser.address2,
-          receiverPhone: currentUser.phone
-        });
-      } else if (event.target.value === "newAddress") {
-        this.setState({
-          receiverName: "",
-          receiverNickname: "",
-          receiverZipcode: "",
-          receiverAddress1: "",
-          receiverAddress2: "",
-          receiverPhone: ""
-        });
-      }
-    }
-  }, {
-    key: 'onSelectPaymentMethod',
-    value: function onSelectPaymentMethod(event) {
-      this.setState({ paymentMethod: event.target.value });
-    }
   }, {
     key: 'onRequestPayment',
     value: function onRequestPayment() {
@@ -332,7 +327,7 @@ var Order = function (_Component) {
 
       this.IMP.request_pay({
         pg: 'inicis', // version 1.1.0부터 지원.
-        pay_method: 'card',
+        pay_method: this.state.paymentMethod,
         merchant_uid: 'merchant_' + new Date().getTime(),
         name: '주문명:결제테스트',
         amount: 14000,
@@ -344,24 +339,136 @@ var Order = function (_Component) {
         m_redirect_url: 'http://localhost:8000/payment'
       }, function (rsp) {
         if (rsp.success) {
-          self.setState({ rsp: rsp });
+          var paymentData = {
+            user_id: self.props.currentUser.id,
+            sender_name: self.state.senderName,
+            sender_phone: self.state.senderPhone,
+            sender_email: self.state.senderEmail,
+            receiver_name: self.state.receiverName,
+            receiver_nickname: self.state.receiverNickname,
+            receiver_zip_code: self.state.receiverZipcode,
+            receiver_address1: self.state.receiverAddress1,
+            receiver_address2: self.state.receiverAddress2,
+            receiver_phone: self.state.receiverPhone,
+            status: 1,
+            payment_type: self.state.paymentMethod,
+            total_price: rsp.paid_amount,
+            imp_uid: rsp.imp_uid,
+            merchant_uid: rsp.merchant_uid,
+            card_confirm_num: rsp.apply_num
+          };
 
-          var msg = '결제가 완료되었습니다.';
-          msg += '고유ID : ' + rsp.imp_uid;
-          msg += '상점 거래ID : ' + rsp.merchant_uid;
-          msg += '결제 금액 : ' + rsp.paid_amount;
-          msg += '카드 승인번호 : ' + rsp.apply_num;
+          self.props.postOrder(paymentData).then(function (res) {
+            console.log(res);
+
+            self.props.history.push("");
+          });
+
+          // var msg = '결제가 완료되었습니다.';
+          // msg += '고유ID : ' + rsp.imp_uid;
+          // msg += '상점 거래ID : ' + rsp.merchant_uid;
+          // msg += '결제 금액 : ' + rsp.paid_amount;
+          // msg += '카드 승인번호 : ' + rsp.apply_num;
         } else {
           var msg = '결제에 실패하였습니다.';
           msg += '에러내용 : ' + rsp.error_msg;
+          msg += '다시 시도해보세요.';
         }
         alert(msg);
       });
     }
   }, {
+    key: 'renderMyAddressList',
+    value: function renderMyAddressList() {
+      var _this4 = this;
+
+      var styles = {
+        zipCodeHeader: { width: 45 },
+        zipCode: { width: 45, fontSize: 8 },
+        addressRoad: { fontSize: 11 },
+        addressNumber: { fontSize: 9 }
+      };
+
+      var onMyAddressListSelect = function onMyAddressListSelect(selectedAddress) {
+        _this4.setState({
+          receiverZipcode: selectedAddress.zip_code,
+          receiverAddress1: selectedAddress.address1,
+          receiverAddress2: selectedAddress.address2,
+          myAddressListDialogOpen: false
+        });
+      };
+
+      var renderMyAddressListElements = function renderMyAddressListElements() {
+        return _this4.state.myAddressList.map(function (address, index) {
+          return _react2.default.createElement(
+            'li',
+            { key: index, onClick: function onClick() {
+                return onMyAddressListSelect(address);
+              } },
+            _react2.default.createElement(
+              'div',
+              { className: 'inlineBlock', style: styles.zipCode },
+              address.zip_code
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'inlineBlock' },
+              _react2.default.createElement(
+                'p',
+                { style: styles.addressRoad },
+                address.address1
+              ),
+              _react2.default.createElement(
+                'p',
+                { style: styles.addressNumber },
+                address.address2
+              )
+            )
+          );
+        });
+      };
+
+      if (this.state.myAddressList.length === 0) {
+        return _react2.default.createElement(
+          'div',
+          null,
+          _react2.default.createElement(
+            'p',
+            null,
+            '\uB4F1\uB85D\uB41C \uC8FC\uC18C \uBAA9\uB85D\uC774 \uC5C6\uC2B5\uB2C8\uB2E4.'
+          ),
+          _react2.default.createElement(
+            'p',
+            null,
+            'My page\uC5D0\uC11C \uB4F1\uB85D \uAC00\uB2A5\uD569\uB2C8\uB2E4.'
+          )
+        );
+      } else {
+        return _react2.default.createElement(
+          'ul',
+          null,
+          _react2.default.createElement(
+            'li',
+            null,
+            _react2.default.createElement(
+              'div',
+              { className: 'inlineBlock', style: styles.zipCodeHeader },
+              '\uC6B0\uD3B8\uBC88\uD638'
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'inlineBlock' },
+              '\uC8FC\uC18C'
+            )
+          ),
+          renderMyAddressListElements()
+        );
+      }
+    }
+  }, {
     key: 'render',
     value: function render() {
-      var _this4 = this;
+      var _this5 = this;
 
       console.log(this);
 
@@ -459,8 +566,8 @@ var Order = function (_Component) {
       };
 
       var renderCartListOver = function renderCartListOver() {
-        console.log(_this4.state.cartItems);
-        return _this4.state.cartItems.map(function (cartItem, index) {
+        console.log(_this5.state.cartItems);
+        return _this5.state.cartItems.map(function (cartItem, index) {
           var marginTop = cartItem.options.length === 0 ? 0 : 39;
 
           return _react2.default.createElement(
@@ -502,7 +609,7 @@ var Order = function (_Component) {
           );
         });
       };
-
+      //
       var renderOptionsUnder = function renderOptionsUnder(cartItem, index) {
         if (cartItem.options.length === 0) {
           return _react2.default.createElement(
@@ -542,7 +649,7 @@ var Order = function (_Component) {
       };
 
       var renderCartListUnder = function renderCartListUnder() {
-        return _this4.state.cartItems.map(function (cartItem, index) {
+        return _this5.state.cartItems.map(function (cartItem, index) {
           return _react2.default.createElement(
             _Table.TableRow,
             { key: index },
@@ -571,7 +678,7 @@ var Order = function (_Component) {
       };
 
       var renderCartListXs = function renderCartListXs() {
-        return _this4.state.cartItems.map(function (cartItem, index) {
+        return _this5.state.cartItems.map(function (cartItem, index) {
           return _react2.default.createElement(
             _Table.TableRow,
             { key: index },
@@ -602,7 +709,7 @@ var Order = function (_Component) {
       var calcTotalPrice = function calcTotalPrice() {
         var totalPrice = 0;
 
-        _this4.state.cartItems.forEach(function (cartItem) {
+        _this5.state.cartItems.forEach(function (cartItem) {
           if (cartItem.options.length === 0) {
             totalPrice += cartItem.product.count * cartItem.product.price_sale;
           } else {
@@ -891,9 +998,19 @@ var Order = function (_Component) {
               _react2.default.createElement(_materialUi.RaisedButton, {
                 className: 'inlineBlock',
                 label: '\uBC30\uC1A1\uC9C0 \uB9AC\uC2A4\uD2B8\uC5D0\uC11C \uD655\uC778',
-                onTouchTap: this.onMyAddressList,
+                onTouchTap: this.onMyAddressListDialogOpen,
                 primary: true
-              })
+              }),
+              _react2.default.createElement(
+                _materialUi.Dialog,
+                {
+                  title: '\uB098\uC758 \uBC30\uC1A1\uC9C0 \uB9AC\uC2A4\uD2B8',
+                  modal: false,
+                  open: this.state.myAddressListDialogOpen,
+                  onRequestClose: this.onMyAddressListDialogClose
+                },
+                this.renderMyAddressList()
+              )
             ),
             _react2.default.createElement(
               'div',
@@ -929,7 +1046,7 @@ var Order = function (_Component) {
               _react2.default.createElement(_materialUi.RaisedButton, {
                 label: '\uC6B0\uD3B8\uBC88\uD638 \uCC3E\uAE30',
                 primary: true,
-                onTouchTap: this.onAddressDialogOpen
+                onTouchTap: this.onSearchAddressDialogOpen
               })
             ),
             _react2.default.createElement(
@@ -978,8 +1095,8 @@ var Order = function (_Component) {
               {
                 title: '\uC8FC\uC18C\uAC80\uC0C9',
                 modal: false,
-                open: this.state.addressDialogOpen,
-                onRequestClose: this.onAddressDialogClose
+                open: this.state.searchAddressDialogOpen,
+                onRequestClose: this.onSearchAddressDialogClose
               },
               _react2.default.createElement(_materialUi.TextField, {
                 floatingLabelText: '\uC8FC\uC18C \uC785\uB825',
@@ -988,7 +1105,7 @@ var Order = function (_Component) {
                 fullWidth: true,
                 value: this.state.searchAddressTerm,
                 onChange: function onChange(event) {
-                  return _this4.onChangeAddress(event.target.value);
+                  return _this5.onChangeAddress(event.target.value);
                 },
                 onKeyPress: this.onDialogKeyDown
               }),
@@ -1016,13 +1133,13 @@ var Order = function (_Component) {
                 _RadioButton.RadioButtonGroup,
                 {
                   className: 'inlineBlock',
-                  defaultSelected: 'credit',
+                  defaultSelected: 'card',
                   name: 'paymentGroup',
                   onChange: this.onSelectPaymentMethod
                 },
                 _react2.default.createElement(_RadioButton.RadioButton, {
                   className: 'inlineBlock',
-                  value: 'credit',
+                  value: 'card',
                   label: '\uC2E0\uC6A9\uCE74\uB4DC'
                 }),
                 _react2.default.createElement(_RadioButton.RadioButton, {
@@ -1041,7 +1158,7 @@ var Order = function (_Component) {
               label: '\uACB0\uC81C\uD558\uAE30',
               primary: true,
               onTouchTap: function onTouchTap() {
-                return _this4.onRequestPayment();
+                return _this5.onRequestPayment();
               },
               disabled: this.state.paymentMethod === "" || this.state.senderName === "" || this.state.senderPhone === "" || this.state.senderEmail === "" || this.state.receiverName === "" || this.state.receiverNickname === "" || this.state.receiverZipcode === "" || this.state.receiverAddress1 === "" || this.state.receiverAddress2 === "" || this.state.receiverPhone === ""
             })
@@ -1063,7 +1180,9 @@ var mapStateToProps = function mapStateToProps(state) {
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return (0, _redux.bindActionCreators)({
     getCart: _RequestManager.getCart,
-    getAddress: _RequestManager.getAddress
+    getAddressFromAPI: _RequestManager.getAddressFromAPI,
+    getMyAddressList: _RequestManager.getMyAddressList,
+    postOrder: _RequestManager.postOrder
   }, dispatch);
 };
 
