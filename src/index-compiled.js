@@ -68,6 +68,10 @@ var _Payment = require('./components/Payment');
 
 var _Payment2 = _interopRequireDefault(_Payment);
 
+var _MyOrder = require('./components/MyOrder');
+
+var _MyOrder2 = _interopRequireDefault(_MyOrder);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 (0, _reactTapEventPlugin2.default)();
@@ -96,6 +100,7 @@ _reactDom2.default.render(_react2.default.createElement(
         _react2.default.createElement(_reactRouter.Route, { path: '/cart', component: _Cart2.default }),
         _react2.default.createElement(_reactRouter.Route, { path: '/order', component: _Order2.default }),
         _react2.default.createElement(_reactRouter.Route, { path: '/payment', component: _Payment2.default }),
+        _react2.default.createElement(_reactRouter.Route, { path: '/my/order', component: _MyOrder2.default }),
         _react2.default.createElement(_Footer2.default, null)
       )
     )

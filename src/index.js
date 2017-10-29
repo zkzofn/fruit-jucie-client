@@ -18,6 +18,7 @@ import ProductDetail from './components/ProductDetail';
 import Cart from './components/Cart';
 import Order from './components/Order';
 import Payment from './components/Payment';
+import MyOrder from './components/MyOrder';
 
 injectTapEventPlugin();
 
@@ -40,6 +41,7 @@ ReactDOM.render(
           <Route path="/cart" component={Cart} />
           <Route path="/order" component={Order} />
           <Route path="/payment" component={Payment} />
+          <Route path="/my/order" component={MyOrder} />
           <Footer />
         </div>
       </MuiThemeProvider>

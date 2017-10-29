@@ -171,7 +171,8 @@ var Order = function (_Component) {
       receiverAddress2: "",
       receiverPhone: "",
       receiverRequirement: "",
-      myAddressList: []
+      myAddressList: [],
+      totalPrice: 0
     };
 
     _this.IMP = window.IMP;
@@ -186,8 +187,8 @@ var Order = function (_Component) {
 
       setTimeout(function () {
         var params = {
-          // userId: this.props.currentUser.id
-          userId: 1
+          userId: _this2.props.currentUser.id
+          // userId: 1
         };
 
         _this2.props.getCart(params).then(function (res) {
@@ -195,6 +196,8 @@ var Order = function (_Component) {
 
 
           _this2.setState({ cartItems: cart });
+        }).then(function () {
+          _this2.setState({ totalPrice: _this2.calcTotalPrice() });
         });
 
         var currentUser = _this2.props.currentUser;
@@ -309,73 +312,82 @@ var Order = function (_Component) {
   }, {
     key: 'onRequestPayment',
     value: function onRequestPayment() {
-      // 결제 전에 값들 다 입력했는지 확인하고 결제로 넘어가야해
-
-      //   paymentMethod: "",
-      //   senderName: "",
-      //   senderPhone: "",
-      //   senderEmail: "",
-      //   receiverName: "",
-      //   receiverNickname: "",
-      //   receiverZipcode: "",
-      //   receiverAddress1: "",
-      //   receiverAddress2: "",
-      //   receiverPhone: "",
-      //   receiverRequirement: ""
-
       var self = this;
 
-      this.IMP.request_pay({
-        pg: 'inicis', // version 1.1.0부터 지원.
-        pay_method: this.state.paymentMethod,
-        merchant_uid: 'merchant_' + new Date().getTime(),
-        name: '주문명:결제테스트',
-        amount: 14000,
-        buyer_email: 'zkzofn@gmail.com',
-        buyer_name: '이장호',
-        buyer_tel: '010-3399-0081',
-        buyer_addr: '서울특별시 강남구 삼성동',
-        buyer_postcode: '123-456',
-        m_redirect_url: 'http://localhost:8000/payment'
-      }, function (rsp) {
-        if (rsp.success) {
-          var paymentData = {
-            user_id: self.props.currentUser.id,
-            sender_name: self.state.senderName,
-            sender_phone: self.state.senderPhone,
-            sender_email: self.state.senderEmail,
-            receiver_name: self.state.receiverName,
-            receiver_nickname: self.state.receiverNickname,
-            receiver_zip_code: self.state.receiverZipcode,
-            receiver_address1: self.state.receiverAddress1,
-            receiver_address2: self.state.receiverAddress2,
-            receiver_phone: self.state.receiverPhone,
-            status: 1,
-            payment_type: self.state.paymentMethod,
-            total_price: rsp.paid_amount,
-            imp_uid: rsp.imp_uid,
-            merchant_uid: rsp.merchant_uid,
-            card_confirm_num: rsp.apply_num
-          };
+      if (this.state.paymentMethod === "cash") {
+        var paymentData = {
+          user_id: self.props.currentUser.id,
+          sender_name: self.state.senderName,
+          sender_phone: self.state.senderPhone,
+          sender_email: self.state.senderEmail,
+          receiver_name: self.state.receiverName,
+          receiver_nickname: self.state.receiverNickname,
+          receiver_zip_code: self.state.receiverZipcode,
+          receiver_address1: self.state.receiverAddress1,
+          receiver_address2: self.state.receiverAddress2,
+          receiver_phone: self.state.receiverPhone,
+          status: 1,
+          payment_type: self.state.paymentMethod,
+          total_price: this.state.totalPrice, // 여기서 나중에 적립금 적용한 금액으로 넣어야해
+          imp_uid: rsp.imp_uid,
+          merchant_uid: rsp.merchant_uid,
+          card_confirm_num: rsp.apply_num
+          //제품목록도 넣어야해
+        };
 
-          self.props.postOrder(paymentData).then(function (res) {
-            console.log(res);
+        self.props.postOrder(paymentData).then(function (res) {
+          console.log(res);
 
-            self.props.history.push("");
-          });
+          self.props.history.push("/my/order");
+        });
+      } else {
+        this.IMP.request_pay({
+          pg: 'inicis', // version 1.1.0부터 지원.
+          pay_method: this.state.paymentMethod,
+          merchant_uid: 'merchant_' + new Date().getTime(),
+          name: '주문명:결제테스트',
+          amount: 14000, // 여기서 this.state.totalPrice 에 나중에 적립금 적용한 가격으로 넣어야해
+          buyer_email: 'zkzofn@gmail.com',
+          buyer_name: '이장호',
+          buyer_tel: '010-3399-0081',
+          buyer_addr: '서울특별시 강남구 삼성동',
+          buyer_postcode: '123-456',
+          m_redirect_url: 'http://eatmore-green.com/my/order'
+        }, function (rsp) {
+          if (rsp.success) {
+            var _paymentData = {
+              user_id: self.props.currentUser.id,
+              sender_name: self.state.senderName,
+              sender_phone: self.state.senderPhone,
+              sender_email: self.state.senderEmail,
+              receiver_name: self.state.receiverName,
+              receiver_nickname: self.state.receiverNickname,
+              receiver_zip_code: self.state.receiverZipcode,
+              receiver_address1: self.state.receiverAddress1,
+              receiver_address2: self.state.receiverAddress2,
+              receiver_phone: self.state.receiverPhone,
+              status: 1,
+              payment_type: self.state.paymentMethod,
+              total_price: rsp.paid_amount,
+              imp_uid: rsp.imp_uid,
+              merchant_uid: rsp.merchant_uid,
+              card_confirm_num: rsp.apply_num
+            };
 
-          // var msg = '결제가 완료되었습니다.';
-          // msg += '고유ID : ' + rsp.imp_uid;
-          // msg += '상점 거래ID : ' + rsp.merchant_uid;
-          // msg += '결제 금액 : ' + rsp.paid_amount;
-          // msg += '카드 승인번호 : ' + rsp.apply_num;
-        } else {
-          var msg = '결제에 실패하였습니다.';
-          msg += '에러내용 : ' + rsp.error_msg;
-          msg += '다시 시도해보세요.';
-        }
-        alert(msg);
-      });
+            self.props.postOrder(_paymentData).then(function (res) {
+              console.log(res);
+
+              self.props.history.push("/my/order");
+            });
+          } else {
+            var msg = '결제에 실패하였습니다.';
+            msg += '에러내용: ' + rsp.error_msg;
+            msg += '다시 시도해보세요.';
+
+            alert(msg);
+          }
+        });
+      }
     }
   }, {
     key: 'renderMyAddressList',
@@ -464,6 +476,23 @@ var Order = function (_Component) {
           renderMyAddressListElements()
         );
       }
+    }
+  }, {
+    key: 'calcTotalPrice',
+    value: function calcTotalPrice() {
+      var totalPrice = 0;
+
+      this.state.cartItems.forEach(function (cartItem) {
+        if (cartItem.options.length === 0) {
+          totalPrice += cartItem.product.count * cartItem.product.price_sale;
+        } else {
+          cartItem.options.forEach(function (option) {
+            totalPrice += option.count * option.additional_fee;
+          });
+        }
+      });
+
+      return totalPrice;
     }
   }, {
     key: 'render',
@@ -566,7 +595,6 @@ var Order = function (_Component) {
       };
 
       var renderCartListOver = function renderCartListOver() {
-        console.log(_this5.state.cartItems);
         return _this5.state.cartItems.map(function (cartItem, index) {
           var marginTop = cartItem.options.length === 0 ? 0 : 39;
 
@@ -706,22 +734,6 @@ var Order = function (_Component) {
         });
       };
 
-      var calcTotalPrice = function calcTotalPrice() {
-        var totalPrice = 0;
-
-        _this5.state.cartItems.forEach(function (cartItem) {
-          if (cartItem.options.length === 0) {
-            totalPrice += cartItem.product.count * cartItem.product.price_sale;
-          } else {
-            cartItem.options.forEach(function (option) {
-              totalPrice += option.count * option.additional_fee;
-            });
-          }
-        });
-
-        return totalPrice.toLocaleString();
-      };
-
       var renderFooter = function renderFooter() {
         return _react2.default.createElement(
           _Table.TableFooter,
@@ -739,7 +751,7 @@ var Order = function (_Component) {
                   'h3',
                   { style: { fontWeight: "bold" } },
                   '\uCD1D \uC0C1\uD488 \uAE08\uC561 = ',
-                  calcTotalPrice(),
+                  _this5.calcTotalPrice().toLocaleString(),
                   '\uC6D0'
                 )
               ),
@@ -750,7 +762,7 @@ var Order = function (_Component) {
                   'h4',
                   { style: { fontWeight: "bold" } },
                   '\uCD1D \uC0C1\uD488 \uAE08\uC561 = ',
-                  calcTotalPrice(),
+                  _this5.calcTotalPrice().toLocaleString(),
                   '\uC6D0'
                 )
               ),
@@ -761,7 +773,7 @@ var Order = function (_Component) {
                   'h5',
                   { style: { fontWeight: "bold" } },
                   '\uCD1D \uC0C1\uD488 \uAE08\uC561 = ',
-                  calcTotalPrice(),
+                  _this5.calcTotalPrice().toLocaleString(),
                   '\uC6D0'
                 )
               )
@@ -779,17 +791,12 @@ var Order = function (_Component) {
           _react2.default.createElement(
             'h1',
             null,
-            '\uC7A5\uBC14\uAD6C\uB2C8'
+            '\uC8FC\uBB38\uB0B4\uC5ED'
           ),
           _react2.default.createElement(
             'p',
             null,
             '\uC8FC\uBB38\uD558\uC2E4 \uC0C1\uD488\uBA85 \uBC0F \uC218\uB7C9\uC744 \uC815\uD655\uD558\uAC8C \uD655\uC778\uD574 \uC8FC\uC138\uC694.'
-          ),
-          _react2.default.createElement(
-            'p',
-            null,
-            '\uC7A5\uBC14\uAD6C\uB2C8\uC5D0 \uB2F4\uC740 \uC0C1\uD488\uC740 \uC77C\uC8FC\uC77C \uD6C4 \uC790\uB3D9 \uC0AD\uC81C\uB429\uB2C8\uB2E4.'
           )
         ),
         _react2.default.createElement(
@@ -801,12 +808,12 @@ var Order = function (_Component) {
           _react2.default.createElement(
             'h4',
             { style: { fontWeight: "bold" } },
-            '\uC7A5\uBC14\uAD6C\uB2C8'
+            '\uC8FC\uBB38\uB0B4\uC5ED'
           ),
           _react2.default.createElement(
             'p',
             null,
-            '\uC0C1\uD488\uBA85 \uBC0F \uC218\uB7C9\uC744 \uD655\uC778\uD574 \uC8FC\uC138\uC694.'
+            '\uC8FC\uBB38\uD558\uC2E4 \uC0C1\uD488\uBA85 \uBC0F \uC218\uB7C9\uC744 \uC815\uD655\uD558\uAC8C \uD655\uC778\uD574 \uC8FC\uC138\uC694.'
           )
         ),
         _react2.default.createElement(
@@ -1145,7 +1152,7 @@ var Order = function (_Component) {
                 _react2.default.createElement(_RadioButton.RadioButton, {
                   className: 'inlineBlock',
                   value: 'cash',
-                  label: '\uACC4\uC88C\uC774\uCCB4'
+                  label: '\uACC4\uC88C\uC774\uCCB4 (\uAD6D\uBBFC xxxxxx-xx-xxxxxx)'
                 }),
                 _react2.default.createElement(_RadioButton.RadioButton, {
                   className: 'inlineBlock',

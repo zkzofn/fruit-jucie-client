@@ -29,7 +29,8 @@ class Order extends Component {
       receiverAddress2: "",
       receiverPhone: "",
       receiverRequirement: "",
-      myAddressList: []
+      myAddressList: [],
+      totalPrice: 0,
     };
 
     this.IMP = window.IMP;
@@ -39,8 +40,8 @@ class Order extends Component {
   componentWillMount() {
     setTimeout(() => {
       const params = {
-        // userId: this.props.currentUser.id
-        userId: 1
+        userId: this.props.currentUser.id
+        // userId: 1
       };
 
       this.props.getCart(params)
@@ -48,6 +49,8 @@ class Order extends Component {
           const { cart } = res.payload.data;
 
           this.setState({cartItems: cart});
+        }).then(() => {
+          this.setState({totalPrice: this.calcTotalPrice()})
         });
 
       const { currentUser } = this.props;
@@ -244,75 +247,92 @@ class Order extends Component {
   };
 
   onRequestPayment() {
-    // 결제 전에 값들 다 입력했는지 확인하고 결제로 넘어가야해
-
-    //   paymentMethod: "",
-    //   senderName: "",
-    //   senderPhone: "",
-    //   senderEmail: "",
-    //   receiverName: "",
-    //   receiverNickname: "",
-    //   receiverZipcode: "",
-    //   receiverAddress1: "",
-    //   receiverAddress2: "",
-    //   receiverPhone: "",
-    //   receiverRequirement: ""
-
     const self = this;
 
-    this.IMP.request_pay({
-      pg : 'inicis', // version 1.1.0부터 지원.
-      pay_method : this.state.paymentMethod,
-      merchant_uid : 'merchant_' + new Date().getTime(),
-      name : '주문명:결제테스트',
-      amount : 14000,
-      buyer_email : 'zkzofn@gmail.com',
-      buyer_name : '이장호',
-      buyer_tel : '010-3399-0081',
-      buyer_addr : '서울특별시 강남구 삼성동',
-      buyer_postcode : '123-456',
-      m_redirect_url : 'http://localhost:8000/payment'
-    }, function(rsp) {
-      if ( rsp.success ) {
-        const paymentData = {
-          user_id: self.props.currentUser.id,
-          sender_name: self.state.senderName,
-          sender_phone: self.state.senderPhone,
-          sender_email: self.state.senderEmail,
-          receiver_name: self.state.receiverName,
-          receiver_nickname: self.state.receiverNickname,
-          receiver_zip_code: self.state.receiverZipcode,
-          receiver_address1: self.state.receiverAddress1,
-          receiver_address2: self.state.receiverAddress2,
-          receiver_phone: self.state.receiverPhone,
-          status: 1,
-          payment_type: self.state.paymentMethod,
-          total_price: rsp.paid_amount,
-          imp_uid: rsp.imp_uid,
-          merchant_uid: rsp.merchant_uid,
-          card_confirm_num: rsp.apply_num
-        };
+    if (this.state.paymentMethod === "cash") {
+      const paymentData = {
+        user_id: self.props.currentUser.id,
+        sender_name: self.state.senderName,
+        sender_phone: self.state.senderPhone,
+        sender_email: self.state.senderEmail,
+        receiver_name: self.state.receiverName,
+        receiver_nickname: self.state.receiverNickname,
+        receiver_zip_code: self.state.receiverZipcode,
+        receiver_address1: self.state.receiverAddress1,
+        receiver_address2: self.state.receiverAddress2,
+        receiver_phone: self.state.receiverPhone,
+        status: 1,
+        payment_type: self.state.paymentMethod,
+        total_price: this.state.totalPrice, // 여기서 나중에 적립금 적용한 금액으로 넣어야해
+        imp_uid: rsp.imp_uid,
+        merchant_uid: rsp.merchant_uid,
+        card_confirm_num: rsp.apply_num
+        //제품목록도 넣어야해
+      };
 
-        self.props.postOrder(paymentData)
-          .then(res => {
-            console.log(res);
+      self.props.postOrder(paymentData)
+        .then(res => {
+          console.log(res);
 
-            self.props.history.push("")
-          });
+          self.props.history.push("/my/order")
+        });
 
-        // var msg = '결제가 완료되었습니다.';
-        // msg += '고유ID : ' + rsp.imp_uid;
-        // msg += '상점 거래ID : ' + rsp.merchant_uid;
-        // msg += '결제 금액 : ' + rsp.paid_amount;
-        // msg += '카드 승인번호 : ' + rsp.apply_num;
-      } else {
-        var msg = '결제에 실패하였습니다.';
-        msg += '에러내용 : ' + rsp.error_msg;
-        msg += '다시 시도해보세요.'
-      }
-      alert(msg);
-    });
+
+    } else {
+      this.IMP.request_pay({
+        pg : 'inicis', // version 1.1.0부터 지원.
+        pay_method : this.state.paymentMethod,
+        merchant_uid : 'merchant_' + new Date().getTime(),
+        name : '주문명:결제테스트',
+        amount : 14000, // 여기서 this.state.totalPrice 에 나중에 적립금 적용한 가격으로 넣어야해
+        buyer_email : 'zkzofn@gmail.com',
+        buyer_name : '이장호',
+        buyer_tel : '010-3399-0081',
+        buyer_addr : '서울특별시 강남구 삼성동',
+        buyer_postcode : '123-456',
+        m_redirect_url : 'http://eatmore-green.com/my/order'
+      }, function(rsp) {
+        if ( rsp.success ) {
+          const paymentData = {
+            user_id: self.props.currentUser.id,
+            sender_name: self.state.senderName,
+            sender_phone: self.state.senderPhone,
+            sender_email: self.state.senderEmail,
+            receiver_name: self.state.receiverName,
+            receiver_nickname: self.state.receiverNickname,
+            receiver_zip_code: self.state.receiverZipcode,
+            receiver_address1: self.state.receiverAddress1,
+            receiver_address2: self.state.receiverAddress2,
+            receiver_phone: self.state.receiverPhone,
+            status: 1,
+            payment_type: self.state.paymentMethod,
+            total_price: rsp.paid_amount,
+            imp_uid: rsp.imp_uid,
+            merchant_uid: rsp.merchant_uid,
+            card_confirm_num: rsp.apply_num
+          };
+
+          self.props.postOrder(paymentData)
+            .then(res => {
+              console.log(res);
+
+              self.props.history.push("/my/order")
+            });
+        } else {
+          var msg = '결제에 실패하였습니다.';
+          msg += '에러내용: ' + rsp.error_msg;
+          msg += '다시 시도해보세요.';
+
+          alert(msg);
+        }
+      });
+    }
+
+
   }
+
+
+
 
   renderMyAddressList() {
     const styles = {
@@ -364,6 +384,23 @@ class Order extends Component {
       )
     }
   }
+
+
+  calcTotalPrice() {
+    let totalPrice = 0;
+
+    this.state.cartItems.forEach(cartItem => {
+      if (cartItem.options.length === 0) {
+        totalPrice += cartItem.product.count * cartItem.product.price_sale;
+      } else {
+        cartItem.options.forEach(option => {
+          totalPrice += option.count * option.additional_fee;
+        })
+      }
+    });
+
+    return totalPrice;
+  };
 
   render() {
     console.log(this);
@@ -446,7 +483,6 @@ class Order extends Component {
     };
 
     const renderCartListOver = () => {
-      console.log(this.state.cartItems);
       return this.state.cartItems.map((cartItem, index) => {
         const marginTop = cartItem.options.length === 0 ? 0 : 39;
 
@@ -560,30 +596,14 @@ class Order extends Component {
     };
 
 
-    const calcTotalPrice = () => {
-      let totalPrice = 0;
-
-      this.state.cartItems.forEach(cartItem => {
-        if (cartItem.options.length === 0) {
-          totalPrice += cartItem.product.count * cartItem.product.price_sale;
-        } else {
-          cartItem.options.forEach(option => {
-            totalPrice += option.count * option.additional_fee;
-          })
-        }
-      });
-
-      return totalPrice.toLocaleString();
-    };
-
     const renderFooter = () => {
       return (
         <TableFooter>
           <TableRow>
             <TableRowColumn>
-              <div className="pull-right pb-2 visible-over-block"><h3 style={{fontWeight: "bold"}}>총 상품 금액 = {calcTotalPrice()}원</h3></div>
-              <div className="pull-right pb-2 visible-under-flex"><h4 style={{fontWeight: "bold"}}>총 상품 금액 = {calcTotalPrice()}원</h4></div>
-              <div className="pull-right pb-2 visible-small-flex"><h5 style={{fontWeight: "bold"}}>총 상품 금액 = {calcTotalPrice()}원</h5></div>
+              <div className="pull-right pb-2 visible-over-block"><h3 style={{fontWeight: "bold"}}>총 상품 금액 = {this.calcTotalPrice().toLocaleString()}원</h3></div>
+              <div className="pull-right pb-2 visible-under-flex"><h4 style={{fontWeight: "bold"}}>총 상품 금액 = {this.calcTotalPrice().toLocaleString()}원</h4></div>
+              <div className="pull-right pb-2 visible-small-flex"><h5 style={{fontWeight: "bold"}}>총 상품 금액 = {this.calcTotalPrice().toLocaleString()}원</h5></div>
             </TableRowColumn>
           </TableRow>
         </TableFooter>
@@ -594,17 +614,16 @@ class Order extends Component {
     return (
       <div>
         <div className="jumbotron alignCenter visible-sm-block visible-md-block visible-lg-block">
-          <h1>장바구니</h1>
+          <h1>주문내역</h1>
           <p>주문하실 상품명 및 수량을 정확하게 확인해 주세요.</p>
-          <p>장바구니에 담은 상품은 일주일 후 자동 삭제됩니다.</p>
         </div>
 
         <div
           className="visible-xs-block alignCenter"
           style={{backgroundColor: "#eee", paddingTop: 20, paddingBottom: 20}}
         >
-          <h4 style={{fontWeight: "bold"}}>장바구니</h4>
-          <p>상품명 및 수량을 확인해 주세요.</p>
+          <h4 style={{fontWeight: "bold"}}>주문내역</h4>
+          <p>주문하실 상품명 및 수량을 정확하게 확인해 주세요.</p>
         </div>
 
         <div className="container pb-4">
@@ -841,7 +860,7 @@ class Order extends Component {
                 <RadioButton
                   className="inlineBlock"
                   value="cash"
-                  label="계좌이체"
+                  label="계좌이체 (국민 xxxxxx-xx-xxxxxx)"
                 />
                 <RadioButton
                   className="inlineBlock"
