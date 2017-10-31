@@ -264,9 +264,9 @@ class Order extends Component {
         status: 1,
         payment_type: self.state.paymentMethod,
         total_price: this.state.totalPrice, // 여기서 나중에 적립금 적용한 금액으로 넣어야해
-        imp_uid: rsp.imp_uid,
-        merchant_uid: rsp.merchant_uid,
-        card_confirm_num: rsp.apply_num,
+        // imp_uid: rsp.imp_uid,
+        // merchant_uid: rsp.merchant_uid,
+        // card_confirm_num: rsp.apply_num,
         items: self.state.cartItems,
       };
 
