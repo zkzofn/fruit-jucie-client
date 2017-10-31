@@ -266,8 +266,8 @@ class Order extends Component {
         total_price: this.state.totalPrice, // 여기서 나중에 적립금 적용한 금액으로 넣어야해
         imp_uid: rsp.imp_uid,
         merchant_uid: rsp.merchant_uid,
-        card_confirm_num: rsp.apply_num
-        //제품목록도 넣어야해
+        card_confirm_num: rsp.apply_num,
+        items: self.state.cartItems,
       };
 
       self.props.postOrder(paymentData)
@@ -309,7 +309,8 @@ class Order extends Component {
             total_price: rsp.paid_amount,
             imp_uid: rsp.imp_uid,
             merchant_uid: rsp.merchant_uid,
-            card_confirm_num: rsp.apply_num
+            card_confirm_num: rsp.apply_num,
+            items: self.state.cartItems,
           };
 
           self.props.postOrder(paymentData)
