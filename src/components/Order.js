@@ -38,40 +38,39 @@ class Order extends Component {
   }
 
   componentWillMount() {
-    setTimeout(() => {
-      const params = {
-        userId: this.props.currentUser.id
-        // userId: 1
-      };
+    // 사용자의 장바구니 리스트 가져오기
+    const params = {
+      userId: this.props.currentUser.id
+      // userId: 1
+    };
 
-      this.props.getCart(params)
-        .then(res => {
-          const { cart } = res.payload.data;
+    this.props.getCart(params)
+      .then(res => {
+        const { cart } = res.payload.data;
 
-          this.setState({cartItems: cart});
-        }).then(() => {
-          this.setState({totalPrice: this.calcTotalPrice()})
-        });
+        this.setState({cartItems: cart});
+      }).then(() => {
+        this.setState({totalPrice: this.calcTotalPrice()})
+      });
 
-      const { currentUser } = this.props;
-      this.setState({
-        senderName: currentUser.name,
-        senderPhone: currentUser.phone,
-        senderEmail: currentUser.email,
-        receiverName: currentUser.name,
-        receiverNickname: currentUser.nickname,
-        receiverZipcode: currentUser.zipcode,
-        receiverAddress1: currentUser.address1,
-        receiverAddress2: currentUser.address2,
-        receiverPhone: currentUser.phone,
-      })
-    }, 200);
-    //
+    const { currentUser } = this.props;
+    this.setState({
+      senderName: currentUser.name,
+      senderPhone: currentUser.phone,
+      senderEmail: currentUser.email,
+      receiverName: currentUser.name,
+      receiverNickname: currentUser.nickname,
+      receiverZipcode: currentUser.zipcode,
+      receiverAddress1: currentUser.address1,
+      receiverAddress2: currentUser.address2,
+      receiverPhone: currentUser.phone,
+    });
 
-    // 여기서 사용자의 저장되어 있는 주소 있으면 불러와서 address 셋팅해줘야 해
+    // 사용자의 저장되어 있는 주소 리스트
     const getMyAddressListParams = {
       userId: 1
     };
+
     this.props.getMyAddressList(getMyAddressListParams)
       .then(res => {
         const { myAddressList } = res.payload.data;
