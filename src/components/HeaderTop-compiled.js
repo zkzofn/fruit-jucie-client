@@ -10,6 +10,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactRedux = require('react-redux');
+
+var _redux = require('redux');
+
 var _FlatButton = require('material-ui/FlatButton');
 
 var _FlatButton2 = _interopRequireDefault(_FlatButton);
@@ -25,22 +29,36 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var HeaderTop = function (_Component) {
   _inherits(HeaderTop, _Component);
 
-  function HeaderTop() {
+  function HeaderTop(props) {
     _classCallCheck(this, HeaderTop);
 
-    return _possibleConstructorReturn(this, (HeaderTop.__proto__ || Object.getPrototypeOf(HeaderTop)).apply(this, arguments));
+    return _possibleConstructorReturn(this, (HeaderTop.__proto__ || Object.getPrototypeOf(HeaderTop)).call(this, props));
   }
 
   _createClass(HeaderTop, [{
+    key: 'pushToUrl',
+    value: function pushToUrl(url) {
+      this.props.history.push(url);
+    }
+  }, {
     key: 'render',
     value: function render() {
+      console.log(this.props);
+      var styles = {
+        loginBtn: { display: this.props.current.user ? "none" : "inlineBlock" }
+      };
+
       return _react2.default.createElement(
         'div',
         { className: 'clearfix pb-4' },
         _react2.default.createElement(
           'div',
           { className: 'floatRight', style: { height: 36 } },
-          _react2.default.createElement(_FlatButton2.default, { label: '\uB85C\uADF8\uC778', href: '/signin' }),
+          _react2.default.createElement(_FlatButton2.default, {
+            label: '\uB85C\uADF8\uC778',
+            onTouchTap: this.pushToUrl.bind(this, "/signin"),
+            style: styles.loginBtn
+          }),
           _react2.default.createElement(_FlatButton2.default, { label: '\uC7A5\uBC14\uAD6C\uB2C8', primary: true, disabled: true }),
           _react2.default.createElement(_FlatButton2.default, { label: '\uBB38\uC758', primary: true, disabled: true }),
           _react2.default.createElement(_FlatButton2.default, { label: '\uB9C8\uC774\uD398\uC774\uC9C0', secondary: true, disabled: true }),

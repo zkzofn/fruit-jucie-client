@@ -67,12 +67,12 @@ var Header = function (_Component) {
   _createClass(Header, [{
     key: 'componentWillMount',
     value: function componentWillMount() {
-      // 여기서 무조건 userId = 1 로 넣어주는데 이부분은 제대로 설계해서 수정해야한다.
-      var getUserParam = {
-        userId: 1
-      };
+      var _this2 = this;
 
-      this.props.getUser(getUserParam);
+      this.props.getValidate().then(function (result) {
+        console.log(result);
+        console.log(_this2.props);
+      });
     }
   }, {
     key: 'openDrawer',
@@ -92,7 +92,7 @@ var Header = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      var _this2 = this;
+      var _this3 = this;
 
       // const headerStyle = {
       //   position: 'relative',
@@ -102,7 +102,6 @@ var Header = function (_Component) {
       //   margin: '0 auto',
       //   overflow: 'hidden'
       // };
-
       return _react2.default.createElement(
         'div',
         null,
@@ -122,14 +121,14 @@ var Header = function (_Component) {
             open: this.state.open,
             docked: false,
             onRequestChange: function onRequestChange(open) {
-              return _this2.setState({ open: open });
+              return _this3.setState({ open: open });
             }
           },
           _react2.default.createElement(
             _materialUi.MenuItem,
             { onTouchTap: function onTouchTap() {
-                _this2.props.history.push("/signin");
-                _this2.closeDrawer();
+                _this3.props.history.push("/signin");
+                _this3.closeDrawer();
               } },
             _react2.default.createElement(_powerSettingsNew2.default, null),
             'Sign In'
@@ -137,8 +136,8 @@ var Header = function (_Component) {
           _react2.default.createElement(
             _materialUi.MenuItem,
             { onTouchTap: function onTouchTap() {
-                _this2.props.history.push("/cart");
-                _this2.closeDrawer();
+                _this3.props.history.push("/cart");
+                _this3.closeDrawer();
               } },
             _react2.default.createElement(_shoppingCart2.default, null),
             '\uC7A5\uBC14\uAD6C\uB2C8'
@@ -169,7 +168,7 @@ var Header = function (_Component) {
         _react2.default.createElement(
           'div',
           { className: 'visible-over-block container' },
-          _react2.default.createElement(_HeaderTop2.default, null),
+          _react2.default.createElement(_HeaderTop2.default, this.props),
           _react2.default.createElement(_HeaderLogo2.default, null),
           _react2.default.createElement(_HeaderNav2.default, null)
         )
@@ -180,15 +179,17 @@ var Header = function (_Component) {
   return Header;
 }(_react.Component);
 
-function mapStateToProps(state) {
-  return { currentUser: state.currentUser.single };
-}
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    current: state.current
+  };
+};
 
-function mapDispatchToProps(dispatch) {
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return (0, _redux.bindActionCreators)({
-    getUser: _RequestManager.getUser
+    getValidate: _RequestManager.getValidate
   }, dispatch);
-}
+};
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Header);
 

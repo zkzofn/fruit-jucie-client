@@ -1,6 +1,5 @@
 import SessionManager from './SessionManager';
 import axios from 'axios';
-import $ from 'jquery/dist/jquery.min';
 
 export const GET_PRODUCTS = "GET_PRODUCTS";
 export const GET_PRODUCT = "GET_PRODUCT";
@@ -12,6 +11,10 @@ export const DELETE_CART = "DELETE_CART";
 export const GET_ADDRESS_FROM_API = "GET_ADDRESS_FROM_API";
 export const GET_MY_ADDRESS_LIST = "GET_MY_ADDRESS_LIST";
 export const POST_ORDER = "POST_ORDER";
+export const GET_VALIDATE = "GET_VALIDATE";
+export const POST_LOGIN = "POST_LOGIN";
+
+
 
 // export const getSomethings = ({pageNo, length, indexBy, indexType, values}) => {
 //   const query = {
@@ -44,6 +47,15 @@ export const getProduct = (params) => {
 
   return {
     type: GET_PRODUCT,
+    payload: request
+  }
+};
+
+export const getValidate = () => {
+  const request = SessionManager.instance().get(`/user/validate`);
+
+  return {
+    type: GET_VALIDATE,
     payload: request
   }
 };
@@ -123,3 +135,19 @@ export const postOrder = (data) => {
     payload: request
   }
 };
+
+export const postLogin = (data) => {
+  const request = SessionManager.instance().post(`/user/login`, data);
+
+  return {
+    type: POST_LOGIN,
+    payload: request
+  }
+};
+// export const getMyOrderList = (params) => {
+//   const request = SessionManager.instance().get(`/`)
+//
+//   return {
+//     type: GET_
+//   }
+// };

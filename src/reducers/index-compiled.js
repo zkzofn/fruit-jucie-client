@@ -6,14 +6,14 @@ Object.defineProperty(exports, "__esModule", {
 
 var _redux = require('redux');
 
-var _ReducerCurrentUser = require('./ReducerCurrentUser');
+var _ReducerCurrent = require('./ReducerCurrent');
 
-var _ReducerCurrentUser2 = _interopRequireDefault(_ReducerCurrentUser);
+var _ReducerCurrent2 = _interopRequireDefault(_ReducerCurrent);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var rootReducer = (0, _redux.combineReducers)({
-  currentUser: _ReducerCurrentUser2.default
+  current: _ReducerCurrent2.default
 });
 
 exports.default = rootReducer;

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.postOrder = exports.getMyAddressList = exports.getAddressFromAPI = exports.delCart = exports.patchCart = exports.getCart = exports.postCart = exports.getUser = exports.getProduct = exports.getProducts = exports.POST_ORDER = exports.GET_MY_ADDRESS_LIST = exports.GET_ADDRESS_FROM_API = exports.DELETE_CART = exports.PATCH_CART = exports.GET_CART = exports.POST_CART = exports.GET_USER = exports.GET_PRODUCT = exports.GET_PRODUCTS = undefined;
+exports.postLogin = exports.postOrder = exports.getMyAddressList = exports.getAddressFromAPI = exports.delCart = exports.patchCart = exports.getCart = exports.postCart = exports.getUser = exports.getValidate = exports.getProduct = exports.getProducts = exports.POST_LOGIN = exports.GET_VALIDATE = exports.POST_ORDER = exports.GET_MY_ADDRESS_LIST = exports.GET_ADDRESS_FROM_API = exports.DELETE_CART = exports.PATCH_CART = exports.GET_CART = exports.POST_CART = exports.GET_USER = exports.GET_PRODUCT = exports.GET_PRODUCTS = undefined;
 
 var _SessionManager = require('./SessionManager');
 
@@ -12,10 +12,6 @@ var _SessionManager2 = _interopRequireDefault(_SessionManager);
 var _axios = require('axios');
 
 var _axios2 = _interopRequireDefault(_axios);
-
-var _jquery = require('jquery/dist/jquery.min');
-
-var _jquery2 = _interopRequireDefault(_jquery);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -29,6 +25,8 @@ var DELETE_CART = exports.DELETE_CART = "DELETE_CART";
 var GET_ADDRESS_FROM_API = exports.GET_ADDRESS_FROM_API = "GET_ADDRESS_FROM_API";
 var GET_MY_ADDRESS_LIST = exports.GET_MY_ADDRESS_LIST = "GET_MY_ADDRESS_LIST";
 var POST_ORDER = exports.POST_ORDER = "POST_ORDER";
+var GET_VALIDATE = exports.GET_VALIDATE = "GET_VALIDATE";
+var POST_LOGIN = exports.POST_LOGIN = "POST_LOGIN";
 
 // export const getSomethings = ({pageNo, length, indexBy, indexType, values}) => {
 //   const query = {
@@ -61,6 +59,15 @@ var getProduct = exports.getProduct = function getProduct(params) {
 
   return {
     type: GET_PRODUCT,
+    payload: request
+  };
+};
+
+var getValidate = exports.getValidate = function getValidate() {
+  var request = _SessionManager2.default.instance().get('/user/validate');
+
+  return {
+    type: GET_VALIDATE,
     payload: request
   };
 };
@@ -140,5 +147,21 @@ var postOrder = exports.postOrder = function postOrder(data) {
     payload: request
   };
 };
+
+var postLogin = exports.postLogin = function postLogin(data) {
+  var request = _SessionManager2.default.instance().post('/user/login', data);
+
+  return {
+    type: POST_LOGIN,
+    payload: request
+  };
+};
+// export const getMyOrderList = (params) => {
+//   const request = SessionManager.instance().get(`/`)
+//
+//   return {
+//     type: GET_
+//   }
+// };
 
 //# sourceMappingURL=RequestManager-compiled.js.map

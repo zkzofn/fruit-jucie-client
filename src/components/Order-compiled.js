@@ -185,41 +185,40 @@ var Order = function (_Component) {
     value: function componentWillMount() {
       var _this2 = this;
 
-      setTimeout(function () {
-        var params = {
-          userId: _this2.props.currentUser.id
-          // userId: 1
-        };
+      // 사용자의 장바구니 리스트 가져오기
+      var params = {
+        userId: this.props.currentUser.id
+        // userId: 1
+      };
 
-        _this2.props.getCart(params).then(function (res) {
-          var cart = res.payload.data.cart;
+      this.props.getCart(params).then(function (res) {
+        var cart = res.payload.data.cart;
 
 
-          _this2.setState({ cartItems: cart });
-        }).then(function () {
-          _this2.setState({ totalPrice: _this2.calcTotalPrice() });
-        });
+        _this2.setState({ cartItems: cart });
+      }).then(function () {
+        _this2.setState({ totalPrice: _this2.calcTotalPrice() });
+      });
 
-        var currentUser = _this2.props.currentUser;
+      var currentUser = this.props.currentUser;
 
-        _this2.setState({
-          senderName: currentUser.name,
-          senderPhone: currentUser.phone,
-          senderEmail: currentUser.email,
-          receiverName: currentUser.name,
-          receiverNickname: currentUser.nickname,
-          receiverZipcode: currentUser.zipcode,
-          receiverAddress1: currentUser.address1,
-          receiverAddress2: currentUser.address2,
-          receiverPhone: currentUser.phone
-        });
-      }, 200);
-      //
+      this.setState({
+        senderName: currentUser.name,
+        senderPhone: currentUser.phone,
+        senderEmail: currentUser.email,
+        receiverName: currentUser.name,
+        receiverNickname: currentUser.nickname,
+        receiverZipcode: currentUser.zipcode,
+        receiverAddress1: currentUser.address1,
+        receiverAddress2: currentUser.address2,
+        receiverPhone: currentUser.phone
+      });
 
-      // 여기서 사용자의 저장되어 있는 주소 있으면 불러와서 address 셋팅해줘야 해
+      // 사용자의 저장되어 있는 주소 리스트
       var getMyAddressListParams = {
         userId: 1
       };
+
       this.props.getMyAddressList(getMyAddressListParams).then(function (res) {
         var myAddressList = res.payload.data.myAddressList;
 

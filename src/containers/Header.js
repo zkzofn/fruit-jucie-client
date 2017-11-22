@@ -8,7 +8,7 @@ import Question from 'material-ui/svg-icons/action/question-answer';
 import HeaderTop from '../components/HeaderTop';
 import HeaderLogo from '../components/HeaderLogo';
 import HeaderNav from '../components/HeaderNav';
-import { getUser } from '../actions/RequestManager';
+import { getValidate } from '../actions/RequestManager';
 
 class Header extends Component {
   constructor(props) {
@@ -20,12 +20,11 @@ class Header extends Component {
   }
 
   componentWillMount() {
-    // 여기서 무조건 userId = 1 로 넣어주는데 이부분은 제대로 설계해서 수정해야한다.
-    const getUserParam = {
-      userId: 1 
-    };
-
-    this.props.getUser(getUserParam);
+    this.props.getValidate().then((result) => {
+      console.log(result);
+      console.log(this.props);
+      
+    });
   }
 
   openDrawer () {
@@ -51,7 +50,6 @@ class Header extends Component {
     //   margin: '0 auto',
     //   overflow: 'hidden'
     // };
-
     return (
       <div>
         <AppBar
@@ -93,7 +91,7 @@ class Header extends Component {
         </Drawer>
 
         <div className="visible-over-block container">
-          <HeaderTop />
+          <HeaderTop {...this.props} />
           <HeaderLogo />
           <HeaderNav />
         </div>
@@ -104,15 +102,18 @@ class Header extends Component {
 }
 
 
-function mapStateToProps(state) {
-  return { currentUser: state.currentUser.single};
-}
 
-function mapDispatchToProps(dispatch) {
+
+const mapStateToProps = (state) => {
+  return {
+    current: state.current
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
-    getUser,
+    getValidate,
   }, dispatch)
-}
-
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

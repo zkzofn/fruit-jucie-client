@@ -14,9 +14,9 @@ npm start
 
 ### How to access to page
 ```npm
-http://localhost:8080
+http://localhost:8000
 or
-http://localhost:8080/webpack-dev-server/
+http://localhost:8000/webpack-dev-server/
 ```
 
 ### Reference

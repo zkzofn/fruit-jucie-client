@@ -21,13 +21,16 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var MyOrder = function (_Component) {
   _inherits(MyOrder, _Component);
 
-  function MyOrder() {
+  function MyOrder(props) {
     _classCallCheck(this, MyOrder);
 
-    return _possibleConstructorReturn(this, (MyOrder.__proto__ || Object.getPrototypeOf(MyOrder)).apply(this, arguments));
+    return _possibleConstructorReturn(this, (MyOrder.__proto__ || Object.getPrototypeOf(MyOrder)).call(this, props));
   }
 
   _createClass(MyOrder, [{
+    key: "componentWillMount",
+    value: function componentWillMount() {}
+  }, {
     key: "render",
     value: function render() {
       return _react2.default.createElement(
