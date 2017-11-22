@@ -43,9 +43,8 @@ var HeaderTop = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      console.log(this.props);
       var styles = {
-        loginBtn: { display: this.props.current.user ? "none" : "inlineBlock" }
+        loginBtn: { display: this.props.validate.isLogin ? "none" : "inlineBlock" }
       };
 
       return _react2.default.createElement(
@@ -72,6 +71,17 @@ var HeaderTop = function (_Component) {
   return HeaderTop;
 }(_react.Component);
 
-exports.default = HeaderTop;
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    current: state.current,
+    validate: state.validate
+  };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return (0, _redux.bindActionCreators)({}, dispatch);
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(HeaderTop);
 
 //# sourceMappingURL=HeaderTop-compiled.js.map

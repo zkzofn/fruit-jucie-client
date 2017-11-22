@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import FlatButton from 'material-ui/FlatButton';
 
-export default class HeaderTop extends Component {
+class HeaderTop extends Component {
   constructor(props) {
     super(props);
   }
@@ -13,9 +13,8 @@ export default class HeaderTop extends Component {
   }
 
   render() {
-    console.log(this.props)
     const styles = {
-      loginBtn: {display: this.props.current.user ? "none" : "inlineBlock"}
+      loginBtn: {display: this.props.validate.isLogin ? "none" : "inlineBlock"}
     };
 
     return (
@@ -37,3 +36,20 @@ export default class HeaderTop extends Component {
     )
   }
 }
+
+
+
+const mapStateToProps = (state) => {
+  return {
+    current: state.current,
+    validate: state.validate
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({
+  }, dispatch)
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderTop);

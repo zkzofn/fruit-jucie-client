@@ -78,12 +78,21 @@ var SignIn = function (_React$Component) {
         };
 
         _this.props.postLogin(data).then(function (result) {
-          if (result.payload.data.status === 200) {
-            _this.props.history.goBack();
-          } else if (result.payload.data.status === 404) _this.setState({
-            alertMessage: result.payload.data.msg,
-            alertOpen: true
-          });
+          if (_this.props.current.user) {
+            _this.props.history.push("/");
+          } else {
+            _this.setState({
+              alertMessage: result.payload.data.msg,
+              alertOpen: true
+            });
+          }
+          // if (result.payload.data.status === 200) {
+          //   this.props.history.goBack();
+          // } else if (result.payload.data.status === 404)
+          //   this.setState({
+          //     alertMessage: result.payload.data.msg,
+          //     alertOpen: true
+          //   })
         });
       }
     };
@@ -160,7 +169,7 @@ var SignIn = function (_React$Component) {
 
 var mapStateToProps = function mapStateToProps(state) {
   return {
-    current: state.current.user
+    current: state.current
   };
 };
 

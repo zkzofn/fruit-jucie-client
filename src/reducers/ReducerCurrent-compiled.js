@@ -12,27 +12,15 @@ exports.default = function () {
 
   switch (action.type) {
     case _RequestManager.POST_LOGIN:
-      if (action.payload.data.status === 200) return _extends({}, state, { user: action.payload.data.user, status: action.payload.data.status });else if (action.payload.data.status === 404) return _extends({}, state, { status: action.payload.data.status, msg: action.payload.data.msg });else return _extends({}, state);
+      return _extends({}, state, { user: action.payload.data.user });
 
-    case _RequestManager.GET_VALIDATE:
-      if (action.payload.data.result) return _extends({}, state);else return _extends({}, state, { user: null });
+    default:
+      return _extends({}, state);
   }
-  return state;
 };
 
 var _RequestManager = require('../actions/RequestManager');
 
-// import { GET_VALIDATE } from '../actions/RequestManager';
-//
-// const INITIAL_STATE = { isLogin: null };
-//
-// export default function (state = INITIAL_STATE, action) {
-//   switch (action.type) {
-//     case GET_VALIDATE:
-//       return { ...state, isLogin: action.payload.data.result };
-//   }
-//   return state;
-// }
-var INITIAL_STATE = { user: null, status: null, msg: null };
+var INITIAL_STATE = { user: null };
 
 //# sourceMappingURL=ReducerCurrent-compiled.js.map

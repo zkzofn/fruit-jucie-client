@@ -58,13 +58,21 @@ class SignIn extends React.Component {
       };
 
       this.props.postLogin(data).then((result) => {
-        if (result.payload.data.status === 200) {
-          this.props.history.goBack();
-        } else if (result.payload.data.status === 404)
+        if (this.props.current.user) {
+          this.props.history.push("/");
+        } else {
           this.setState({
             alertMessage: result.payload.data.msg,
             alertOpen: true
           })
+        }
+        // if (result.payload.data.status === 200) {
+        //   this.props.history.goBack();
+        // } else if (result.payload.data.status === 404)
+        //   this.setState({
+        //     alertMessage: result.payload.data.msg,
+        //     alertOpen: true
+        //   })
       })
     }
   };
@@ -128,7 +136,7 @@ class SignIn extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    current: state.current.user
+    current: state.current
   };
 };
 

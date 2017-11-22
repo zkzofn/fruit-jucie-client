@@ -50,6 +50,8 @@ class Header extends Component {
     //   margin: '0 auto',
     //   overflow: 'hidden'
     // };
+    console.log(this.props);
+    
     return (
       <div>
         <AppBar

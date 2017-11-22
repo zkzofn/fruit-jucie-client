@@ -102,6 +102,8 @@ var Header = function (_Component) {
       //   margin: '0 auto',
       //   overflow: 'hidden'
       // };
+      console.log(this.props);
+
       return _react2.default.createElement(
         'div',
         null,
