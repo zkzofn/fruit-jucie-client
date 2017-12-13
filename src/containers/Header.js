@@ -5,10 +5,15 @@ import { AppBar, Drawer, MenuItem, Divider } from 'material-ui';
 import Power from 'material-ui/svg-icons/action/power-settings-new';
 import Cart from 'material-ui/svg-icons/action/shopping-cart';
 import Question from 'material-ui/svg-icons/action/question-answer';
+
 import HeaderTop from '../components/HeaderTop';
 import HeaderLogo from '../components/HeaderLogo';
 import HeaderNav from '../components/HeaderNav';
-import { getValidate } from '../actions/RequestManager';
+
+import MainTab from '../components/Tabs/MainTabs';
+import LogoMark from '../components/Logo/LogoMark';
+
+
 
 class Header extends Component {
   constructor(props) {
@@ -20,11 +25,6 @@ class Header extends Component {
   }
 
   componentWillMount() {
-    this.props.getValidate().then((result) => {
-      console.log(result);
-      console.log(this.props);
-      
-    });
   }
 
   openDrawer () {
@@ -42,18 +42,20 @@ class Header extends Component {
 
 
   render() {
-    // const headerStyle = {
-    //   position: 'relative',
-    //   width: '100%',
-    //   height: 'auto',
-    //   backgroundColor: '#fff',
-    //   margin: '0 auto',
-    //   overflow: 'hidden'
-    // };
-    console.log(this.props);
-    
+    const headerStyle = {
+      position: 'relative',
+      width: '100%',
+      height: 'auto',
+      backgroundColor: '#fff',
+      margin: '0 auto',
+      overflow: 'hidden'
+    };
+    //
+
     return (
-      <div>
+      <div style={headerStyle}>
+        <LogoMark {...this.props} className="pull-left" />
+        <MainTab {...this.props} className="pull-right" />
         <AppBar
           className="appBar"
           title={<span className="cursorPointer">Eat More</span>}
@@ -92,11 +94,13 @@ class Header extends Component {
           <MenuItem disabled={true}>Salad</MenuItem>
         </Drawer>
 
-        <div className="visible-over-block container">
-          <HeaderTop {...this.props} />
-          <HeaderLogo />
-          <HeaderNav />
-        </div>
+        {
+          // <div className="visible-over-block container">
+          //   <HeaderTop {...this.props} />
+          //   <HeaderLogo />
+          //   <HeaderNav />
+          // </div>
+        }
 
       </div>
     )
@@ -108,13 +112,12 @@ class Header extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    current: state.current
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
-    getValidate,
+
   }, dispatch)
 };
 

@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
-import CurrentReducer from './ReducerCurrent';
+import UserReducer from './ReducerUser';
 import ValidateReducer from './ReducerValidate';
 
 const rootReducer = combineReducers({
-  current: CurrentReducer,
+  user: UserReducer,
   validate: ValidateReducer
 });
 

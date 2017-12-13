@@ -1,38 +1,28 @@
-import React, {Component} from 'react';
-import Image from '../components/Image';
-import { AutoRotatingCarousel, Slide } from 'material-auto-rotating-carousel'
-import { green400, green600, blue400, blue600, red400, red600 } from 'material-ui/styles/colors'
+import React, { Component } from 'react';
 
-export default class Body extends React.Component {
+import { BackgroundImage } from '../components/BackgroundImage';
+import LogoImage from '../components/Logo/LogoImage';
+import CarouselImage from '../components/CarouselImage';
+
+export default class Home extends Component {
+  constructor(props) {
+    super(props)
+  }
+
   render() {
+
+
     return (
       <div>
-
-        <AutoRotatingCarousel
-          // mobile={true}
-          // landscape={true}
-          label="Get started"
-          // open style={style}
-        >
-          <Slide media={<img src="http://www.icons101.com/icon_png/size_256/id_79394/youtube.png" />}
-                 title="This is a very cool feature"
-                 subtitle="Just using this will blow your mind."
-          />
-          <Slide media={<img src="http://www.icons101.com/icon_png/size_256/id_80975/GoogleInbox.png" />}
-                 title="Ever wanted to be popular?"
-                 subtitle="Well just mix two colors and your are good to go!"
-          />
-          <Slide
-            media={<img src="http://www.icons101.com/icon_png/size_256/id_76704/Google_Settings.png" />}
-            title="May the force be with you"
-            subtitle="The Force is a metaphysical and ubiquitous power in the Star Wars universe."
-          />
-        </AutoRotatingCarousel>
+        <div>
+          <CarouselImage />
+        </div>
       </div>
     )
   }
 }
 
+//
 
 
 // <div>

@@ -4,10 +4,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Divider, TextField, RaisedButton, Dialog } from 'material-ui';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn, TableFooter } from 'material-ui/Table';
-import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import { getCart, patchCart, delCart, getAddressFromAPI, getMyAddressList, postOrder } from '../actions/RequestManager';
 import CircularProgress from './CircularProgress';
-import $ from 'jquery/dist/jquery.min';
 
 class Order extends Component {
   constructor(props) {

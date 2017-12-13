@@ -5,7 +5,7 @@ export default class Image extends Component {
     const style = {
       background: `url(${this.props.path}) center center`,
       backgroundSize: 'cover',
-      cursor: 'pointer',
+      // cursor: 'pointer',
     };
     
     return (

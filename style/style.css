@@ -443,3 +443,12 @@ td {
     padding: 10px 30px 5px 30px;
     margin-bottom: 15px;
 }
+
+.comming-soon{
+    font-family: 'Montserrat', sans-serif;
+    font-size: 60px;
+    line-height: 55px;
+    color: #ffffff;
+    font-weight: 900;
+    letter-spacing: 4px;
+}

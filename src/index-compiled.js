@@ -20,6 +20,10 @@ var _MuiThemeProvider = require('material-ui/styles/MuiThemeProvider');
 
 var _MuiThemeProvider2 = _interopRequireDefault(_MuiThemeProvider);
 
+var _getMuiTheme = require('material-ui/styles/getMuiTheme');
+
+var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
+
 var _reduxPromise = require('redux-promise');
 
 var _reduxPromise2 = _interopRequireDefault(_reduxPromise);
@@ -88,11 +92,15 @@ _reactDom2.default.render(_react2.default.createElement(
     { history: customHistory },
     _react2.default.createElement(
       _MuiThemeProvider2.default,
-      null,
+      { muiTheme: (0, _getMuiTheme2.default)() },
       _react2.default.createElement(
         'div',
         null,
-        _react2.default.createElement(_reactRouter.Route, { path: '*', component: _Header2.default }),
+        _react2.default.createElement(
+          'div',
+          null,
+          _react2.default.createElement(_reactRouter.Route, { path: '*', component: _Header2.default })
+        ),
         _react2.default.createElement(_reactRouter.Route, { exact: true, path: '/', component: _Home2.default }),
         _react2.default.createElement(_reactRouter.Route, { path: '/product/:productId', component: _ProductDetail2.default }),
         _react2.default.createElement(_reactRouter.Route, { path: '/products', component: _Products2.default }),
@@ -100,8 +108,7 @@ _reactDom2.default.render(_react2.default.createElement(
         _react2.default.createElement(_reactRouter.Route, { path: '/cart', component: _Cart2.default }),
         _react2.default.createElement(_reactRouter.Route, { path: '/order', component: _Order2.default }),
         _react2.default.createElement(_reactRouter.Route, { path: '/payment', component: _Payment2.default }),
-        _react2.default.createElement(_reactRouter.Route, { path: '/my/order', component: _MyOrder2.default }),
-        _react2.default.createElement(_Footer2.default, null)
+        _react2.default.createElement(_reactRouter.Route, { path: '/my/order', component: _MyOrder2.default })
       )
     )
   )

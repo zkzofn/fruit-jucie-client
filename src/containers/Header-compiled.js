@@ -4,6 +4,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = require('react');
@@ -40,7 +42,13 @@ var _HeaderNav = require('../components/HeaderNav');
 
 var _HeaderNav2 = _interopRequireDefault(_HeaderNav);
 
-var _RequestManager = require('../actions/RequestManager');
+var _MainTabs = require('../components/Tabs/MainTabs');
+
+var _MainTabs2 = _interopRequireDefault(_MainTabs);
+
+var _LogoMark = require('../components/Logo/LogoMark');
+
+var _LogoMark2 = _interopRequireDefault(_LogoMark);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -66,14 +74,7 @@ var Header = function (_Component) {
 
   _createClass(Header, [{
     key: 'componentWillMount',
-    value: function componentWillMount() {
-      var _this2 = this;
-
-      this.props.getValidate().then(function (result) {
-        console.log(result);
-        console.log(_this2.props);
-      });
-    }
+    value: function componentWillMount() {}
   }, {
     key: 'openDrawer',
     value: function openDrawer() {
@@ -92,21 +93,23 @@ var Header = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      var _this3 = this;
+      var _this2 = this;
 
-      // const headerStyle = {
-      //   position: 'relative',
-      //   width: '100%',
-      //   height: 'auto',
-      //   backgroundColor: '#fff',
-      //   margin: '0 auto',
-      //   overflow: 'hidden'
-      // };
-      console.log(this.props);
+      var headerStyle = {
+        position: 'relative',
+        width: '100%',
+        height: 'auto',
+        backgroundColor: '#fff',
+        margin: '0 auto',
+        overflow: 'hidden'
+      };
+      //
 
       return _react2.default.createElement(
         'div',
-        null,
+        { style: headerStyle },
+        _react2.default.createElement(_LogoMark2.default, _extends({}, this.props, { className: 'pull-left' })),
+        _react2.default.createElement(_MainTabs2.default, _extends({}, this.props, { className: 'pull-right' })),
         _react2.default.createElement(_materialUi.AppBar, {
           className: 'appBar',
           title: _react2.default.createElement(
@@ -123,14 +126,14 @@ var Header = function (_Component) {
             open: this.state.open,
             docked: false,
             onRequestChange: function onRequestChange(open) {
-              return _this3.setState({ open: open });
+              return _this2.setState({ open: open });
             }
           },
           _react2.default.createElement(
             _materialUi.MenuItem,
             { onTouchTap: function onTouchTap() {
-                _this3.props.history.push("/signin");
-                _this3.closeDrawer();
+                _this2.props.history.push("/signin");
+                _this2.closeDrawer();
               } },
             _react2.default.createElement(_powerSettingsNew2.default, null),
             'Sign In'
@@ -138,8 +141,8 @@ var Header = function (_Component) {
           _react2.default.createElement(
             _materialUi.MenuItem,
             { onTouchTap: function onTouchTap() {
-                _this3.props.history.push("/cart");
-                _this3.closeDrawer();
+                _this2.props.history.push("/cart");
+                _this2.closeDrawer();
               } },
             _react2.default.createElement(_shoppingCart2.default, null),
             '\uC7A5\uBC14\uAD6C\uB2C8'
@@ -166,13 +169,6 @@ var Header = function (_Component) {
             { disabled: true },
             'Salad'
           )
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'visible-over-block container' },
-          _react2.default.createElement(_HeaderTop2.default, this.props),
-          _react2.default.createElement(_HeaderLogo2.default, null),
-          _react2.default.createElement(_HeaderNav2.default, null)
         )
       );
     }
@@ -182,15 +178,11 @@ var Header = function (_Component) {
 }(_react.Component);
 
 var mapStateToProps = function mapStateToProps(state) {
-  return {
-    current: state.current
-  };
+  return {};
 };
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-  return (0, _redux.bindActionCreators)({
-    getValidate: _RequestManager.getValidate
-  }, dispatch);
+  return (0, _redux.bindActionCreators)({}, dispatch);
 };
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Header);
