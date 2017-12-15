@@ -14,6 +14,7 @@ import LogoMark from '../components/Logo/LogoMark';
 import MainTabs from '../components/Tabs/MainTabs';
 import ShopTabs from '../components/Tabs/ShopTabs';
 import CarouselImage from '../components/CarouselImage';
+import CardImage from '../components/CardImage';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
@@ -26,7 +27,7 @@ storiesOf('Button', module)
   .add('with some emoji', () => <Button onClick={action('clicked')}>😀 😎 👍 💯</Button>);
 
 storiesOf('Logo', module)
-  .add('Logo', () => <LogoImage url="https://i.imgur.com/kUXEm3p.png"/>)
+  .add('Logo', () => <LogoImage url="https://i.imgur.com/kUXEm3p.png" />)
   .add('Logo mark', () => <LogoMark url="https://i.imgur.com/vMKFYwf.png" />);
 
 storiesOf('Tabs')
@@ -37,4 +38,5 @@ storiesOf('Tabs')
 
 storiesOf('Photo')
   .addDecorator(muiTheme())
-  .add('Carousel', () => <CarouselImage />);
+  .add('Carousel', () => <CarouselImage />)
+  .add('Card', () => <CardImage />);
