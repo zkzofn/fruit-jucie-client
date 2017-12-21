@@ -24,7 +24,8 @@ export default class ShopTabs extends Component {
   render() {
     const styles = {
       allStyle: {
-        width: this.props.width ? this.props.width : 150
+        width: this.props.width ? this.props.width : 150,
+        margin: "auto"
       },
       tabStyle: {
         color: "black",

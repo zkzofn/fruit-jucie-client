@@ -10,8 +10,12 @@ export default class Footer extends Component {
 
     return (
       <div>
-        <FooterCS />
-        <FooterBottom />
+        {
+
+          //<FooterCS />
+          // <FooterBottom />
+        }
+
       </div>
     )
   }

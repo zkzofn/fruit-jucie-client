@@ -2,38 +2,37 @@ import React, { Component } from 'react';
 import BackgroundImage from '../BackgroundImage';
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
-
 /**
  * @props
+ *    className
+ *    url
  *    height
- *    width
- *    imgUrl
+ *    title
+ *    subtitle
  */
 export default class CardImage extends Component {
   constructor(props) {
     super(props)
 
-    this.imgUrl = props.imgUrl ? props.imgUrl : "https://i.imgur.com/tG6Sw83.jpg";
   }
 
   render() {
-    const styles = {
-      card: {
-        height: this.props.height ? this.props.height : 200,
-        width: this.props.width ? this.props.width: 200
-      }
-    };
-
-
+    const className = this.props.className ? this.props.className : "";
+    const url = this.props.url ? this.props.url : "https://i.imgur.com/tG6Sw83.jpg";
+    const height = this.props.height ? this.props.height : 500;
+    const title = this.props.title ? this.props.title : "Overlay title";
+    const subtitle = this.props.subtitle ? this.props.subtitle : "Overlay subtitle";
 
     return (
-      <Card style={styles.card}>
-        <CardMedia
-          overlay={<CardTitle title="Overlay title" subtitle="Overlay subtitle" />}
-        >
-          <img src={this.imgUrl} alt="" />
-        </CardMedia>
-      </Card>
+      <div className={className}>
+        <Card>
+          <CardMedia
+            overlay={<CardTitle title={title} subtitle={subtitle} />}
+          >
+            <BackgroundImage url={url} height={height} />
+          </CardMedia>
+        </Card>
+      </div>
     )
   }
 }
