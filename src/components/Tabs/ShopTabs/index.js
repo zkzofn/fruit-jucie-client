@@ -12,7 +12,8 @@ export default class ShopTabs extends Component {
     super(props);
 
     this.state = {
-      value: "salad"
+      value: "salad",
+      slideIndex: 0
     };
 
   }
