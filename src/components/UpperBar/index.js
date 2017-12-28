@@ -15,7 +15,7 @@ export default class UpperBar extends Component {
 
     const style = {
       margin: "20px auto",
-      padding: "80",
+      padding: 80,
       backgroundColor: "#3B574F",
       color: "white"
     };

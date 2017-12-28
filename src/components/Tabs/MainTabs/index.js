@@ -18,10 +18,10 @@ class MainTab extends Component {
       value: ""
     };
 
-    if (this.props.history) {
-      this.props.history.listen(location => {
-        const tabDivider =
-          location.pathname.split("/")[1] ? location.pathname.split("/")[1] : "";
+    if (props.history) {  // This if condition is used for storybook
+      // listen 은 url이 바뀌었을 때 체크하는 체크하는 기능
+      props.history.listen(location => {
+        const tabDivider = location.pathname.split("/")[1] ? location.pathname.split("/")[1] : "";
 
         this.setState({
           value: tabDivider
@@ -32,12 +32,18 @@ class MainTab extends Component {
 
   componentWillMount() {
     this.props.getValidate();
+
+    // shop / about / login 이 아닐 때, MainTabs 의 선택을 해제해주는 기능
+    const tabDivider = location.pathname.split("/")[1] ? location.pathname.split("/")[1] : "";
+    this.setState({
+      value: tabDivider
+    });
   }
 
   handleChange = (value) => {
     this.setState({value});
 
-    this.props.history.push(`/${value}`)
+    this.props.history.push(`/${value}`);
   };
 
   render() {

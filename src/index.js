@@ -42,7 +42,7 @@ ReactDOM.render(
             <Route path="*" component={Header} />
           </div>
           <Route exact path="/" component={Home} />
-          <Route exact path="/shop" component={Shop} />
+          <Route path="/shop" component={Shop} />
           <Route path="/product/:productId" component={ProductDetail} />
           <Route path="/products" component={Products} />
           <Route path="/signin" component={SignIn} />

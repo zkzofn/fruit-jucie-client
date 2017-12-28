@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Tabs, Tab } from 'material-ui/Tabs';
+import { enumSalad, enumJuice } from "../../Enum";
 
 /**
  * @props
@@ -12,7 +13,7 @@ export default class ShopTabs extends Component {
     super(props);
 
     this.state = {
-      value: "salad",
+      value: enumSalad.value,
       slideIndex: 0
     };
 
@@ -20,6 +21,7 @@ export default class ShopTabs extends Component {
 
   handleChange = (value) => {
     this.setState({value});
+    this.props.handleDivider(value);
   };
 
   render() {
@@ -50,8 +52,8 @@ export default class ShopTabs extends Component {
           style={styles.tabStyle}
           inkBarStyle={styles.inkBarStyle}
         >
-          <Tab label="SALAD" value="salad" style={styles.tabStyle} />
-          <Tab label="JUICE" value="juice" style={styles.tabStyle} />
+          <Tab label={enumSalad.label} value={enumSalad.value} style={styles.tabStyle} />
+          <Tab label={enumJuice.label} value={enumJuice.value} style={styles.tabStyle} />
         </Tabs>
       </div>
     )
