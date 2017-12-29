@@ -14,7 +14,7 @@ import Header from './containers/Header';
 import Home from './containers/Home';
 import Footer from './containers/Footer';
 import Shop from './containers/Shop';
-
+import Item from './components/Item';
 
 import Products from './components/Products';
 import SignIn from './components/SignIn';
@@ -43,6 +43,7 @@ ReactDOM.render(
           </div>
           <Route exact path="/" component={Home} />
           <Route path="/shop" component={Shop} />
+          <Route path="/shop/:productId" component={Item} />
           <Route path="/product/:productId" component={ProductDetail} />
           <Route path="/products" component={Products} />
           <Route path="/signin" component={SignIn} />

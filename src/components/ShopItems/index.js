@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Switch, Route } from 'react-router';
 import CardImage from '../../components/CardImage';
 import { enumSalad, enumJuice } from "../Enum";
 
@@ -46,59 +45,46 @@ export default class ShopItems extends Component {
   }
 
   componentWillMount() {
-    this.setState({divider: this.props.divider})
+    // 여기서 salad, juice item list 불러와
   }
 
-  shouldComponentUpdate(nextProps) {
-    return nextProps.divider !== this.props.divider;
+  renderItems() {
+    if (this.props.divider === enumSalad.value) {
+      // componentWillMount 에서 불러온 변수에 따라 여기서 map 하는 변수명이 달라져야한다.
+      return this.info.salad.map((info, index) => {
+        return (
+          <CardImage
+            key={index}
+            className="col-md-4 py-4"
+            title={info.title}
+            subtitle={info.subtitle}
+            url={info.url}
+            height={300}
+          />
+        )
+      });
+    } else {
+      return this.info.juice.map((info, index) => {
+        return (
+          <CardImage
+            key={index}
+            className="col-md-4 py-4"
+            title={info.title}
+            subtitle={info.subtitle}
+            url={info.url}
+            height={300}
+          />
+        )
+      })
+    }
   }
 
   render() {
-
     const className = this.props.className ? this.props.className : "";
-    const styles = {
-      shopTabs: {
-        height: 200,
-        textAlign: "Center",
-        margin: "auto"
-
-      }
-    };
-
-
-    const renderItems = () => {
-      if (this.state.divider === enumSalad) {
-        return this.info.salad.map((info, index) => {
-          return (
-            <CardImage
-              key={index}
-              className="col-md-4 py-4"
-              title={info.title}
-              subtitle={info.subtitle}
-              url={info.url}
-              height={300}
-            />
-          )
-        })
-      } else {
-        return this.info.juice.map((info, index) => {
-          return (
-            <CardImage
-              key={index}
-              className="col-md-4 py-4"
-              title={info.title}
-              subtitle={info.subtitle}
-              url={info.url}
-              height={300}
-            />
-          )
-        });
-      }
-    };
 
     return (
       <div className={className}>
-        {renderItems}
+        {this.renderItems()}
       </div>
     )
   }

@@ -15,9 +15,13 @@ import MainTabs from '../components/Tabs/MainTabs';
 import ShopTabs from '../components/Tabs/ShopTabs';
 import CarouselImage from '../components/CarouselImage';
 import CardImage from '../components/CardImage';
+import Shop from '../containers/Shop';
+
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-
+import '../../style/style.css';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import ShopItems from "../components/ShopItems/index";
 
 //
 storiesOf('Welcome', module).add('to Storybook', () => <Welcome showApp={linkTo('Button')} />);
@@ -40,3 +44,8 @@ storiesOf('Photo')
   .addDecorator(muiTheme())
   .add('Carousel', () => <CarouselImage />)
   .add('Card', () => <CardImage />);
+
+storiesOf('Shop')
+  .addDecorator(muiTheme())
+  .add('Shop', () => <Shop />)
+  .add('ShopItems', () => <ShopItems />)
