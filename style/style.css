@@ -444,11 +444,11 @@ td {
     margin-bottom: 15px;
 }
 
-.comming-soon{
-    font-family: 'Montserrat', sans-serif;
-    font-size: 60px;
-    line-height: 55px;
-    color: #ffffff;
-    font-weight: 900;
-    letter-spacing: 4px;
+.coming-soon{
+    padding: 30px;
+    font-size: 50px;
+    font-weight: bold;
+    text-align: center;
+    background-color: rgb(255, 255, 255);
+    opacity: 0.8;
 }

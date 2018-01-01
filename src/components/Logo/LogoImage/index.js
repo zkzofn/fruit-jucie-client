@@ -29,7 +29,7 @@ export default class LogoImage extends Component {
     return (
       <div style={styles.wrapper}>
         <img
-          src={this.props.url ? this.props.url : "/assets/img/logo_trans.png"}
+          src={this.props.url ? this.props.url : "https://i.imgur.com/kUXEm3p.png"}
           style={styles.logo}
         />
       </div>

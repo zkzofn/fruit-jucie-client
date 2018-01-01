@@ -6,7 +6,7 @@ import React, { Component } from 'react';
  *    url
  *    width
  */
-export default class LogoMark extends Component {
+export default class LogoName extends Component {
   constructor(props) {
     super(props)
   }
@@ -22,7 +22,7 @@ export default class LogoMark extends Component {
         height: 48
       },
       logo: {
-        width: this.props.width ? this.props.width : 80,
+        width: this.props.width ? this.props.width : 250,
         cursor: "pointer",
         marginTop: 3,
         marginLeft: 5
@@ -35,7 +35,7 @@ export default class LogoMark extends Component {
         style={styles.div}
       >
         <img
-          src={this.props.url ? this.props.url : "https://i.imgur.com/vMKFYwf.png"}
+          src={this.props.url ? this.props.url : "https://i.imgur.com/KhJ7YcO.png"}
           style={styles.logo}
           onClick={this.onTouchLogo}
         />

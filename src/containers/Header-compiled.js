@@ -50,6 +50,10 @@ var _LogoMark = require('../components/Logo/LogoMark');
 
 var _LogoMark2 = _interopRequireDefault(_LogoMark);
 
+var _LogoName = require('../components/Logo/LogoName');
+
+var _LogoName2 = _interopRequireDefault(_LogoName);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -93,8 +97,6 @@ var Header = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      var _this2 = this;
-
       var headerStyle = {
         position: 'relative',
         width: '100%',
@@ -103,73 +105,12 @@ var Header = function (_Component) {
         margin: '0 auto',
         overflow: 'hidden'
       };
-      //
 
       return _react2.default.createElement(
         'div',
         { style: headerStyle },
         _react2.default.createElement(_LogoMark2.default, _extends({}, this.props, { className: 'pull-left' })),
-        _react2.default.createElement(_MainTabs2.default, _extends({}, this.props, { className: 'pull-right' })),
-        _react2.default.createElement(_materialUi.AppBar, {
-          className: 'appBar',
-          title: _react2.default.createElement(
-            'span',
-            { className: 'cursorPointer' },
-            'Eat More'
-          ),
-          onTitleTouchTap: this.titleTouch.bind(this),
-          onLeftIconButtonTouchTap: this.openDrawer.bind(this)
-        }),
-        _react2.default.createElement(
-          _materialUi.Drawer,
-          {
-            open: this.state.open,
-            docked: false,
-            onRequestChange: function onRequestChange(open) {
-              return _this2.setState({ open: open });
-            }
-          },
-          _react2.default.createElement(
-            _materialUi.MenuItem,
-            { onTouchTap: function onTouchTap() {
-                _this2.props.history.push("/signin");
-                _this2.closeDrawer();
-              } },
-            _react2.default.createElement(_powerSettingsNew2.default, null),
-            'Sign In'
-          ),
-          _react2.default.createElement(
-            _materialUi.MenuItem,
-            { onTouchTap: function onTouchTap() {
-                _this2.props.history.push("/cart");
-                _this2.closeDrawer();
-              } },
-            _react2.default.createElement(_shoppingCart2.default, null),
-            '\uC7A5\uBC14\uAD6C\uB2C8'
-          ),
-          _react2.default.createElement(
-            _materialUi.MenuItem,
-            null,
-            _react2.default.createElement(_questionAnswer2.default, null),
-            '\uBB38\uC758'
-          ),
-          _react2.default.createElement(_materialUi.Divider, null),
-          _react2.default.createElement(
-            _materialUi.MenuItem,
-            { href: '/products', onTouchTap: this.closeDrawer.bind(this) },
-            'Green'
-          ),
-          _react2.default.createElement(
-            _materialUi.MenuItem,
-            { disabled: true },
-            'Soup'
-          ),
-          _react2.default.createElement(
-            _materialUi.MenuItem,
-            { disabled: true },
-            'Salad'
-          )
-        )
+        _react2.default.createElement(_LogoName2.default, _extends({}, this.props, { className: 'alignCenter' }))
       );
     }
   }]);
