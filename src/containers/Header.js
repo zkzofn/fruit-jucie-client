@@ -55,20 +55,14 @@ class Header extends Component {
       <div style={headerStyle}>
         <LogoMark {...this.props} className="pull-left" />
         <LogoName {...this.props} className="alignCenter" />
-      
-
-        {
-          //<MainTab {...this.props} className="pull-right" />
-        }
-        {
-          // <AppBar
-          //   className="appBar"
-          //   title={<span className="cursorPointer">Eat More</span>}
-          //   onTitleTouchTap={this.titleTouch.bind(this)}
-          //   onLeftIconButtonTouchTap={this.openDrawer.bind(this)}
-          // >
-          // </AppBar>
-        }
+        <MainTab {...this.props} className="pull-right" />
+        <AppBar
+          className="appBar"
+          title={<span className="cursorPointer">Eat More</span>}
+          onTitleTouchTap={this.titleTouch.bind(this)}
+          onLeftIconButtonTouchTap={this.openDrawer.bind(this)}
+        >
+        </AppBar>
         {
           // <Drawer
           //   open={this.state.open}

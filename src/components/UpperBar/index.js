@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 /**
  * @props
  *    className
+ *    backgroundColor
+ *    textColor
  *    text
  */
 export default class UpperBar extends Component {
@@ -14,10 +16,13 @@ export default class UpperBar extends Component {
     const className = this.props.className ? this.props.className : "";
 
     const style = {
-      margin: "20px auto",
+      margin: "auto",
       padding: 80,
-      backgroundColor: "#3B574F",
-      color: "white"
+      textAlign: "center",
+      fontWeight: "bold",
+      fontSize: 25,
+      backgroundColor: this.props.backgroundColor ? this.props.backgroundColor : "#3B574F",
+      color: this.props.textColor ? this.props.textColor : "white"
     };
 
     const text = this.props.text ? this.props.text : "test text"

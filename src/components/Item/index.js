@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import UpperBar from '../UpperBar';
 
 /**
  * @props
  *    className
  */
-export default class ShopItems extends Component {
+export default class Item extends Component {
   constructor(props) {
     super(props)
 
@@ -28,7 +29,8 @@ export default class ShopItems extends Component {
 
     return (
       <div className={className}>
-
+        <UpperBar backgroundColor="#F4F4F4" textColor="black" text="묶음 배송 가이드" />
+        <UpperBar backgroundColor="#A3A3A3" textColor="black" text="결제" />
       </div>
     )
   }

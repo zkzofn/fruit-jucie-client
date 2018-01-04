@@ -42,8 +42,8 @@ ReactDOM.render(
             <Route path="*" component={Header} />
           </div>
           <Route exact path="/" component={Home} />
-          <Route path="/shop" component={Shop} />
-          <Route path="/shop/:productId" component={Item} />
+          <Route exact path="/shop/:productId" component={Item} />
+          <Route exact path="/shop" component={Shop} />
           <Route path="/product/:productId" component={ProductDetail} />
           <Route path="/products" component={Products} />
           <Route path="/signin" component={SignIn} />
