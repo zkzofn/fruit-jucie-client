@@ -16,10 +16,12 @@ import ShopTabs from '../components/Tabs/ShopTabs';
 import CarouselImage from '../components/CarouselImage';
 import CardImage from '../components/CardImage';
 import Shop from '../containers/Shop';
-import SelectDay from '../components/SelectDay';
+import SelectDay from '../components/Buttons/SelectDay';
 import ShopItems from "../components/ShopItems/index";
 import Item from '../components/Item';
-
+import PaymentButton from '../components/Buttons/PaymentButton';
+import AddCart from '../components/Buttons/AddCartButton';
+import PaymentBar from '../components/PaymentBar';
 
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -33,7 +35,9 @@ storiesOf('Button', module)
   .addDecorator(muiTheme())
   .add('with text', () => <Button onClick={action('clicked')}>Hello Button</Button>)
   .add('with some emoji', () => <Button onClick={action('clicked')}>😀 😎 👍 💯</Button>)
-  .add('Select Day', () => <SelectDay />);
+  .add('Select Day', () => <SelectDay />)
+  .add('PaymentButton', () => <PaymentButton />)
+  .add('AddCart', () => <AddCart />);
 
 storiesOf('Logo', module)
   .add('Logo', () => <LogoImage url="https://i.imgur.com/kUXEm3p.png" />)
@@ -54,5 +58,5 @@ storiesOf('Shop')
   .addDecorator(muiTheme())
   .add('Shop', () => <Shop />)
   .add('ShopItems', () => <ShopItems />)
-  .add('ItemsDetail', () => <Item />);
-
+  .add('ItemsDetail', () => <Item />)
+  .add('PaymentBar', () => <PaymentBar />);

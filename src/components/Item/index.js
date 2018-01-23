@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import UpperBar from '../UpperBar';
-import SelectDay from '../SelectDay';
+import SelectDay from '../Buttons/SelectDay';
+import PaymentBar from '../PaymentBar';
 
 /**
  * @props
@@ -31,13 +32,7 @@ export default class Item extends Component {
     return (
       <div className={className}>
         <UpperBar backgroundColor="#F4F4F4" textColor="black" text="묶음 배송 가이드" />
-        <UpperBar backgroundColor="#A3A3A3" textColor="black" text="결제" />
-        <div>
-          <div>
-            원하는 요일을 선택해주세요
-          </div>
-          <SelectDay />
-        </div>
+        <PaymentBar backgroundColor="#A3A3A3" />
       </div>
     )
   }
