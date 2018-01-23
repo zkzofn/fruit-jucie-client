@@ -110,8 +110,8 @@ _reactDom2.default.render(_react2.default.createElement(
           _react2.default.createElement(_reactRouter.Route, { path: '*', component: _Header2.default })
         ),
         _react2.default.createElement(_reactRouter.Route, { exact: true, path: '/', component: _Home2.default }),
-        _react2.default.createElement(_reactRouter.Route, { path: '/shop', component: _Shop2.default }),
-        _react2.default.createElement(_reactRouter.Route, { path: '/shop/:productId', component: _Item2.default }),
+        _react2.default.createElement(_reactRouter.Route, { exact: true, path: '/shop/:productId', component: _Item2.default }),
+        _react2.default.createElement(_reactRouter.Route, { exact: true, path: '/shop', component: _Shop2.default }),
         _react2.default.createElement(_reactRouter.Route, { path: '/product/:productId', component: _ProductDetail2.default }),
         _react2.default.createElement(_reactRouter.Route, { path: '/products', component: _Products2.default }),
         _react2.default.createElement(_reactRouter.Route, { path: '/signin', component: _SignIn2.default }),

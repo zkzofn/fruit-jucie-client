@@ -110,7 +110,18 @@ var Header = function (_Component) {
         'div',
         { style: headerStyle },
         _react2.default.createElement(_LogoMark2.default, _extends({}, this.props, { className: 'pull-left' })),
-        _react2.default.createElement(_LogoName2.default, _extends({}, this.props, { className: 'alignCenter' }))
+        _react2.default.createElement(_LogoName2.default, _extends({}, this.props, { className: 'alignCenter' })),
+        _react2.default.createElement(_MainTabs2.default, _extends({}, this.props, { className: 'pull-right' })),
+        _react2.default.createElement(_materialUi.AppBar, {
+          className: 'appBar',
+          title: _react2.default.createElement(
+            'span',
+            { className: 'cursorPointer' },
+            'Eat More'
+          ),
+          onTitleTouchTap: this.titleTouch.bind(this),
+          onLeftIconButtonTouchTap: this.openDrawer.bind(this)
+        })
       );
     }
   }]);

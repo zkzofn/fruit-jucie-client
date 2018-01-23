@@ -19,7 +19,6 @@ export default class PaymentButton extends Component {
     const styles = {
       button: {
         margin: 12,
-        width: "47%",
       }
     };
 

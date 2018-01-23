@@ -21,7 +21,7 @@ export default class PaymentBar extends Component {
 
     const style = {
       margin: "auto",
-      padding: 80,
+      // padding: 80,
       textAlign: "center",
       fontWeight: "bold",
       backgroundColor: this.props.backgroundColor ? this.props.backgroundColor : "#3B574F",
@@ -33,7 +33,7 @@ export default class PaymentBar extends Component {
     return (
       <div className={className}>
         <div style={style}>
-          <div style={{maxWidth: 560}}>
+          <div>
             <SelectDay />
             <PaymentButton className="inlineBlock col-6" />
             <AddCartButton className="inlineBlock col-6" />
