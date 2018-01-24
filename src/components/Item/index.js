@@ -33,6 +33,9 @@ export default class Item extends Component {
       <div className={className}>
         <UpperBar backgroundColor="#F4F4F4" textColor="black" text="묶음 배송 가이드" />
         <PaymentBar backgroundColor="#A3A3A3" />
+        <div>
+          <img src="https://i.imgur.com/x80XR2r.png" alt="" />
+        </div>
       </div>
     )
   }

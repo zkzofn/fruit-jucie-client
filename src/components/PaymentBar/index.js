@@ -35,8 +35,8 @@ export default class PaymentBar extends Component {
         <div style={style}>
           <div>
             <SelectDay />
-            <PaymentButton className="inlineBlock col-6" />
-            <AddCartButton className="inlineBlock col-6" />
+            <PaymentButton />
+            <AddCartButton />
           </div>
         </div>
       </div>
