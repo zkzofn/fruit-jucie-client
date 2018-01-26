@@ -12,10 +12,10 @@ let secretProfile = Crypto.SHA1("fRu1t_profile_privacy");
 // const END_POINT = "http://13.124.237.236:3000";
 
 // For dev-web-server
-// const END_POINT = "http://localhost:3000";
+const END_POINT = "http://localhost:3000";
 
 // For React dev server
-const END_POINT = "/api";
+// const END_POINT = "/api";
 
 export default class SessionManager extends Component {
   customAxios = axios.create();

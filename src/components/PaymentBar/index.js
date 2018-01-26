@@ -14,7 +14,18 @@ export default class PaymentBar extends Component {
   constructor(props) {
     super(props)
 
+
+    this.onClickPaymentButton = this.onClickPaymentButton.bind(this);
+    this.onClickAddCartButton = this.onClickAddCartButton.bind(this);
   }
+
+  onClickPaymentButton() {
+    console.log("clicked payment button");
+  };
+
+  onClickAddCartButton() {
+    console.log("clicked add cart button");
+  };
 
   render() {
     const className = this.props.className ? this.props.className : "";
@@ -35,8 +46,8 @@ export default class PaymentBar extends Component {
         <div style={style}>
           <div>
             <SelectDay />
-            <PaymentButton />
-            <AddCartButton />
+            <PaymentButton className="inlineBlock" onClick={this.onClickPaymentButton} />
+            <AddCartButton className="inlineBlock" onClick={this.onClickAddCartButton} />
           </div>
         </div>
       </div>
