@@ -13,19 +13,7 @@ import AddCartButton from '../Buttons/AddCartButton';
 export default class PaymentBar extends Component {
   constructor(props) {
     super(props)
-
-
-    this.onClickPaymentButton = this.onClickPaymentButton.bind(this);
-    this.onClickAddCartButton = this.onClickAddCartButton.bind(this);
   }
-
-  onClickPaymentButton() {
-    console.log("clicked payment button");
-  };
-
-  onClickAddCartButton() {
-    console.log("clicked add cart button");
-  };
 
   render() {
     const className = this.props.className ? this.props.className : "";
@@ -39,15 +27,15 @@ export default class PaymentBar extends Component {
       color: this.props.textColor ? this.props.textColor : "white"
     };
 
-    const text = this.props.text ? this.props.text : "test text"
+    const text = this.props.text ? this.props.text : "test text";
 
     return (
       <div className={className}>
         <div style={style}>
           <div>
             <SelectDay />
-            <PaymentButton className="inlineBlock" onClick={this.onClickPaymentButton} />
-            <AddCartButton className="inlineBlock" onClick={this.onClickAddCartButton} />
+            <PaymentButton className="inlineBlock" />
+            <AddCartButton className="inlineBlock" />
           </div>
         </div>
       </div>
