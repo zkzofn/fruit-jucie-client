@@ -14,6 +14,13 @@ export default class PaymentButton extends Component {
 
 
   onClickPayment() {
+
+    // 여기서 로그인 상태인지 아닌지 한번 체크하고
+    // --> 로그인 상태면 제품정보 한번 보여주고, 배송지, 주소, 포인트 등 알려주는 화면으로 ㄱㄱ
+    //     --> 거기서 결제 누르면 아래의 IMPORT API 콜 하도록
+    // --> 로그인 상태가 아니면 로그인/회원가입 페이지로 redirect
+
+/*
     const self = this;
 
     if (this.state.paymentMethod === "cash") {
@@ -95,6 +102,7 @@ export default class PaymentButton extends Component {
         }
       });
     }
+*/
 
   }
 

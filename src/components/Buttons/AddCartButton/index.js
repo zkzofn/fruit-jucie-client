@@ -13,6 +13,11 @@ export default class AddCartButton extends Component {
   }
 
   onClickAddCartButton() {
+    // 여기서 로그인 상태인지 아닌지 한번 체크하고
+    // --> 로그인 상태면 장바구니에 넣는 API 콜 하고, [계속 쇼핑할건지 / 장바구니로 갈지] Dialog 띄워주고
+    // --> 로그인 상태가 아니면 로그인/회원가입 페이지로 redirect 했다가 장바구니에 넣어
+
+
     // 여기서 사용자 정보, 제품정보 param으로 해서 AddCart function call
     console.log("onClickaAddCartButton");
 
