@@ -28,7 +28,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import '../../style/style.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-//
+
 storiesOf('Welcome', module).add('to Storybook', () => <Welcome showApp={linkTo('Button')} />);
 
 storiesOf('Button', module)
