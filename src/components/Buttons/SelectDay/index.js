@@ -21,13 +21,11 @@ export default class SelectDay extends Component {
     }
   }
 
-  componentWillMount() {
-
-  }
-
   onClickMon() {
     this.setState(prevState => {
       if (!(prevState.mon === false && prevState.count === this.state.days)) {
+        this.props.onClickMon(!prevState.mon);
+
         return {
           mon: !prevState.mon,
           count: prevState.mon ? prevState.count - 1 : prevState.count + 1
@@ -39,6 +37,8 @@ export default class SelectDay extends Component {
   onClickTue() {
     this.setState(prevState => {
       if (!(prevState.tue === false && prevState.count === this.state.days)) {
+        this.props.onClickTue(!prevState.tue);
+
         return {
           tue: !prevState.tue,
           count: prevState.tue ? prevState.count - 1 : prevState.count + 1
@@ -51,6 +51,8 @@ export default class SelectDay extends Component {
   onClickWed() {
     this.setState(prevState => {
       if (!(prevState.wed === false && prevState.count === this.state.days)) {
+        this.props.onClickWed(!prevState.wed);
+
         return {
           wed: !prevState.wed,
           count: prevState.wed ? prevState.count - 1 : prevState.count + 1
@@ -62,6 +64,8 @@ export default class SelectDay extends Component {
   onClickThur() {
     this.setState(prevState => {
       if (!(prevState.thur === false && prevState.count === this.state.days)) {
+        this.props.onClickThur(!prevState.thur);
+
         return {
           thur: !prevState.thur,
           count: prevState.thur ? prevState.count - 1 : prevState.count + 1
@@ -73,6 +77,8 @@ export default class SelectDay extends Component {
   onClickFri() {
     this.setState(prevState => {
       if (!(prevState.fri === false && prevState.count === this.state.days)) {
+        this.props.onClickFri(!prevState.fri);
+
         return {
           fri: !prevState.fri,
           count: prevState.fri ? prevState.count - 1 : prevState.count + 1
@@ -89,7 +95,6 @@ export default class SelectDay extends Component {
         margin: 12,
       }
     };
-
 
 
     return (

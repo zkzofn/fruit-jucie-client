@@ -12,7 +12,35 @@ import AddCartButton from '../Buttons/AddCartButton';
  */
 export default class PaymentBar extends Component {
   constructor(props) {
-    super(props)
+    super(props);
+
+    this.state = {
+      mon: false,
+      tue: false,
+      wed: false,
+      thur: false,
+      fri: false
+    }
+  }
+
+  onClickMon(mon) {
+    this.setState({mon});
+  }
+
+  onClickTue(tue) {
+    this.setState({tue})
+  }
+
+  onClickWed(wed) {
+    this.setState({wed})
+  }
+
+  onClickThur(thur) {
+    this.setState({thur})
+  }
+
+  onClickFri(fri) {
+    this.setState({fri})
   }
 
   render() {
@@ -27,13 +55,17 @@ export default class PaymentBar extends Component {
       color: this.props.textColor ? this.props.textColor : "white"
     };
 
-    const text = this.props.text ? this.props.text : "test text";
-
     return (
       <div className={className}>
         <div style={style}>
           <div>
-            <SelectDay />
+            <SelectDay
+              onClickMon={this.onClickMon.bind(this)}
+              onClickTue={this.onClickTue.bind(this)}
+              onClickWed={this.onClickWed.bind(this)}
+              onClickThur={this.onClickThur.bind(this)}
+              onClickFri={this.onClickFri.bind(this)}
+            />
             <PaymentButton className="inlineBlock" />
             <AddCartButton className="inlineBlock" />
           </div>
