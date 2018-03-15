@@ -24,6 +24,10 @@ export default class Shop extends Component {
   }
 
   render() {
+    console.log("container shop props");
+    console.log(this.props);
+    //
+
     const className = this.props.className ? this.props.className : "";
     const styles = {
       shopTabs: {

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { TextField, RaisedButton, FlatButton, Dialog } from 'material-ui';
 import { postLogin, getValidate } from '../../actions/RequestManager';
+import SessionManager from '../../actions/SessionManager';
 
 import crypto from 'crypto-js';
 
@@ -57,8 +58,13 @@ class SignIn extends React.Component {
         password: crypto.SHA1(this.state.password).toString()
       };
 
+      console.log("SignIn submit");
+      console.log(data);
+      
       this.props.postLogin(data).then((result) => {
         if (this.props.user) {
+          // 여기서 user 정보 local에 저장해
+
           this.props.history.push("/");
         } else {
           this.setState({

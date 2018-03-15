@@ -44,22 +44,18 @@ export default class SessionManager extends Component {
   }
 
   login(email, password) {
-    return this.customAxios.post("/users/authorize", {
-      email: email, password: Crypto.SHA1(password).toString()
-    }).then(res => {
-      const { sessionKey, user } = res.data;
+    const { sessionKey, user } = res.data;
+    
+    let cryptedToken = Crypto.AES.encrypt(sessionKey, secretToken).toString().split("").reverse().join("");
+    let cryptedUser = Crypto.AES.encrypt(JSON.stringify(user), secretProfile).toString().split("").reverse().join("");
 
-      let cryptedToken = Crypto.AES.encrypt(sessionKey, secretToken).toString().split("").reverse().join("");
-      let cryptedUser = Crypto.AES.encrypt(JSON.stringify(user), secretProfile).toString().split("").reverse().join("");
+    localStorage.setItem("token", cryptedToken);
+    localStorage.setItem("user", cryptedUser);
 
-      localStorage.setItem("token", cryptedToken);
-      localStorage.setItem("user", cryptedUser);
+    this.setToken(sessionKey);
+    this.setUser(user);
 
-      this.setToken(sessionKey);
-      this.setUser(user);
-
-      return new Promise((resolve, reject) => resolve({sessionKey, user}));
-    })
+    return new Promise((resolve, reject) => resolve({sessionKey, user}));
   }
 
   logout() {

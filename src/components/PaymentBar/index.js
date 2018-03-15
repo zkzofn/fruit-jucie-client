@@ -46,6 +46,9 @@ export default class PaymentBar extends Component {
   render() {
     const className = this.props.className ? this.props.className : "";
 
+    console.log("paymentBar props")
+    console.log(this.props);
+
     const style = {
       margin: "auto",
       // padding: 80,

@@ -16,6 +16,11 @@ export default class CardImage extends Component {
 
   }
 
+  onClickItem() {
+    console.log(this.props)
+    this.props.history.push("/shop/1");
+  }
+
   render() {
     const className = this.props.className ? this.props.className : "";
     const url = this.props.url ? this.props.url : "https://i.imgur.com/tG6Sw83.jpg";
@@ -23,8 +28,10 @@ export default class CardImage extends Component {
     const title = this.props.title ? this.props.title : "Overlay title";
     const subtitle = this.props.subtitle ? this.props.subtitle : "Overlay subtitle";
 
+
+
     return (
-      <div className={className}>
+      <div className={className} onClick={this.onClickItem.bind(this)}>
         <Card>
           <CardMedia
             overlay={<CardTitle title={title} subtitle={subtitle} />}

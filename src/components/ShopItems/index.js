@@ -48,12 +48,14 @@ export default class ShopItems extends Component {
     // 여기서 salad, juice item list 불러와
   }
 
+
   renderItems() {
     if (this.props.divider === enumSalad.value) {
       // componentWillMount 에서 불러온 변수에 따라 여기서 map 하는 변수명이 달라져야한다.
       return this.info.salad.map((info, index) => {
         return (
           <CardImage
+            {...this.props}
             key={index}
             className="col-md-4 py-4"
             title={info.title}
@@ -67,6 +69,7 @@ export default class ShopItems extends Component {
       return this.info.juice.map((info, index) => {
         return (
           <CardImage
+            { ...this.props }
             key={index}
             className="col-md-4 py-4"
             title={info.title}

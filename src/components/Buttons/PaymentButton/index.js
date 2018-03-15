@@ -17,6 +17,7 @@ class PaymentButton extends Component {
 
 
   onClickPayment() {
+    console.log("paymentButton");
     console.log(this.props);
 
     // 여기서 로그인 상태인지 아닌지 한번 체크하고
@@ -118,6 +119,10 @@ class PaymentButton extends Component {
         margin: 12,
       }
     };
+    //
+
+    console.log("paymentButton props");
+    console.log(this.props);
 
     return (
       <div className={className}>
@@ -139,11 +144,11 @@ const mapStateToProps = (state) => {
   }
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({
-  }, dispatch)
-};
+// const mapDispatchToProps = (dispatch) => {
+//   return bindActionCreators({
+//   }, dispatch)
+// };
 
-export default connect(mapStateToProps, mapDispatchToProps)(PaymentButton);
+export default connect(mapStateToProps/*, mapDispatchToProps*/)(PaymentButton);
 
 
