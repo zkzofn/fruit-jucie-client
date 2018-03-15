@@ -1,19 +1,23 @@
 import React, { Component } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import Payment from 'material-ui/svg-icons/action/payment';
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { getProduct, postCart } from "../../../actions/RequestManager";
 
 /**
  * @props
  *    className
  *    days (주 몇 회인지 선택 / default: 3)
  */
-export default class PaymentButton extends Component {
+class PaymentButton extends Component {
   constructor(props) {
     super(props);
   }
 
 
   onClickPayment() {
+    console.log(this.props);
 
     // 여기서 로그인 상태인지 아닌지 한번 체크하고
     // --> 로그인 상태면 제품정보 한번 보여주고, 배송지, 주소, 포인트 등 알려주는 화면으로 ㄱㄱ
@@ -126,3 +130,20 @@ export default class PaymentButton extends Component {
     )
   }
 }
+
+
+
+const mapStateToProps = (state) => {
+  return {
+    user: state.user.user
+  }
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({
+  }, dispatch)
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(PaymentButton);
+
+
