@@ -48,13 +48,13 @@ module.exports = {
   devServer: {
     historyApiFallback: true,
     contentBase: './',
-    port: 8000,
-    proxy: {
-      "/api": {
-        target: "http://localhost:3000",
-        secure: false,
-        pathRewrite: { "^/api": "" }
-      }
-    }
+    port: 8000
+    // proxy: {
+    //   "/api": {
+    //     target: "http://localhost:3000",
+    //     secure: false,
+    //     pathRewrite: { "^/api": "" }
+    //   }
+    // }
   }
 };

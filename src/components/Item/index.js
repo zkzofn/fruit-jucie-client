@@ -19,7 +19,6 @@ export default class Item extends Component {
 
   componentWillMount() {
     // 여기서 salad, juice item detail 불러와
-    console.log('here');
   }
 
   //

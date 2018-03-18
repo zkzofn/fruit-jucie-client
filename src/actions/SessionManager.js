@@ -19,13 +19,14 @@ const END_POINT = "http://localhost:3000";
 
 export default class SessionManager extends Component {
   customAxios = axios.create();
-  header = {};
+  headers = {};
   user = {};
 
   constructor(props) {
     super(props);
 
     this.customAxios.defaults.baseURL = END_POINT;
+    this.customAxios.defaults.withCredintials = true;
   }
 
   static instance() {
@@ -36,21 +37,18 @@ export default class SessionManager extends Component {
   }
 
   setToken(token) {
-    this.headers.Authorization = token;
+    this.headers.authorization = token;
   }
 
   setUser(user) {
     this.user = user;
   }
 
-  login(email, password) {
-    const { sessionKey, user } = res.data;
-    
-    let cryptedToken = Crypto.AES.encrypt(sessionKey, secretToken).toString().split("").reverse().join("");
-    let cryptedUser = Crypto.AES.encrypt(JSON.stringify(user), secretProfile).toString().split("").reverse().join("");
+  setSession({sessionKey, user}) {
+    const userInfoString = JSON.stringify(user);
 
-    localStorage.setItem("token", cryptedToken);
-    localStorage.setItem("user", cryptedUser);
+    localStorage.setItem("eatmore_sessionKey", sessionKey);
+    localStorage.setItem("eatmore_user", userInfoString);
 
     this.setToken(sessionKey);
     this.setUser(user);
@@ -62,8 +60,8 @@ export default class SessionManager extends Component {
     this.setToken("");
     this.setUser({});
 
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    localStorage.removeItem("eatmore_sessionKey");
+    localStorage.removeItem("eatmore_user");
   }
 
   /**
@@ -75,11 +73,8 @@ export default class SessionManager extends Component {
   loadToken() {
     return new Promise((resolve, reject) => {
       try {
-        let cryptedToken = localStorage.getItem('token').split('').reverse().join('');
-        let cryptedUser = localStorage.getItem('user').split('').reverse().join('');
-
-        let sessionKey = Crypto.AES.decrypt(cryptedToken, secretToken).toString(Crypto.enc.Utf8);
-        let user = JSON.parse(Crypto.AES.decrypt(cryptedUser, secretProfile).toString(Crypto.enc.Utf8));
+        const sessionKey = localStorage.getItem('eatmore_sessionKey');
+        const user = JSON.parse(localStorage.getItem('eatmore_user'));
 
         this.setToken(sessionKey);
         this.setUser(user);
@@ -98,13 +93,12 @@ export default class SessionManager extends Component {
    * @return Promise<User>
    */
   validate() {
-    return this.loadToken()
-      .then(() => {
-        return this.post("/users/validation")
-          .then(res => {
-            return res.data;
-          });
-      });
+    return this.loadToken().then(() => {
+      return this.get("/user/validate")
+        .then(res => {
+          return res.data;
+        });
+    });
   }
 
   get(url, query) {
@@ -121,46 +115,56 @@ export default class SessionManager extends Component {
 
     let queryStr = generateQueryString();
 
-    return this.customAxios({
-      method: "get",
-      url: `${url}${queryStr}`,
-      headers: this.headers
+    return this.loadToken().then(() => {
+      return this.customAxios({
+        method: "get",
+        url: `${url}${queryStr}`,
+        headers: this.headers
+      })
     })
   }
 
   post(url, data) {
-    return this.customAxios({
-      method: "post",
-      url: url,
-      headers: this.headers,
-      data
+    return this.loadToken().then(() => {
+      return this.customAxios({
+        method: "post",
+        url: url,
+        headers: this.headers,
+        data
+      })
     })
   }
 
   patch(url, data) {
-    return this.customAxios({
-      method: "patch",
-      url: url,
-      headers: this.headers,
-      data
+    return this.loadToken().then(() => {
+      return this.customAxios({
+        method: "patch",
+        url: url,
+        headers: this.headers,
+        data
+      })
     })
   }
 
   put(url, data) {
-    return this.customAxios({
-      method: "put",
-      url: url,
-      headers: this.headers,
-      data
+    return this.loadToken().then(() => {
+      return this.customAxios({
+        method: "put",
+        url: url,
+        headers: this.headers,
+        data
+      })
     })
   }
 
   del(url, data) {
-    return this.customAxios({
-      method: "delete",
-      url: url,
-      headers: this.headers,
-      data
+    return this.loadToken().then(() => {
+      return this.customAxios({
+        method: "delete",
+        url: url,
+        headers: this.headers,
+        data
+      })
     })
   }
 }

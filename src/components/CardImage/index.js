@@ -17,7 +17,6 @@ export default class CardImage extends Component {
   }
 
   onClickItem() {
-    console.log(this.props)
     this.props.history.push("/shop/1");
   }
 

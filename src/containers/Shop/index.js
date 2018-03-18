@@ -12,7 +12,7 @@ import { enumSalad, enumJuice } from "../../components/Enum";
  */
 export default class Shop extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       divider: enumSalad.value  //salad, juice Tabs를 구분하는 구분자
@@ -24,10 +24,6 @@ export default class Shop extends Component {
   }
 
   render() {
-    console.log("container shop props");
-    console.log(this.props);
-    //
-
     const className = this.props.className ? this.props.className : "";
     const styles = {
       shopTabs: {
