@@ -11,14 +11,20 @@ export default class Item extends Component {
   constructor(props) {
     super(props)
 
-    // 이건 나중에 API 불러서 목록 가져오는걸로 바꿀거야
-    this.info = {
 
+    // 이건 나중에 API 불러서 목록 가져오는걸로 바꿀거야
+    this.itemInfo = {
+      days: null
     }
   }
 
   componentWillMount() {
-    // 여기서 salad, juice item detail 불러와
+    // 여기서 item 정보 불러와
+    // 여기서 days --> this.itemInfo.days = days 꼭 설정해줘
+    //    DB 상에서 days 는 null 허용
+
+    // 이건 item의 정보에 따라서
+    this.itemInfo.days = null;
   }
 
   //
@@ -31,7 +37,7 @@ export default class Item extends Component {
     return (
       <div className={className}>
         <UpperBar backgroundColor="#F4F4F4" textColor="black" text="묶음 배송 가이드" />
-        <PaymentBar backgroundColor="#A3A3A3" />
+        <PaymentBar {...this.props} {...this.itemInfo} backgroundColor="#A3A3A3" />
         <div style={{textAlign: "center"}} >
           <img src="https://i.imgur.com/x80XR2r.png" alt="" />
         </div>

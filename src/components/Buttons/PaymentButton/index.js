@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import RaisedButton from 'material-ui/RaisedButton';
-import Payment from 'material-ui/svg-icons/action/payment';
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { getProduct, postCart, getValidate } from "../../../actions/RequestManager";
-import SessionManager from '../../../actions/SessionManager';
+import { Dialog, FlatButton } from 'material-ui';
+import RaisedButton from 'material-ui/RaisedButton';
+import Payment from 'material-ui/svg-icons/action/payment';
+
+
 /**
  * @props
  *    className
@@ -13,121 +15,70 @@ import SessionManager from '../../../actions/SessionManager';
 class PaymentButton extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      alertOpen: false
+    };
+
+    this.alertMessage = `원하는 요일을 ${props.days}일 선택해주세요.`
   }
 
   componentWillMount() {
 
-
-
   }
 
+  handleAlertOpen = () => {
+    this.setState({alertOpen: true})
+  };
+
+  handleAlertClose = () => {
+    this.setState({alertOpen: false})
+  };
 
   onClickPayment() {
-    // 여기서 로그인 상태인지 아닌지 한번 체크하고
-    // --> 로그인 상태면 제품정보 한번 보여주고, 배송지, 주소, 포인트 등 알려주는 화면으로 ㄱㄱ
-    //     --> 거기서 결제 누르면 아래의 IMPORT API 콜 하도록
-    // --> 로그인 상태가 아니면 로그인/회원가입 페이지로 redirect
+    // 0. Options를 제대로 선택했는지 체크
+    // 0.1. 제대로 선택했으면 1로
+    // 0.2. 제대로 선택하지 않았으면 alert 띄워주고 제대로 선택하도록
+    // 1. 여기서 로그인 상태인지 아닌지 한번 체크하고
+    // 2.1. 로그인 상태면 제품정보 한번 보여주고, 배송지, 주소, 포인트 등 알려주는 화면으로 ㄱㄱ
+    // 2.2. 거기서 결제 누르면 아래의 IMPORT API 콜 하도록
+    // 3. 로그인 상태가 아니면 로그인/회원가입 페이지로 redirect
 
-    SessionManager.instance().validate().then(result => {
-      const { validate } = result;
+    const { days, count } = this.props;
 
-      if (validate) {
+    const paymentAfterValidate = (paymentData) => {
+      this.props.getValidate().then(result => {
+        const { validate } = result.payload.data;
 
-      } else {
-
-      }
-    });
-
-    // this.props.getValidate().then(result => {
-    //   console.log("paymentButtion validated");
-    //   console.log(result);
-    // })
-
-/*
-    const self = this;
-
-    if (this.state.paymentMethod === "cash") {
-      const paymentData = {
-        user_id: self.props.currentUser.id,
-        sender_name: self.state.senderName,
-        sender_phone: self.state.senderPhone,
-        sender_email: self.state.senderEmail,
-        receiver_name: self.state.receiverName,
-        receiver_nickname: self.state.receiverNickname,
-        receiver_zip_code: self.state.receiverZipcode,
-        receiver_address1: self.state.receiverAddress1,
-        receiver_address2: self.state.receiverAddress2,
-        receiver_phone: self.state.receiverPhone,
-        status: 1,
-        payment_type: self.state.paymentMethod,
-        total_price: this.state.totalPrice, // 여기서 나중에 적립금 적용한 금액으로 넣어야해
-        // imp_uid: rsp.imp_uid,
-        // merchant_uid: rsp.merchant_uid,
-        // card_confirm_num: rsp.apply_num,
-        items: self.state.cartItems,
-      };
-
-      self.props.postOrder(paymentData)
-        .then(res => {
-          console.log(res);
-
-          self.props.history.push("/my/order")
-        });
-
-
-    } else {
-      this.IMP.request_pay({
-        pg : 'inicis', // version 1.1.0부터 지원.
-        pay_method : this.state.paymentMethod,
-        merchant_uid : 'merchant_' + new Date().getTime(),
-        name : '주문명:결제테스트',
-        amount : 14000, // 여기서 this.state.totalPrice 에 나중에 적립금 적용한 가격으로 넣어야해
-        buyer_email : 'zkzofn@gmail.com',
-        buyer_name : '이장호',
-        buyer_tel : '010-3399-0081',
-        buyer_addr : '서울특별시 강남구 삼성동',
-        buyer_postcode : '123-456',
-        m_redirect_url : 'http://eatmore-green.com/my/order'
-      }, function(rsp) {
-        if ( rsp.success ) {
-          const paymentData = {
-            user_id: self.props.currentUser.id,
-            sender_name: self.state.senderName,
-            sender_phone: self.state.senderPhone,
-            sender_email: self.state.senderEmail,
-            receiver_name: self.state.receiverName,
-            receiver_nickname: self.state.receiverNickname,
-            receiver_zip_code: self.state.receiverZipcode,
-            receiver_address1: self.state.receiverAddress1,
-            receiver_address2: self.state.receiverAddress2,
-            receiver_phone: self.state.receiverPhone,
-            status: 1,
-            payment_type: self.state.paymentMethod,
-            total_price: rsp.paid_amount,
-            imp_uid: rsp.imp_uid,
-            merchant_uid: rsp.merchant_uid,
-            card_confirm_num: rsp.apply_num,
-            items: self.state.cartItems,
-          };
-
-          self.props.postOrder(paymentData)
-            .then(res => {
-              console.log(res);
-
-              self.props.history.push("/my/order")
-            });
+        if (validate) {
+          // 결제 API call
         } else {
-          var msg = '결제에 실패하였습니다.';
-          msg += '에러내용: ' + rsp.error_msg;
-          msg += '다시 시도해보세요.';
-
-          alert(msg);
+          this.props.history.push("/signin");
         }
       });
+    };
+
+    if (days) {
+      if (count !== days) {
+        this.handleAlertOpen();
+      } else {
+        // 여기서 요일별로 결제하는 정보 저장해서 payment API call
+        const paymentData = {};
+        paymentAfterValidate(paymentData);
+      }
+    } else {
+      // 여기서 단품(요일X) 결제 정보 저장해서 payment API call
+      const paymentData = {};
+      paymentAfterValidate(paymentData);
     }
-*/
+  }
+
+  // 이걸쓸지 import 해서 쓸지는 생각해보자
+  callImportAPI() {
 
   }
+
+
 
   render() {
     const className = this.props.className ? this.props.className : "";
@@ -138,6 +89,14 @@ class PaymentButton extends Component {
       }
     };
 
+    const alertActions = [
+      <FlatButton
+        label="OK"
+        primary={true}
+        onClick={this.handleAlertClose}
+      />
+    ];
+
     return (
       <div className={className}>
         <RaisedButton
@@ -145,6 +104,14 @@ class PaymentButton extends Component {
           style={styles.button}
           onClick={this.onClickPayment.bind(this)}
         />
+        <Dialog
+          actions={alertActions}
+          modal={false}
+          open={this.state.alertOpen}
+          onRequestClose={this.handleAlertClose}
+        >
+          {this.alertMessage}
+        </Dialog>
       </div>
     )
   }

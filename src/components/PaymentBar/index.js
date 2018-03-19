@@ -15,6 +15,7 @@ export default class PaymentBar extends Component {
     super(props);
 
     this.state = {
+      count: 0,
       mon: false,
       tue: false,
       wed: false,
@@ -23,24 +24,24 @@ export default class PaymentBar extends Component {
     }
   }
 
-  onClickMon(mon) {
-    this.setState({mon});
+  onClickMon(mon, count) {
+    this.setState({mon, count});
   }
 
-  onClickTue(tue) {
-    this.setState({tue})
+  onClickTue(tue, count) {
+    this.setState({tue, count})
   }
 
-  onClickWed(wed) {
-    this.setState({wed})
+  onClickWed(wed, count) {
+    this.setState({wed, count})
   }
 
-  onClickThur(thur) {
-    this.setState({thur})
+  onClickThur(thur, count) {
+    this.setState({thur, count})
   }
 
-  onClickFri(fri) {
-    this.setState({fri})
+  onClickFri(fri, count) {
+    this.setState({fri, count})
   }
 
   render() {
@@ -55,19 +56,45 @@ export default class PaymentBar extends Component {
       color: this.props.textColor ? this.props.textColor : "white"
     };
 
+    const renderSelectDays = () => {
+      if (this.props.days)
+        return (
+          <SelectDay
+            days={this.props.days}
+            onClickMon={this.onClickMon.bind(this)}
+            onClickTue={this.onClickTue.bind(this)}
+            onClickWed={this.onClickWed.bind(this)}
+            onClickThur={this.onClickThur.bind(this)}
+            onClickFri={this.onClickFri.bind(this)}
+          />
+        )
+    };
+
     return (
       <div className={className}>
         <div style={style}>
           <div>
-            <SelectDay
-              onClickMon={this.onClickMon.bind(this)}
-              onClickTue={this.onClickTue.bind(this)}
-              onClickWed={this.onClickWed.bind(this)}
-              onClickThur={this.onClickThur.bind(this)}
-              onClickFri={this.onClickFri.bind(this)}
+            {renderSelectDays()}
+            <PaymentButton
+              {...this.props}
+              className="inlineBlock"
+              count={this.state.count}
+              mon={this.state.mon}
+              tue={this.state.tue}
+              wed={this.state.wed}
+              thur={this.state.thur}
+              fri={this.state.fri}
             />
-            <PaymentButton className="inlineBlock" />
-            <AddCartButton className="inlineBlock" />
+            <AddCartButton
+              {...this.props}
+              className="inlineBlock"
+              count={this.state.count}
+              mon={this.state.mon}
+              tue={this.state.tue}
+              wed={this.state.wed}
+              thur={this.state.thur}
+              fri={this.state.fri}
+            />
           </div>
         </div>
       </div>

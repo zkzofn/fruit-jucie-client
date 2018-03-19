@@ -12,7 +12,7 @@ export default class SelectDay extends Component {
 
     this.state = {
       count: 0,
-      days: props.days ? props.days : 3,
+      days: props.days,
       mon: false,
       tue: false,
       wed: false,
@@ -24,12 +24,12 @@ export default class SelectDay extends Component {
   onClickMon() {
     this.setState(prevState => {
       if (!(prevState.mon === false && prevState.count === this.state.days)) {
-        this.props.onClickMon(!prevState.mon);
+        const mon = !prevState.mon;
+        const count = prevState.mon ? prevState.count - 1 : prevState.count + 1;
 
-        return {
-          mon: !prevState.mon,
-          count: prevState.mon ? prevState.count - 1 : prevState.count + 1
-        }
+        this.props.onClickMon(mon, count);
+
+        return { mon, count }
       }
     })
   };
@@ -37,12 +37,12 @@ export default class SelectDay extends Component {
   onClickTue() {
     this.setState(prevState => {
       if (!(prevState.tue === false && prevState.count === this.state.days)) {
-        this.props.onClickTue(!prevState.tue);
+        const tue = !prevState.tue;
+        const count = prevState.tue ? prevState.count - 1 : prevState.count + 1;
 
-        return {
-          tue: !prevState.tue,
-          count: prevState.tue ? prevState.count - 1 : prevState.count + 1
-        }
+        this.props.onClickTue(tue, count);
+
+        return { tue, count }
       }
     })
   }
@@ -51,12 +51,12 @@ export default class SelectDay extends Component {
   onClickWed() {
     this.setState(prevState => {
       if (!(prevState.wed === false && prevState.count === this.state.days)) {
-        this.props.onClickWed(!prevState.wed);
+        const wed = !prevState.wed;
+        const count = prevState.wed ? prevState.count - 1 : prevState.count + 1;
 
-        return {
-          wed: !prevState.wed,
-          count: prevState.wed ? prevState.count - 1 : prevState.count + 1
-        }
+        this.props.onClickWed(wed, count);
+
+        return { wed, count }
       }
     })
   }
@@ -64,12 +64,12 @@ export default class SelectDay extends Component {
   onClickThur() {
     this.setState(prevState => {
       if (!(prevState.thur === false && prevState.count === this.state.days)) {
-        this.props.onClickThur(!prevState.thur);
+        const thur = !prevState.thur;
+        const count = prevState.thur ? prevState.count - 1 : prevState.count + 1;
 
-        return {
-          thur: !prevState.thur,
-          count: prevState.thur ? prevState.count - 1 : prevState.count + 1
-        }
+        this.props.onClickThur(thur, count);
+
+        return { thur, count }
       }
     })
   }
@@ -77,12 +77,12 @@ export default class SelectDay extends Component {
   onClickFri() {
     this.setState(prevState => {
       if (!(prevState.fri === false && prevState.count === this.state.days)) {
-        this.props.onClickFri(!prevState.fri);
+        const fri = !prevState.fri;
+        const count = prevState.fri ? prevState.count - 1 : prevState.count + 1;
 
-        return {
-          fri: !prevState.fri,
-          count: prevState.fri ? prevState.count - 1 : prevState.count + 1
-        }
+        this.props.onClickFri(fri, count);
+
+        return { fri, count }
       }
     })
   }
