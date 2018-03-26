@@ -9,7 +9,7 @@ export const GET_CART = "GET_CART";
 export const PATCH_CART = "PATCH_CART";
 export const DELETE_CART = "DELETE_CART";
 export const GET_ADDRESS_FROM_API = "GET_ADDRESS_FROM_API";
-export const GET_MY_ADDRESS_LIST = "GET_MY_ADDRESS_LIST";
+export const GET_ADDRESS_LIST = "GET_ADDRESS_LIST";
 export const POST_ORDER = "POST_ORDER";
 export const GET_VALIDATE = "GET_VALIDATE";
 export const POST_LOGIN = "POST_LOGIN";
@@ -60,8 +60,8 @@ export const getValidate = () => {
   }
 };
 
-export const getUser = (params) => {
-  const request = SessionManager.instance().get(`/user`, params);
+export const getUser = () => {
+  const request = SessionManager.instance().get(`/user`);
 
   return {
     type: GET_USER,
@@ -118,11 +118,11 @@ export const getAddressFromAPI = (data) => {
   }
 };
 
-export const getMyAddressList = (params) => {
-  const request = SessionManager.instance().get(`/address`, params);
+export const getAddressList = () => {
+  const request = SessionManager.instance().get(`/address`);
 
   return {
-    type: GET_MY_ADDRESS_LIST,
+    type: GET_ADDRESS_LIST,
     payload: request
   }
 };

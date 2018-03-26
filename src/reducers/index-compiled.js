@@ -14,11 +14,16 @@ var _ReducerValidate = require('./ReducerValidate');
 
 var _ReducerValidate2 = _interopRequireDefault(_ReducerValidate);
 
+var _ReducerAddressList = require('./ReducerAddressList');
+
+var _ReducerAddressList2 = _interopRequireDefault(_ReducerAddressList);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var rootReducer = (0, _redux.combineReducers)({
   user: _ReducerUser2.default,
-  validate: _ReducerValidate2.default
+  validate: _ReducerValidate2.default,
+  addressList: _ReducerAddressList2.default
 });
 
 exports.default = rootReducer;

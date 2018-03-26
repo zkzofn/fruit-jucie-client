@@ -24,7 +24,7 @@ export default class Item extends Component {
     //    DB 상에서 days 는 null 허용
 
     // 이건 item의 정보에 따라서
-    this.itemInfo.days = null;
+    this.itemInfo.days = 3;
   }
 
   //
