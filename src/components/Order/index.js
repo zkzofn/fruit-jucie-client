@@ -5,9 +5,8 @@ import { bindActionCreators } from 'redux';
 import { Divider, TextField, RaisedButton, Dialog } from 'material-ui';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn, TableFooter } from 'material-ui/Table';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
-import { getValidate, getUser, getCart, patchCart, delCart, getAddressFromAPI, getAddressList, postOrder } from '../actions/RequestManager';
-import CircularProgress from './CircularProgress';
-import SessionManager from '../actions/SessionManager';
+import { getValidate, getUser, getCart, patchCart, delCart, getAddressFromAPI, getAddressList, postOrder } from '../../actions/RequestManager';
+import CircularProgress from '../CircularProgress';
 
 class Order extends Component {
   constructor(props) {
@@ -429,16 +428,19 @@ class Order extends Component {
 //     // 여기서는 장바구니 내용 없다고 보여줘야해
 //     if (this.state.cartItems === undefined)
 //       return <CircularProgress />;
-//
-//     const styles = {
-//       id: {width: "10%", textAlign: "center"},
-//       titleHeader: {width: "54%", textAlign: "center"},
-//       title: {width: "54%"},
-//       count: {width: "11%", textAlign: "center"},
-//       delete: {width: "11%", textAlign: "center"},
-//       price: {width: "12%", textAlign: "center"},
-//       totalPrice: {width: "12%", textAlign: "center"},
-//     };
+
+    console.log(this.props);
+
+    
+    const styles = {
+      id: {width: "10%", textAlign: "center"},
+      titleHeader: {width: "54%", textAlign: "center"},
+      title: {width: "54%"},
+      count: {width: "11%", textAlign: "center"},
+      delete: {width: "11%", textAlign: "center"},
+      price: {width: "12%", textAlign: "center"},
+      totalPrice: {width: "12%", textAlign: "center"},
+    };
 //
 //     const formStyles = {
 //       width: 256,
@@ -534,7 +536,7 @@ class Order extends Component {
 //         )
 //       })
 //     };
-// //
+
 //     const renderOptionsUnder = (cartItem, index) => {
 //       if (cartItem.options.length === 0) {
 //         return (
@@ -630,47 +632,57 @@ class Order extends Component {
 //         </TableFooter>
 //       )
 //     };
-//
-//
+
     return (
-      <div></div>
-//       <div>
-//         <div className="jumbotron alignCenter visible-sm-block visible-md-block visible-lg-block">
-//           <h1>주문내역</h1>
-//           <p>주문하실 상품명 및 수량을 정확하게 확인해 주세요.</p>
-//         </div>
+      <div>
+        <div className="jumbotron alignCenter visible-sm-block visible-md-block visible-lg-block">
+          <h1>주문내역</h1>
+          <p>주문하실 상품명 및 수량을 정확하게 확인해 주세요.</p>
+        </div>
+        <div
+          className="visible-xs-block alignCenter"
+          style={{backgroundColor: "#eee", paddingTop: 20, paddingBottom: 20}}
+        >
+          <h4 style={{fontWeight: "bold"}}>주문내역</h4>
+          <p>주문하실 상품명 및 수량을 정확하게 확인해 주세요.</p>
+        </div>
+
+      </div>
+
+      /*
+       <div className="container pb-4">
+       <div>
+       <div className="visible-over-block">
+       <Table
+       // selectable={true} multiSelectable={true} allRowsSelected={true}
+       >
+       <TableHeader
+       //enableSelectAll={true}
+       displaySelectAll={false} adjustForCheckbox={false}
+       >
+       <TableRow>
+       <TableHeaderColumn style={styles.titleHeader}>상품정보</TableHeaderColumn>
+       <TableHeaderColumn style={styles.count}>수량</TableHeaderColumn>
+       <TableHeaderColumn style={styles.price}>개당 판매가</TableHeaderColumn>
+       <TableHeaderColumn style={styles.totalPrice}>금액</TableHeaderColumn>
+       </TableRow>
+       </TableHeader>
+       <TableBody displayRowCheckbox={false}>
+       {
+       // renderCartListOver()
+       }
+       </TableBody>
+       {
+       // renderFooter()
+       }
+       </Table>
+       </div>
+       </div>
+
+
+       </div>
+      * */
 //
-//         <div
-//           className="visible-xs-block alignCenter"
-//           style={{backgroundColor: "#eee", paddingTop: 20, paddingBottom: 20}}
-//         >
-//           <h4 style={{fontWeight: "bold"}}>주문내역</h4>
-//           <p>주문하실 상품명 및 수량을 정확하게 확인해 주세요.</p>
-//         </div>
-//
-//         <div className="container pb-4">
-//           <div>
-//             <div className="visible-over-block">
-//               <Table
-//                 // selectable={true} multiSelectable={true} allRowsSelected={true}
-//               >
-//                 <TableHeader
-//                   //enableSelectAll={true}
-//                   displaySelectAll={false} adjustForCheckbox={false}
-//                 >
-//                   <TableRow>
-//                     <TableHeaderColumn style={styles.titleHeader}>상품정보</TableHeaderColumn>
-//                     <TableHeaderColumn style={styles.count}>수량</TableHeaderColumn>
-//                     <TableHeaderColumn style={styles.price}>개당 판매가</TableHeaderColumn>
-//                     <TableHeaderColumn style={styles.totalPrice}>금액</TableHeaderColumn>
-//                   </TableRow>
-//                 </TableHeader>
-//                 <TableBody displayRowCheckbox={false}>
-//                   {renderCartListOver()}
-//                 </TableBody>
-//                 {renderFooter()}
-//               </Table>
-//             </div>
 //
 //             <div className="visible-under-flex">
 //               <Table>
@@ -911,8 +923,6 @@ class Order extends Component {
 //             />
 //           </div>
 //
-//         </div>
-//       </div>
     )
   }
 }

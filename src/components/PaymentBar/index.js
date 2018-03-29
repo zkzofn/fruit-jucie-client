@@ -13,35 +13,10 @@ import AddCartButton from '../Buttons/AddCartButton';
 export default class PaymentBar extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      count: 0,
-      mon: false,
-      tue: false,
-      wed: false,
-      thur: false,
-      fri: false
-    }
   }
 
-  onClickMon(mon, count) {
-    this.setState({mon, count});
-  }
-
-  onClickTue(tue, count) {
-    this.setState({tue, count})
-  }
-
-  onClickWed(wed, count) {
-    this.setState({wed, count})
-  }
-
-  onClickThur(thur, count) {
-    this.setState({thur, count})
-  }
-
-  onClickFri(fri, count) {
-    this.setState({fri, count})
+  onClickPaymentButton(paymentClicked) {
+    this.props.onClickPaymentButton(paymentClicked);
   }
 
   render() {
@@ -59,14 +34,7 @@ export default class PaymentBar extends Component {
     const renderSelectDays = () => {
       if (this.props.days)
         return (
-          <SelectDay
-            days={this.props.days}
-            onClickMon={this.onClickMon.bind(this)}
-            onClickTue={this.onClickTue.bind(this)}
-            onClickWed={this.onClickWed.bind(this)}
-            onClickThur={this.onClickThur.bind(this)}
-            onClickFri={this.onClickFri.bind(this)}
-          />
+          <SelectDay {...this.props} />
         )
     };
 
@@ -78,22 +46,11 @@ export default class PaymentBar extends Component {
             <PaymentButton
               {...this.props}
               className="inlineBlock"
-              count={this.state.count}
-              mon={this.state.mon}
-              tue={this.state.tue}
-              wed={this.state.wed}
-              thur={this.state.thur}
-              fri={this.state.fri}
+              onClickPaymentButton={this.onClickPaymentButton.bind(this)}
             />
             <AddCartButton
               {...this.props}
               className="inlineBlock"
-              count={this.state.count}
-              mon={this.state.mon}
-              tue={this.state.tue}
-              wed={this.state.wed}
-              thur={this.state.thur}
-              fri={this.state.fri}
             />
           </div>
         </div>

@@ -3,6 +3,7 @@ import axios from 'axios';
 
 export const GET_PRODUCTS = "GET_PRODUCTS";
 export const GET_PRODUCT = "GET_PRODUCT";
+export const GET_PRODUCT_CHECK = "GET_PRODUCT_CHECK";
 export const GET_USER = "GET_USER";
 export const POST_CART = "POST_CART";
 export const GET_CART = "GET_CART";
@@ -47,6 +48,15 @@ export const getProduct = (params) => {
 
   return {
     type: GET_PRODUCT,
+    payload: request
+  }
+};
+
+export const getProductCheck = (params) => {
+  const request = SessionManager.instance().get(`/product/check`, params);
+
+  return {
+    type: GET_PRODUCT_CHECK,
     payload: request
   }
 };

@@ -41,7 +41,7 @@ class PaymentButton extends Component {
     // 0.2. 제대로 선택하지 않았으면 alert 띄워주고 제대로 선택하도록
     // 1. 여기서 로그인 상태인지 아닌지 한번 체크하고
     // 2.1. 로그인 상태면 제품정보 한번 보여주고, 배송지, 주소, 포인트 등 알려주는 화면으로 ㄱㄱ
-    // 2.2. 거기서 결제 누르면 아래의 IMPORT API 콜 하도록
+    // 2.2. 거기서 결제 누르면 아래의 Order 페이지 보여준다
     // 3. 로그인 상태가 아니면 로그인/회원가입 페이지로 redirect
 
     const { days, count } = this.props;
@@ -51,8 +51,9 @@ class PaymentButton extends Component {
         const { validate } = result.payload.data;
 
         if (validate) {
-          // 결제 API call
+          this.props.onClickPaymentButton(true);
         } else {
+          // 로그인 noti 줘야해
           this.props.history.push("/signin");
         }
       });
