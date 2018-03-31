@@ -4,7 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 /**
  * @props
  *    className
- *    days (주 몇 회인지 선택 / default: 3)
+ *    days (주 몇 회인지 선택)
  */
 export default class SelectDay extends Component {
   constructor(props) {
@@ -12,7 +12,6 @@ export default class SelectDay extends Component {
 
     this.state = {
       count: 0,
-      days: props.days,
       mon: false,
       tue: false,
       wed: false,
@@ -23,7 +22,7 @@ export default class SelectDay extends Component {
 
   onClickMon() {
     this.setState(prevState => {
-      if (!(prevState.mon === false && prevState.count === this.state.days)) {
+      if (!(prevState.mon === false && prevState.count === this.props.product.days)) {
         const mon = !prevState.mon;
         const count = prevState.mon ? prevState.count - 1 : prevState.count + 1;
 
@@ -36,7 +35,7 @@ export default class SelectDay extends Component {
 
   onClickTue() {
     this.setState(prevState => {
-      if (!(prevState.tue === false && prevState.count === this.state.days)) {
+      if (!(prevState.tue === false && prevState.count === this.props.product.days)) {
         const tue = !prevState.tue;
         const count = prevState.tue ? prevState.count - 1 : prevState.count + 1;
 
@@ -50,7 +49,7 @@ export default class SelectDay extends Component {
 
   onClickWed() {
     this.setState(prevState => {
-      if (!(prevState.wed === false && prevState.count === this.state.days)) {
+      if (!(prevState.wed === false && prevState.count === this.props.product.days)) {
         const wed = !prevState.wed;
         const count = prevState.wed ? prevState.count - 1 : prevState.count + 1;
 
@@ -63,7 +62,7 @@ export default class SelectDay extends Component {
 
   onClickThur() {
     this.setState(prevState => {
-      if (!(prevState.thur === false && prevState.count === this.state.days)) {
+      if (!(prevState.thur === false && prevState.count === this.props.product.days)) {
         const thur = !prevState.thur;
         const count = prevState.thur ? prevState.count - 1 : prevState.count + 1;
 
@@ -76,7 +75,7 @@ export default class SelectDay extends Component {
 
   onClickFri() {
     this.setState(prevState => {
-      if (!(prevState.fri === false && prevState.count === this.state.days)) {
+      if (!(prevState.fri === false && prevState.count === this.props.product.days)) {
         const fri = !prevState.fri;
         const count = prevState.fri ? prevState.count - 1 : prevState.count + 1;
 

@@ -32,7 +32,7 @@ export default class PaymentBar extends Component {
     };
 
     const renderSelectDays = () => {
-      if (this.props.days)
+      if (this.props.product.days)
         return (
           <SelectDay {...this.props} />
         )

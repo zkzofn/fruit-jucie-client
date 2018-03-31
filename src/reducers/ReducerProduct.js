@@ -1,6 +1,6 @@
 import { GET_PRODUCT, GET_PRODUCTS } from '../actions/RequestManager';
 
-const INITIAL_STATE = { product: null };
+const INITIAL_STATE = { product: { days: null }, products: [] };
 
 export default function (state = INITIAL_STATE, action) {
   switch (action.type) {

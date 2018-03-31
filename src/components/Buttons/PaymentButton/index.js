@@ -10,7 +10,7 @@ import Payment from 'material-ui/svg-icons/action/payment';
 /**
  * @props
  *    className
- *    days (주 몇 회인지 선택 / default: 3)
+ *    days (주 몇 회인지 선택)
  */
 class PaymentButton extends Component {
   constructor(props) {
@@ -20,7 +20,7 @@ class PaymentButton extends Component {
       alertOpen: false
     };
 
-    this.alertMessage = `원하는 요일을 ${props.days}일 선택해주세요.`
+    this.alertMessage = `원하는 요일을 ${props.product.days}일 선택해주세요.`
   }
 
   componentWillMount() {
@@ -44,7 +44,8 @@ class PaymentButton extends Component {
     // 2.2. 거기서 결제 누르면 아래의 Order 페이지 보여준다
     // 3. 로그인 상태가 아니면 로그인/회원가입 페이지로 redirect
 
-    const { days, count } = this.props;
+    const { days } = this.props.product;
+    const { count } = this.props;
 
     const paymentAfterValidate = (paymentData) => {
       this.props.getValidate().then(result => {
