@@ -11,7 +11,7 @@ export default class SelectDay extends Component {
     super(props);
 
     this.state = {
-      count: 0,
+      dayCount: 0,
       mon: false,
       tue: false,
       wed: false,
@@ -22,26 +22,26 @@ export default class SelectDay extends Component {
 
   onClickMon() {
     this.setState(prevState => {
-      if (!(prevState.mon === false && prevState.count === this.props.product.days)) {
+      if (!(prevState.mon === false && prevState.dayCount === this.props.product.days)) {
         const mon = !prevState.mon;
-        const count = prevState.mon ? prevState.count - 1 : prevState.count + 1;
+        const dayCount = prevState.mon ? prevState.dayCount - 1 : prevState.dayCount + 1;
 
-        this.props.onClickMon(mon, count);
+        this.props.onClickMon(mon, dayCount);
 
-        return { mon, count }
+        return { mon, dayCount }
       }
     })
   };
 
   onClickTue() {
     this.setState(prevState => {
-      if (!(prevState.tue === false && prevState.count === this.props.product.days)) {
+      if (!(prevState.tue === false && prevState.dayCount === this.props.product.days)) {
         const tue = !prevState.tue;
-        const count = prevState.tue ? prevState.count - 1 : prevState.count + 1;
+        const dayCount = prevState.tue ? prevState.dayCount - 1 : prevState.dayCount + 1;
 
-        this.props.onClickTue(tue, count);
+        this.props.onClickTue(tue, dayCount);
 
-        return { tue, count }
+        return { tue, dayCount }
       }
     })
   }
@@ -49,39 +49,39 @@ export default class SelectDay extends Component {
 
   onClickWed() {
     this.setState(prevState => {
-      if (!(prevState.wed === false && prevState.count === this.props.product.days)) {
+      if (!(prevState.wed === false && prevState.dayCount === this.props.product.days)) {
         const wed = !prevState.wed;
-        const count = prevState.wed ? prevState.count - 1 : prevState.count + 1;
+        const dayCount = prevState.wed ? prevState.dayCount - 1 : prevState.dayCount + 1;
 
-        this.props.onClickWed(wed, count);
+        this.props.onClickWed(wed, dayCount);
 
-        return { wed, count }
+        return { wed, dayCount }
       }
     })
   }
 
   onClickThur() {
     this.setState(prevState => {
-      if (!(prevState.thur === false && prevState.count === this.props.product.days)) {
+      if (!(prevState.thur === false && prevState.dayCount === this.props.product.days)) {
         const thur = !prevState.thur;
-        const count = prevState.thur ? prevState.count - 1 : prevState.count + 1;
+        const dayCount = prevState.thur ? prevState.dayCount - 1 : prevState.dayCount + 1;
 
-        this.props.onClickThur(thur, count);
+        this.props.onClickThur(thur, dayCount);
 
-        return { thur, count }
+        return { thur, dayCount }
       }
     })
   }
 
   onClickFri() {
     this.setState(prevState => {
-      if (!(prevState.fri === false && prevState.count === this.props.product.days)) {
+      if (!(prevState.fri === false && prevState.dayCount === this.props.product.days)) {
         const fri = !prevState.fri;
-        const count = prevState.fri ? prevState.count - 1 : prevState.count + 1;
+        const dayCount = prevState.fri ? prevState.dayCount - 1 : prevState.dayCount + 1;
 
-        this.props.onClickFri(fri, count);
+        this.props.onClickFri(fri, dayCount);
 
-        return { fri, count }
+        return { fri, dayCount }
       }
     })
   }

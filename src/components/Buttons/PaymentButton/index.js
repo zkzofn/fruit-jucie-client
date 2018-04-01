@@ -45,7 +45,7 @@ class PaymentButton extends Component {
     // 3. 로그인 상태가 아니면 로그인/회원가입 페이지로 redirect
 
     const { days } = this.props.product;
-    const { count } = this.props;
+    const { dayCount } = this.props;
 
     const paymentAfterValidate = (paymentData) => {
       this.props.getValidate().then(result => {
@@ -61,7 +61,7 @@ class PaymentButton extends Component {
     };
 
     if (days) {
-      if (count !== days) {
+      if (dayCount !== days) {
         this.handleAlertOpen();
       } else {
         // 여기서 요일별로 결제하는 정보 저장해서 payment API call

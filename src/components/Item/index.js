@@ -18,15 +18,19 @@ class Item extends Component {
   constructor(props) {
     super(props);
 
+    // 개별 제품의 경우
+    // productCount 셋팅 해주는 부분 해야해
     this.state = {
       paymentClicked: false,
-      count: 0,
+      dayCount: 0,
       mon: false,
       tue: false,
       wed: false,
       thur: false,
       fri: false,
-      alertOpen: false
+      alertOpen: false,
+      options: [],
+      productCount: 1
     };
 
     this.alertMessage = "잘못된 경로로 접속하였습니다.";
@@ -46,7 +50,6 @@ class Item extends Component {
       if (productCheck) {
         this.props.getProduct(params)
       } else {
-        console.log(productCheck);
         // 여기서 product 결과 없을때 alert
         this.setState({alertOpen: true})
       }
@@ -63,27 +66,28 @@ class Item extends Component {
   };
 
   onClickPaymentButton(paymentClicked) {
+    this.props.product.count = this.state.productCount;
     this.setState({paymentClicked})
   }
 
-  onClickMon(mon, count) {
-    this.setState({mon, count});
+  onClickMon(mon, dayCount) {
+    this.setState({mon, dayCount});
   }
 
-  onClickTue(tue, count) {
-    this.setState({tue, count})
+  onClickTue(tue, dayCount) {
+    this.setState({tue, dayCount})
   }
 
-  onClickWed(wed, count) {
-    this.setState({wed, count})
+  onClickWed(wed, dayCount) {
+    this.setState({wed, dayCount})
   }
 
-  onClickThur(thur, count) {
-    this.setState({thur, count})
+  onClickThur(thur, dayCount) {
+    this.setState({thur, dayCount})
   }
 
-  onClickFri(fri, count) {
-    this.setState({fri, count})
+  onClickFri(fri, dayCount) {
+    this.setState({fri, dayCount})
   }
 
   //
@@ -119,7 +123,10 @@ class Item extends Component {
     if (this.state.paymentClicked) {
       return (
         <div className={className}>
-          <Order {...this.props} />
+          <Order
+            {...this.props}
+            {...this.state}
+          />
         </div>
       )
     } else {

@@ -17,17 +17,11 @@ class Cart extends Component {
 
   componentWillMount() {
     setTimeout(() => {
-      const params = {
-        // userId: this.props.currentUser.id
-        userId: 1
-      };
+      this.props.getCart().then(res => {
+        const { cart } = res.payload.data;
 
-      this.props.getCart(params)
-        .then(res => {
-          const { cart } = res.payload.data;
-
-          this.setState({cartItems: cart});
-        });
+        this.setState({cartItems: cart});
+      });
     }, 200);
   }
 
@@ -285,7 +279,7 @@ class Cart extends Component {
               <img
                 src={`../../assets/img/${cartItem.product.image_path}`}
                 className="inlineBlock alignCenter"
-                style={{width: "50%"}}
+                style={{width: "50%", paddingLeft: 40, paddingTop: 20, paddingRight: 40, paddingBottom: 20}}
               />
               <div style={{width: "50%", verticalAlign: "middle"}} className="inlineBlock">
                 {renderProductOptions(cartItem)}
@@ -360,7 +354,7 @@ class Cart extends Component {
                 // 여기서 이미지랑 제품명 클릭했을 때 해당 제품으로 이동할 수 있도록 링크 달아야해
                 src={`../../assets/img/${cartItem.product.image_path}`}
                 className="inlineBlock alignCenter"
-                style={{width: "50%"}}
+                style={{width: "50%", paddingLeft: 40, paddingRight: 40}}
               />
               <div style={{width: "50%", verticalAlign: "middle"}} className="inlineBlock">
                 <h4>{cartItem.product.name}</h4>
@@ -384,7 +378,7 @@ class Cart extends Component {
                 // 여기서 이미지랑 제품명 클릭했을 때 해당 제품으로 이동할 수 있도록 링크 달아야해
                 src={`../../assets/img/${cartItem.product.image_path}`}
                 className="alignCenter"
-                style={{width: "100%"}}
+                style={{width: "100%", paddingLeft: 40, paddingRight: 40}}
               />
               <div style={{verticalAlign: "middle"}}>
                 {renderOptionsUnder(cartItem, index)}
@@ -509,7 +503,6 @@ class Cart extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    currentUser: state.currentUser.single
   }
 };
 

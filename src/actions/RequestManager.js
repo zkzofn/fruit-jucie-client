@@ -88,8 +88,8 @@ export const postCart = (data) => {
   }
 };
 
-export const getCart = (params) => {
-  const request = SessionManager.instance().get(`/cart`, params);
+export const getCart = () => {
+  const request = SessionManager.instance().get(`/cart`);
 
   return {
     type: GET_CART,

@@ -72,6 +72,10 @@ var _Cart = require('./components/Cart');
 
 var _Cart2 = _interopRequireDefault(_Cart);
 
+var _Order = require('./components/Order');
+
+var _Order2 = _interopRequireDefault(_Order);
+
 var _Payment = require('./components/Payment');
 
 var _Payment2 = _interopRequireDefault(_Payment);
@@ -112,6 +116,7 @@ _reactDom2.default.render(_react2.default.createElement(
         _react2.default.createElement(_reactRouter.Route, { path: '/products', component: _Products2.default }),
         _react2.default.createElement(_reactRouter.Route, { path: '/signin', component: _SignIn2.default }),
         _react2.default.createElement(_reactRouter.Route, { path: '/cart', component: _Cart2.default }),
+        _react2.default.createElement(_reactRouter.Route, { path: '/order', component: _Order2.default }),
         _react2.default.createElement(_reactRouter.Route, { path: '/payment', component: _Payment2.default }),
         _react2.default.createElement(_reactRouter.Route, { path: '/my/order', component: _MyOrder2.default }),
         _react2.default.createElement(_Footer2.default, null)
