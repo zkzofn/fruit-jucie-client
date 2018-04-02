@@ -73,14 +73,21 @@ class Order extends Component {
           productList: [{
             product: this.props.product,
             options: this.props.options
-          }]
+          }],
+          totalPrice: this.calcTotalPrice([{
+            product: this.props.product,
+            options: this.props.options
+          }])
         });
       } else {
         // cart 정보 productList 에 저장
         this.props.getCart().then(result => {
           const { cart } = result.payload.data;
 
-          this.setState({productList: cart});
+          this.setState({
+            productList: cart,
+            totalPrice: this.calcTotalPrice(cart)
+          });
         });
       }
     });
@@ -249,32 +256,30 @@ class Order extends Component {
   };
 
   onRequestPayment() {
-    const self = this;
-
     if (this.state.paymentMethod === "cash") {
       const paymentData = {
-        user_id: self.props.user.id,
-        sender_name: self.state.senderName,
-        sender_phone: self.state.senderPhone,
-        sender_email: self.state.senderEmail,
-        receiver_name: self.state.receiverName,
-        receiver_nickname: self.state.receiverNickname,
-        receiver_zip_code: self.state.receiverZipcode,
-        receiver_address1: self.state.receiverAddress1,
-        receiver_address2: self.state.receiverAddress2,
-        receiver_phone: self.state.receiverPhone,
+        user_id: this.props.user.id,
+        sender_name: this.state.senderName,
+        sender_phone: this.state.senderPhone,
+        sender_email: this.state.senderEmail,
+        receiver_name: this.state.receiverName,
+        receiver_nickname: this.state.receiverNickname,
+        receiver_zipcode: this.state.receiverZipcode,
+        receiver_address1: this.state.receiverAddress1,
+        receiver_address2: this.state.receiverAddress2,
+        receiver_phone: this.state.receiverPhone,
         status: 1,
-        payment_type: self.state.paymentMethod,
+        payment_type: this.state.paymentMethod,
         total_price: this.state.totalPrice, // 여기서 나중에 적립금 적용한 금액으로 넣어야해
         // imp_uid: rsp.imp_uid,
         // merchant_uid: rsp.merchant_uid,
         // card_confirm_num: rsp.apply_num,
-        items: self.state.cartItems,
+        items: this.state.productList
       };
 
-      self.props.postOrder(paymentData)
+      this.props.postOrder(paymentData)
         .then(res => {
-          self.props.history.push("/my/order")
+          this.props.history.push("/my/order")
         });
 
 
@@ -284,38 +289,38 @@ class Order extends Component {
         pay_method : this.state.paymentMethod,
         merchant_uid : 'merchant_' + new Date().getTime(),
         name : '주문명:결제테스트',
-        amount : 14000, // 여기서 this.state.totalPrice 에 나중에 적립금 적용한 가격으로 넣어야해
-        buyer_email : 'zkzofn@gmail.com',
-        buyer_name : '이장호',
-        buyer_tel : '010-3399-0081',
-        buyer_addr : '서울특별시 강남구 삼성동',
-        buyer_postcode : '123-456',
+        amount : this.state.totalPrice, // 나중에 적립금 적용한 가격으로 넣어야해
+        buyer_email : this.props.user.email,
+        buyer_name : this.props.user.name,
+        buyer_tel : this.props.user.phone,
+        buyer_addr : `${this.props.user.address1} ${this.props.user.address2}`,
+        buyer_postcode : this.props.user.zipcode,
         m_redirect_url : 'http://eatmore-green.com/my/order'
       }, function(rsp) {
         if ( rsp.success ) {
           const paymentData = {
-            user_id: self.props.user.id,
-            sender_name: self.state.senderName,
-            sender_phone: self.state.senderPhone,
-            sender_email: self.state.senderEmail,
-            receiver_name: self.state.receiverName,
-            receiver_nickname: self.state.receiverNickname,
-            receiver_zip_code: self.state.receiverZipcode,
-            receiver_address1: self.state.receiverAddress1,
-            receiver_address2: self.state.receiverAddress2,
-            receiver_phone: self.state.receiverPhone,
+            user_id: this.props.user.id,
+            sender_name: this.props.user.name,
+            sender_phone: this.props.user.phone,
+            sender_email: this.props.user.email,
+            receiver_name: this.state.receiverName,
+            receiver_nickname: this.state.receiverNickname,
+            receiver_zipcode: this.state.receiverZipcode,
+            receiver_address1: this.state.receiverAddress1,
+            receiver_address2: this.state.receiverAddress2,
+            receiver_phone: this.state.receiverPhone,
             status: 1,
-            payment_type: self.state.paymentMethod,
+            payment_type: this.state.paymentMethod,
             total_price: rsp.paid_amount,
             imp_uid: rsp.imp_uid,
             merchant_uid: rsp.merchant_uid,
             card_confirm_num: rsp.apply_num,
-            items: self.state.cartItems,
+            items: this.state.productList,
           };
 
-          self.props.postOrder(paymentData)
+          this.props.postOrder(paymentData)
             .then(res => {
-              self.props.history.push("/my/order")
+              this.props.history.push("/my/order")
             });
         } else {
           var msg = '결제에 실패하였습니다.';
@@ -343,7 +348,7 @@ class Order extends Component {
 
     const onMyAddressListSelect = (selectedAddress) => {
       this.setState({
-        receiverZipcode: selectedAddress.zip_code,
+        receiverZipcode: selectedAddress.zipcode,
         receiverAddress1: selectedAddress.address1,
         receiverAddress2: selectedAddress.address2,
         myAddressListDialogOpen: false
@@ -354,7 +359,7 @@ class Order extends Component {
       return this.state.myAddressList.map((address, index) => {
         return (
           <li key={index} onClick={() => onMyAddressListSelect(address)}>
-            <div className="inlineBlock" style={styles.zipCode}>{address.zip_code}</div>
+            <div className="inlineBlock" style={styles.zipCode}>{address.zipcode}</div>
             <div className="inlineBlock">
               <p style={styles.addressRoad}>{address.address1}</p>
               <p style={styles.addressNumber}>{address.address2}</p>
@@ -368,7 +373,7 @@ class Order extends Component {
       return (
         <div>
           <p>등록된 주소 목록이 없습니다.</p>
-          <p>My page에서 등록 가능합니다.</p>
+          <p>My page에서 등록 가능합니다. (아직 안되용)</p>
         </div>
       )
     } else {
@@ -385,10 +390,10 @@ class Order extends Component {
   }
 
 
-  calcTotalPrice() {
+  calcTotalPrice(productList) {
     let totalPrice = 0;
 
-    this.state.productList.forEach(cartItem => {
+    productList.forEach(cartItem => {
       if (cartItem.options.length === 0) {
         totalPrice += cartItem.product.count * cartItem.product.price_sale;
       } else {
@@ -436,14 +441,18 @@ class Order extends Component {
     };
 
 
+    const renderCount = (id, count, index) => {
+      return <div>{count} 개</div>
+    };
+
 
     const renderCounts = (cartItem, index) => {
       // option이 없는 단품일 경우
       if (cartItem.options.length === 0) {
-        // return renderCount(cartItem.id, cartItem.product.count, index);
+        return renderCount(cartItem.id, cartItem.product.count, index);
       } else { // option이 있는 제품일 경우
         return cartItem.options.map((option, optionIndex) => {
-          // return renderCount(option.cartId, option.count, index, optionIndex);
+          return renderCount(option.cartId, option.count, index, optionIndex);
         })
       }
     };
@@ -452,12 +461,12 @@ class Order extends Component {
 
     const renderEachPrice = (cartItem) => {
       if (cartItem.options.length === 0) {
-        return <p>{cartItem.product.price_sale.toLocaleString()}원</p>
+        return <div>{cartItem.product.price_sale.toLocaleString()}원</div>
       } else {
         return cartItem.options.map((option, index) => {
           const marginTop = index === 0 ? 39 : 0;
 
-          return <p key={index} style={{marginTop}}>{option.additional_fee.toLocaleString()}원</p>
+          return <div key={index} style={{marginTop}}>{option.additional_fee.toLocaleString()}원</div>
         })
       }
     };
@@ -474,7 +483,7 @@ class Order extends Component {
           linePrice += option.additional_fee * option.count;
         });
       }
-      return <h4 style={{fontWeight: "bold", marginTop: 20}}>{linePrice.toLocaleString()}원</h4>
+      return <div style={{fontWeight: "bold", fontSize: 18}}>{linePrice.toLocaleString()}원</div>
     };
 
     const renderProductOptions = (cartItem) => {
@@ -496,7 +505,7 @@ class Order extends Component {
               <img
                 src={`../../assets/img/${cartItem.product.image_path}`}
                 className="inlineBlock alignCenter"
-                style={{width: "50%"}}
+                style={{width: "50%", paddingLeft: 40, paddingTop: 20, paddingRight: 40, paddingBottom: 20}}
               />
               <div style={{width: "50%", verticalAlign: "middle"}} className="inlineBlock">
                 {renderProductOptions(cartItem)}
@@ -527,7 +536,7 @@ class Order extends Component {
             </div>
             <div style={{width: 70}} className="pull-left alignCenter">
               {
-                // renderCount(cartItem.id, cartItem.product.count, index)
+                renderCount(cartItem.id, cartItem.product.count, index)
               }
             </div>
           </div>
@@ -545,7 +554,7 @@ class Order extends Component {
                 </div>
                 <div style={{width: 70}} className="pull-left alignCenter">
                   {
-                    // renderCount(option.cartId, option.count, index, optionIndex)
+                    renderCount(option.cartId, option.count, index, optionIndex)
                   }
                 </div>
               </div>
@@ -564,7 +573,7 @@ class Order extends Component {
                 // 여기서 이미지랑 제품명 클릭했을 때 해당 제품으로 이동할 수 있도록 링크 달아야해
                 src={`../../assets/img/${cartItem.product.image_path}`}
                 className="inlineBlock alignCenter"
-                style={{width: "50%"}}
+                style={{width: "50%", paddingLeft: 40, paddingTop: 20, paddingRight: 40, paddingBottom: 20}}
               />
               <div style={{width: "50%", verticalAlign: "middle"}} className="inlineBlock">
                 <h4>{cartItem.product.name}</h4>
@@ -588,7 +597,7 @@ class Order extends Component {
                 // 여기서 이미지랑 제품명 클릭했을 때 해당 제품으로 이동할 수 있도록 링크 달아야해
                 src={`../../assets/img/${cartItem.product.image_path}`}
                 className="alignCenter"
-                style={{width: "100%"}}
+                style={{width: "100%", paddingLeft: 40, paddingTop: 20, paddingRight: 40, paddingBottom: 20}}
               />
               <div style={{verticalAlign: "middle"}}>
                 {renderOptionsUnder(cartItem, index)}
@@ -605,9 +614,9 @@ class Order extends Component {
         <TableFooter>
           <TableRow>
             <TableRowColumn>
-              <div className="pull-right pb-2 visible-over-block"><h3 style={{fontWeight: "bold"}}>총 상품 금액 = {this.calcTotalPrice().toLocaleString()}원</h3></div>
-              <div className="pull-right pb-2 visible-under-flex"><h4 style={{fontWeight: "bold"}}>총 상품 금액 = {this.calcTotalPrice().toLocaleString()}원</h4></div>
-              <div className="pull-right pb-2 visible-small-flex"><h5 style={{fontWeight: "bold"}}>총 상품 금액 = {this.calcTotalPrice().toLocaleString()}원</h5></div>
+              <div className="pull-right pb-2 visible-over-block"><h3 style={{fontWeight: "bold"}}>총 상품 금액 = {this.calcTotalPrice(this.state.productList).toLocaleString()}원</h3></div>
+              <div className="pull-right pb-2 visible-under-flex"><h4 style={{fontWeight: "bold"}}>총 상품 금액 = {this.calcTotalPrice(this.state.productList).toLocaleString()}원</h4></div>
+              <div className="pull-right pb-2 visible-small-flex"><h5 style={{fontWeight: "bold"}}>총 상품 금액 = {this.calcTotalPrice(this.state.productList).toLocaleString()}원</h5></div>
             </TableRowColumn>
           </TableRow>
         </TableFooter>
@@ -721,7 +730,7 @@ class Order extends Component {
 
           </div>
 
-          <div>
+          <div className="pt-4">
             <h4>배송 정보</h4>
             <Divider />
 
@@ -848,7 +857,7 @@ class Order extends Component {
             </Dialog>
           </div>
 
-          <div>
+          <div className="pt-4">
             <h4>결제수단</h4>
             <Divider />
             <div>
@@ -866,12 +875,13 @@ class Order extends Component {
                 <RadioButton
                   className="inlineBlock"
                   value="cash"
-                  label="계좌이체 (국민 xxxxxx-xx-xxxxxx)"
+                  label="계좌이체 (국민 이장호 9-3399-0081-64)"
                 />
                 <RadioButton
                   className="inlineBlock"
                   value="kakao"
                   label="카카오결제"
+                  disabled={true}
                 />
 
               </RadioButtonGroup>
@@ -898,12 +908,6 @@ class Order extends Component {
 
         </div>
       </div>
-
-
-//
-//
-//
-//
     )
   }
 }
@@ -913,7 +917,7 @@ class Order extends Component {
 const mapStateToProps = (state) => {
   return {
     user: state.user.user,
-    addressList: state.addressList.addressList,
+    addressList: state.addressList.addressList
   }
 };
 

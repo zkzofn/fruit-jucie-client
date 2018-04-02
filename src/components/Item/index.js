@@ -145,7 +145,11 @@ class Item extends Component {
             onClickPaymentButton={this.onClickPaymentButton.bind(this)}
           />
           <div style={{textAlign: "center"}} >
-            <img src="https://i.imgur.com/x80XR2r.png" alt="" />
+            <img
+              src="https://i.imgur.com/x80XR2r.png"
+              alt=""
+              style={{width: "100%"}} // 화면 크기에 따라 폭 비율 셋팅해야해
+            />
           </div>
         </div>
       )
