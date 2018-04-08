@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Divider } from 'material-ui';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn, TableFooter } from 'material-ui/Table';
-import { getCart, patchCart, delCart } from '../actions/RequestManager';
-import CircularProgress from './CircularProgress';
+import { getCart, patchCart, delCart } from '../../actions/RequestManager';
+import CircularProgress from '../CircularProgress';
 
 class Cart extends Component {
   constructor(props) {
@@ -28,8 +28,6 @@ class Cart extends Component {
 
 
   render() {
-    console.log(this);
-
     // 여기서는 장바구니 내용 없다고 보여줘야해
     if (this.state.cartItems === undefined)
       return <CircularProgress />;
@@ -53,11 +51,6 @@ class Cart extends Component {
         )
       })
     };
-
-
-
-
-
 
     const renderCount = (cartId, count, index, optionIndex = null) => {
       const minusProductCount = (event, index, optionIndex, cartId) => {
@@ -495,7 +488,7 @@ class Cart extends Component {
           </div>
         </div>
       </div>
-   )
+    )
   }
 }
 

@@ -15,8 +15,12 @@ export default class PaymentBar extends Component {
     super(props);
   }
 
-  onClickPaymentButton(paymentClicked) {
-    this.props.onClickPaymentButton(paymentClicked);
+  onClickPaymentButton(paymentButtonClicked) {
+    this.props.onClickPaymentButton(paymentButtonClicked);
+  }
+
+  onClickAddCartButton(addCartButtonClicked) {
+    this.props.onClickAddCartButton(addCartButtonClicked)
   }
 
   render() {
@@ -46,7 +50,6 @@ export default class PaymentBar extends Component {
             <PaymentButton
               {...this.props}
               className="inlineBlock"
-              onClickPaymentButton={this.onClickPaymentButton.bind(this)}
             />
             <AddCartButton
               {...this.props}

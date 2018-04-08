@@ -68,7 +68,7 @@ class Order extends Component {
       // item 에서 바로구매인지 (true)
       // cart 에서 구매인지 구분 (false)
       //  --> cart 에 있는 제품정보 받아와야 한다.
-      if (this.props.paymentClicked !== undefined && this.props.paymentClicked) {
+      if (this.props.paymentButtonClicked !== undefined && this.props.paymentButtonClicked) {
         this.setState({
           productList: [{
             product: this.props.product,

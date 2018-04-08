@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { getProduct, postCart, getValidate } from "../../../actions/RequestManager";
+import { getValidate } from "../../../actions/RequestManager";
 import { Dialog, FlatButton } from 'material-ui';
 import RaisedButton from 'material-ui/RaisedButton';
 import Payment from 'material-ui/svg-icons/action/payment';
@@ -20,11 +20,7 @@ class PaymentButton extends Component {
       alertOpen: false
     };
 
-    this.alertMessage = `원하는 요일을 ${props.product.days}일 선택해주세요.`
-  }
-
-  componentWillMount() {
-
+    this.alertMessage = `원하는 요일을 ${props.product.days}일 선택해주세요.`;
   }
 
   handleAlertOpen = () => {
@@ -35,7 +31,7 @@ class PaymentButton extends Component {
     this.setState({alertOpen: false})
   };
 
-  onClickPayment() {
+  onClickPaymentButton() {
     // 0. Options를 제대로 선택했는지 체크
     // 0.1. 제대로 선택했으면 1로
     // 0.2. 제대로 선택하지 않았으면 alert 띄워주고 제대로 선택하도록
@@ -47,40 +43,24 @@ class PaymentButton extends Component {
     const { days } = this.props.product;
     const { dayCount } = this.props;
 
-    const paymentAfterValidate = (paymentData) => {
+    const paymentAfterValidate = () => {
       this.props.getValidate().then(result => {
         const { validate } = result.payload.data;
 
         if (validate) {
           this.props.onClickPaymentButton(true);
         } else {
-          // 로그인 noti 줘야해
           this.props.history.push("/signin");
         }
       });
     };
 
-    if (days) {
-      if (dayCount !== days) {
-        this.handleAlertOpen();
-      } else {
-        // 여기서 요일별로 결제하는 정보 저장해서 payment API call
-        const paymentData = {};
-        paymentAfterValidate(paymentData);
-      }
+    if (days && dayCount !== days) {
+      this.handleAlertOpen();
     } else {
-      // 여기서 단품(요일X) 결제 정보 저장해서 payment API call
-      const paymentData = {};
-      paymentAfterValidate(paymentData);
+      paymentAfterValidate();
     }
   }
-
-  // 이걸쓸지 import 해서 쓸지는 생각해보자
-  callImportAPI() {
-
-  }
-
-
 
   render() {
     const className = this.props.className ? this.props.className : "";
@@ -93,7 +73,7 @@ class PaymentButton extends Component {
 
     const alertActions = [
       <FlatButton
-        label="OK"
+        label="확인"
         primary={true}
         onClick={this.handleAlertClose}
       />
@@ -104,7 +84,7 @@ class PaymentButton extends Component {
         <RaisedButton
           icon={<Payment />}
           style={styles.button}
-          onClick={this.onClickPayment.bind(this)}
+          onClick={this.onClickPaymentButton.bind(this)}
         />
         <Dialog
           actions={alertActions}
@@ -123,7 +103,6 @@ class PaymentButton extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    user: state.user.user
   }
 };
 
