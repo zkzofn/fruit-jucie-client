@@ -16,7 +16,6 @@ export const GET_VALIDATE = "GET_VALIDATE";
 export const POST_LOGIN = "POST_LOGIN";
 
 
-
 // export const getSomethings = ({pageNo, length, indexBy, indexType, values}) => {
 //   const query = {
 //     pageNo, length

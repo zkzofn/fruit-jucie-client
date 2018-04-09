@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
 import SelectDay from '../Buttons/SelectDay';
 import PaymentButton from '../Buttons/PaymentButton';
 import AddCartButton from '../Buttons/AddCartButton';
+import CountButton from '../Buttons/CountButton';
 
 /**
  * @props
@@ -10,7 +13,7 @@ import AddCartButton from '../Buttons/AddCartButton';
  *    textColor
  *    text
  */
-export default class PaymentBar extends Component {
+class PaymentBar extends Component {
   constructor(props) {
     super(props);
   }
@@ -47,6 +50,9 @@ export default class PaymentBar extends Component {
         <div style={style}>
           <div>
             {renderSelectDays()}
+            <CountButton
+              {...this.props}
+            />
             <PaymentButton
               {...this.props}
               className="inlineBlock"
@@ -55,9 +61,24 @@ export default class PaymentBar extends Component {
               {...this.props}
               className="inlineBlock"
             />
+            <div>
+              {(this.props.product.price_sale * this.props.productCount).toLocaleString()} 원
+            </div>
           </div>
         </div>
       </div>
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+  }
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({
+  }, dispatch)
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(PaymentBar);

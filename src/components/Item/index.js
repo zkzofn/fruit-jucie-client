@@ -64,9 +64,28 @@ class Item extends Component {
     this.props.history.push("/shop");
   };
 
+  onClickAddButton() {
+    this.setState(prevState => {
+      return {
+        productCount: prevState.productCount + 1
+      }
+    })
+  }
+
+  onClickRemoveButton() {
+    this.setState(prevState => {
+      return {
+        productCount: prevState.productCount - 1
+      }
+    })
+  }
+
   onClickPaymentButton(paymentButtonClicked) {
     this.props.product.count = this.state.productCount;
     this.setState({paymentButtonClicked});
+
+    // <Order /> 내에서
+    // 요일 데이터 맞춰서 api call 해주는 것도 해야 해
   }
 
   onClickAddCartButton(addCartButtonClicked) {
@@ -76,22 +95,30 @@ class Item extends Component {
     // 우선 카트에 저장하고
     // 여기서 dialog 띄워줘
 
-    // 이 postCartData 객체 그대로 사용 못한다. 다시 맞게 수정해
     const postCartData = {
-      userId: this.props.currentUser.id,
-      product: this.state.product,  // 여기서 product 는 getProduct 에서 받아온 정보 + product.count = 1;
+      product: {
+        id: this.props.product.id,  // 여기서 product 는 getProduct 에서 받아온 정보 + product.count = 1;
+        count: this.state.productCount,
+        mon: this.state.mon,
+        tue: this.state.tue,
+        wed: this.state.wed,
+        thur: this.state.thur,
+        fri: this.state.fri
+      },
       selectedOptions: this.state.selectedOptions
     };
 
-    this.props.postCart().then(() => {
-
-    })
+    // 요일 데이터 맞춰서 api call 해주는 것도 해야 해
+    console.log(postCartData);
+    // this.props.postCart(postCartData).then(() => {
+    //
+    // })
 
   }
 
-  handleCartAlertClose() {
+  handleCartAlertClose = () => {
     this.setState({addCartButtonClicked: false})
-  }
+  };
 
   onClickContinue = () => {
     this.props.history.push("/shop");
@@ -186,6 +213,8 @@ class Item extends Component {
             onClickWed={this.onClickWed.bind(this)}
             onClickThur={this.onClickThur.bind(this)}
             onClickFri={this.onClickFri.bind(this)}
+            onClickAddButton={this.onClickAddButton.bind(this)}
+            onClickRemoveButton={this.onClickRemoveButton.bind(this)}
             onClickPaymentButton={this.onClickPaymentButton.bind(this)}
             onClickAddCartButton={this.onClickAddCartButton.bind(this)}
           />
@@ -214,7 +243,7 @@ class Item extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    product: state.product.product
+    product: state.product.product,
   }
 };
 
