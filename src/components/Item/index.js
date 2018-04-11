@@ -23,6 +23,7 @@ class Item extends Component {
     this.state = {
       paymentButtonClicked: false,
       addCartButtonClicked: false,
+      alertServerErrorOpen: false,
       dayCount: 0,
       mon: false,
       tue: false,
@@ -31,9 +32,11 @@ class Item extends Component {
       fri: false,
       alertOpen: false,
       options: [],
-      productCount: 1
+      productCount: 1,
+      selectedOptions: []
     };
 
+    this.alertServerErrorMessage = "카트에 담는 중 에러가 발생했습니다. 관리자에게 문의해주세요.";
     this.alertMessage = "잘못된 경로로 접속하였습니다.";
     this.addCartAlertMessage = "선택한 제품이 장바구니에 담겼습니다.\n계속 쇼핑하시겠습니까?";
   }
@@ -89,9 +92,6 @@ class Item extends Component {
   }
 
   onClickAddCartButton(addCartButtonClicked) {
-    this.props.product.count = this.state.productCount;
-    this.setState({addCartButtonClicked});
-
     // 우선 카트에 저장하고
     // 여기서 dialog 띄워줘
 
@@ -99,25 +99,43 @@ class Item extends Component {
       product: {
         id: this.props.product.id,  // 여기서 product 는 getProduct 에서 받아온 정보 + product.count = 1;
         count: this.state.productCount,
-        mon: this.state.mon,
-        tue: this.state.tue,
-        wed: this.state.wed,
-        thur: this.state.thur,
-        fri: this.state.fri
+        // daysCondition: [
+        //   {mon: this.state.mon},
+        //   {tue: this.state.tue},
+        //   {wed: this.state.wed},
+        //   {thur: this.state.thur},
+        //   {fri: this.state.fri}
+        // ],
+        daysCondition: {
+          mon: this.state.mon,
+          tue: this.state.tue,
+          wed: this.state.wed,
+          thur: this.state.thur,
+          fri: this.state.fri
+        }
       },
       selectedOptions: this.state.selectedOptions
     };
 
     // 요일 데이터 맞춰서 api call 해주는 것도 해야 해
-    console.log(postCartData);
-    // this.props.postCart(postCartData).then(() => {
-    //
-    // })
+    this.props.postCart(postCartData).then((results) => {
+      if (results.error) {
+        // 여기다가 관리자한테 직접 alert 갈수 있는 기능 추가해
+        // results 안에 call 정보 다 들어있어.
 
+        this.setState({alertServerErrorOpen: true});
+      } else {
+        this.setState({addCartButtonClicked});
+      }
+    })
   }
 
   handleCartAlertClose = () => {
     this.setState({addCartButtonClicked: false})
+  };
+
+  handleAlertServerErrorClose = () => {
+    this.setState({alertServerErrorOpen: false})
   };
 
   onClickContinue = () => {
@@ -191,6 +209,14 @@ class Item extends Component {
       />
     ];
 
+    const alertServerErrorActions = [
+      <FlatButton
+        label="확인"
+        primary={true}
+        onClick={this.handleAlertServerErrorClose}
+      />
+    ];
+
     if (this.state.paymentButtonClicked) {
       return (
         <div>
@@ -203,7 +229,7 @@ class Item extends Component {
     } else {
       return (
         <div className={className}>
-          <UpperBar backgroundColor="#F4F4F4" textColor="black" text="묶음 배송 가이드" />
+          <UpperBar backgroundColor="#F4F4F4" textColor="black" text="여러 세트를 구매하는데 다른 요일로 주문하고 싶으면 전화문의 주세요" />
           <PaymentBar
             backgroundColor="#A3A3A3"
             {...this.props}
@@ -232,6 +258,14 @@ class Item extends Component {
             onRequestClose={this.handleCartAlertClose}
           >
             {this.addCartAlertMessage}
+          </Dialog>
+          <Dialog
+            actions={alertServerErrorActions}
+            modal={false}
+            open={this.state.alertServerErrorOpen}
+            onRequestClose={this.handleAlertServerErrorClose}
+          >
+            {this.alertServerErrorMessage}
           </Dialog>
         </div>
       )
