@@ -53,6 +53,8 @@ class Cart extends Component {
     };
 
     const renderCount = (cartId, count, index, optionIndex = null) => {
+      console.log(cartId);
+
       const minusProductCount = (event, index, optionIndex, cartId) => {
         event.stopPropagation();
 

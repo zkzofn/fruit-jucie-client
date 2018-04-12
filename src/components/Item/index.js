@@ -99,13 +99,6 @@ class Item extends Component {
       product: {
         id: this.props.product.id,  // 여기서 product 는 getProduct 에서 받아온 정보 + product.count = 1;
         count: this.state.productCount,
-        // daysCondition: [
-        //   {mon: this.state.mon},
-        //   {tue: this.state.tue},
-        //   {wed: this.state.wed},
-        //   {thur: this.state.thur},
-        //   {fri: this.state.fri}
-        // ],
         daysCondition: {
           mon: this.state.mon,
           tue: this.state.tue,

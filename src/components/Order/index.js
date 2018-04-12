@@ -69,14 +69,30 @@ class Order extends Component {
       // cart 에서 구매인지 구분 (false)
       //  --> cart 에 있는 제품정보 받아와야 한다.
       if (this.props.paymentButtonClicked !== undefined && this.props.paymentButtonClicked) {
+        const { product, mon, tue, wed, thur, fri, options } = this.props;
+
         this.setState({
           productList: [{
-            product: this.props.product,
-            options: this.props.options
+            product: {
+              id: product.id,
+              name: product.name,
+              count: product.count,
+              image_path: product.image_path,
+              days: product.days,
+              price_sale: product.price_sale,
+              daysCondition: {
+                mon,
+                tue,
+                wed,
+                thur,
+                fri
+              }
+            },
+            options
           }],
           totalPrice: this.calcTotalPrice([{
-            product: this.props.product,
-            options: this.props.options
+            product,
+            options
           }])
         });
       } else {
@@ -152,7 +168,7 @@ class Order extends Component {
         receiverAddress1: selectedAddress.roadAddrPart1,
         searchAddressDialogOpen: false
       })
-    }
+    };
 
     const renderAddressElements = () => {
       return this.state.addressList.map((address, index) => {
@@ -284,20 +300,20 @@ class Order extends Component {
 
 
     } else {
-      this.IMP.request_pay({
-        pg : 'inicis', // version 1.1.0부터 지원.
-        pay_method : this.state.paymentMethod,
-        merchant_uid : 'merchant_' + new Date().getTime(),
-        name : '주문명:결제테스트',
-        amount : this.state.totalPrice, // 나중에 적립금 적용한 가격으로 넣어야해
-        buyer_email : this.props.user.email,
-        buyer_name : this.props.user.name,
-        buyer_tel : this.props.user.phone,
-        buyer_addr : `${this.props.user.address1} ${this.props.user.address2}`,
-        buyer_postcode : this.props.user.zipcode,
-        m_redirect_url : 'http://eatmore-green.com/my/order'
-      }, function(rsp) {
-        if ( rsp.success ) {
+      // this.IMP.request_pay({
+      //   pg : 'inicis', // version 1.1.0부터 지원.
+      //   pay_method : this.state.paymentMethod,
+      //   merchant_uid : 'merchant_' + new Date().getTime(),
+      //   name : '주문명:결제테스트',
+      //   amount : this.state.totalPrice, // 나중에 적립금 적용한 가격으로 넣어야해
+      //   buyer_email : this.props.user.email,
+      //   buyer_name : this.props.user.name,
+      //   buyer_tel : this.props.user.phone,
+      //   buyer_addr : `${this.props.user.address1} ${this.props.user.address2}`,
+      //   buyer_postcode : this.props.user.zipcode,
+      //   m_redirect_url : 'http://eatmore-green.com/my/order'
+      // }, function(rsp) {
+      //   if ( rsp.success ) {
           const paymentData = {
             user_id: this.props.user.id,
             sender_name: this.props.user.name,
@@ -311,25 +327,26 @@ class Order extends Component {
             receiver_phone: this.state.receiverPhone,
             status: 1,
             payment_type: this.state.paymentMethod,
-            total_price: rsp.paid_amount,
-            imp_uid: rsp.imp_uid,
-            merchant_uid: rsp.merchant_uid,
-            card_confirm_num: rsp.apply_num,
-            items: this.state.productList,
+            // total_price: rsp.paid_amount,
+            // imp_uid: rsp.imp_uid,
+            // merchant_uid: rsp.merchant_uid,
+            // card_confirm_num: rsp.apply_num,
+            items: this.state.productList
           };
 
-          this.props.postOrder(paymentData)
-            .then(res => {
-              this.props.history.push("/my/order")
-            });
-        } else {
-          var msg = '결제에 실패하였습니다.';
-          msg += '에러내용: ' + rsp.error_msg;
-          msg += '다시 시도해보세요.';
+      console.log(paymentData);
 
-          alert(msg);
-        }
-      });
+          // this.props.postOrder(paymentData).then(res => {
+          //   this.props.history.push("/my/order")
+          // });
+      //   } else {
+      //     var msg = '결제에 실패하였습니다.';
+      //     msg += '에러내용: ' + rsp.error_msg;
+      //     msg += '다시 시도해보세요.';
+      //
+      //     alert(msg);
+      //   }
+      // });
     }
 
 
@@ -473,8 +490,6 @@ class Order extends Component {
 
     const renderLinePrice = (cartItem) => {
       let linePrice = 0;
-
-      console.log(cartItem);
 
       if (cartItem.options.length === 0) {
         linePrice = cartItem.product.count * cartItem.product.price_sale
