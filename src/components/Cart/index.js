@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import update from 'react-addons-update';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Divider } from 'material-ui';
+import { Divider, RaisedButton } from 'material-ui';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn, TableFooter } from 'material-ui/Table';
 import { getCart, patchCart, delCart } from '../../actions/RequestManager';
 import CircularProgress from '../CircularProgress';
@@ -53,8 +53,6 @@ class Cart extends Component {
     };
 
     const renderCount = (cartId, count, index, optionIndex = null) => {
-      console.log(cartId);
-
       const minusProductCount = (event, index, optionIndex, cartId) => {
         event.stopPropagation();
 
@@ -62,6 +60,8 @@ class Cart extends Component {
           cartId: cartId,
           value: -1
         };
+
+        console.log(params);
 
         if (optionIndex === null) {
           if (this.state.cartItems[index].product.count > 1)
@@ -165,7 +165,7 @@ class Cart extends Component {
     const renderCounts = (cartItem, index) => {
       // option이 없는 단품일 경우
       if (cartItem.options.length === 0) {
-        return renderCount(cartItem.id, cartItem.product.count, index);
+        return renderCount(cartItem.product.cartId, cartItem.product.count, index);
       } else { // option이 있는 제품일 경우
         return cartItem.options.map((option, optionIndex) => {
           return renderCount(option.cartId, option.count, index, optionIndex);
@@ -221,7 +221,7 @@ class Cart extends Component {
 
     const renderDeleteButton = (cartItem, index) => {
       if (cartItem.options.length === 0) {
-        return renderDelButton(cartItem.id, cartItem, index);
+        return renderDelButton(cartItem.product.cartId, cartItem, index);
       } else {
         return cartItem.options.map((option, optionIndex) => {
           return renderDelButton(option.cartId, cartItem, index, optionIndex)
@@ -264,7 +264,6 @@ class Cart extends Component {
     };
 
     const renderCartListOver = () => {
-      console.log(this.state.cartItems);
       return this.state.cartItems.map((cartItem, index) => {
         const marginTop = cartItem.options.length === 0 ? 0 : 39;
 
@@ -309,10 +308,10 @@ class Cart extends Component {
               개당 {cartItem.product.price_sale.toLocaleString()}원
             </div>
             <div style={{width: 70}} className="pull-left alignCenter">
-              {renderCount(cartItem.id, cartItem.product.count, index)}
+              {renderCount(cartItem.product.cartId, cartItem.product.count, index)}
             </div>
             <div style={{width: 40}} className="pull-right alignCenter">
-              {renderDelButton(cartItem.id, cartItem, index)}
+              {renderDelButton(cartItem.product.cartId, cartItem, index)}
             </div>
           </div>
 
@@ -414,13 +413,20 @@ class Cart extends Component {
           <TableRow>
             <TableRowColumn>
               <div className="pull-right">
-                <button className="btn btn-primary" onTouchTap={() => {this.props.history.push("/order")}}>상품주문</button>
+                <RaisedButton
+                  label="상품주문"
+                  primary={true}
+                  disabled={this.state.cartItems.length === 0}
+                  onClick={() => {this.props.history.push("/order")}}
+                />
               </div>
             </TableRowColumn>
           </TableRow>
         </TableFooter>
       )
     };
+
+    console.log(this.state.cartItems);
 
     return (
       <div>

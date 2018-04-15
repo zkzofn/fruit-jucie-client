@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import update from 'react-addons-update';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Divider, TextField, RaisedButton, Dialog } from 'material-ui';
+import { Divider, TextField, FlatButton, RaisedButton, Dialog } from 'material-ui';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn, TableFooter } from 'material-ui/Table';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
-import { getValidate, getUser, getCart, patchCart, delCart, getAddressFromAPI, getAddressList, postOrder } from '../../actions/RequestManager';
+import { getValidate, getUser, getCart, getAddressFromAPI, getAddressList, postOrder } from '../../actions/RequestManager';
 import CircularProgress from '../CircularProgress';
 
 class Order extends Component {
@@ -15,6 +14,7 @@ class Order extends Component {
     this.state = {
       searchAddressDialogOpen: false,
       myAddressListDialogOpen: false,
+      WrongAccessDialogOpen: true,
       searchAddressTerm: "",
       addressDivider: "",
       paymentMethod: "card",
@@ -35,6 +35,8 @@ class Order extends Component {
 
     this.IMP = window.IMP;
     this.IMP.init("imp08816802");
+
+    this.wrongApproachMessage = "잘못된 접근입니다.";
   }
 
   componentWillMount() {
@@ -64,7 +66,7 @@ class Order extends Component {
       // 사용자의 배송주소 정보
       this.props.getAddressList();
 
-      // this.props.paymentClicked 에 따라 제품 정보
+      // this.props.paymentButtonClicked 에 따라 제품 정보
       // item 에서 바로구매인지 (true)
       // cart 에서 구매인지 구분 (false)
       //  --> cart 에 있는 제품정보 받아와야 한다.
@@ -125,6 +127,12 @@ class Order extends Component {
     this.setState({searchAddressDialogOpen: false})
   };
 
+  onWrongAccessDialogClose = () => {
+    this.setState({WrongAccessDialogOpen: false});
+
+    this.props.history.push("/shop");
+  };
+
   onChangeAddress(searchAddressTerm) {
     this.setState({searchAddressTerm})
   };
@@ -152,8 +160,6 @@ class Order extends Component {
     if(event.key === "Enter")
       this.onSearchAddress();
   };
-
-
 
   renderAddressList() {
     const styles = {
@@ -253,7 +259,7 @@ class Order extends Component {
         receiverZipcode: user.zipcode,
         receiverAddress1: user.address1,
         receiverAddress2: user.address2,
-        receiverPhone: user.phone,
+        receiverPhone: user.phone
       })
     } else if (event.target.value === "newAddress") {
       this.setState({
@@ -262,7 +268,7 @@ class Order extends Component {
         receiverZipcode: "",
         receiverAddress1: "",
         receiverAddress2: "",
-        receiverPhone:  "",
+        receiverPhone:  ""
       })
     }
   };
@@ -272,9 +278,12 @@ class Order extends Component {
   };
 
   onRequestPayment() {
+    const { user } = this.props;
+
+    // 계좌이체 선택
     if (this.state.paymentMethod === "cash") {
       const paymentData = {
-        user_id: this.props.user.id,
+        user_id: user.id,
         sender_name: this.state.senderName,
         sender_phone: this.state.senderPhone,
         sender_email: this.state.senderEmail,
@@ -287,38 +296,36 @@ class Order extends Component {
         status: 1,
         payment_type: this.state.paymentMethod,
         total_price: this.state.totalPrice, // 여기서 나중에 적립금 적용한 금액으로 넣어야해
-        // imp_uid: rsp.imp_uid,
-        // merchant_uid: rsp.merchant_uid,
-        // card_confirm_num: rsp.apply_num,
         items: this.state.productList
       };
 
-      this.props.postOrder(paymentData)
-        .then(res => {
-          this.props.history.push("/my/order")
-        });
+        this.props.postOrder(paymentData).then(res => {
+          // 여기서 응답 값에 따라 alert 띄워주는 거 설정
+          // 실패시 에러처리
+          this.props.history.push("/my/order");
+        })
 
 
-    } else {
-      // this.IMP.request_pay({
-      //   pg : 'inicis', // version 1.1.0부터 지원.
-      //   pay_method : this.state.paymentMethod,
-      //   merchant_uid : 'merchant_' + new Date().getTime(),
-      //   name : '주문명:결제테스트',
-      //   amount : this.state.totalPrice, // 나중에 적립금 적용한 가격으로 넣어야해
-      //   buyer_email : this.props.user.email,
-      //   buyer_name : this.props.user.name,
-      //   buyer_tel : this.props.user.phone,
-      //   buyer_addr : `${this.props.user.address1} ${this.props.user.address2}`,
-      //   buyer_postcode : this.props.user.zipcode,
-      //   m_redirect_url : 'http://eatmore-green.com/my/order'
-      // }, function(rsp) {
-      //   if ( rsp.success ) {
+    } else { // 카드결제 (현재는 계좌이체 아니면 계좌이체 밖에 안된다.
+      this.IMP.request_pay({
+        pg : 'inicis', // version 1.1.0부터 지원.
+        pay_method : this.state.paymentMethod,
+        merchant_uid : 'merchant_' + new Date().getTime(),
+        name : '주문명:결제테스트',
+        amount : this.state.totalPrice, // 나중에 적립금 적용한 가격으로 넣어야해
+        buyer_email : user.email,
+        buyer_name : user.name,
+        buyer_tel : user.phone,
+        buyer_addr : `${user.address1} ${user.address2}`,
+        buyer_postcode : user.zipcode,
+        m_redirect_url : 'http://eatmore-green.com/my/order'
+      }, rsp => {
+        if ( rsp.success ) {
           const paymentData = {
-            user_id: this.props.user.id,
-            sender_name: this.props.user.name,
-            sender_phone: this.props.user.phone,
-            sender_email: this.props.user.email,
+            user_id: user.id,
+            sender_name: user.name,
+            sender_phone: user.phone,
+            sender_email: user.email,
             receiver_name: this.state.receiverName,
             receiver_nickname: this.state.receiverNickname,
             receiver_zipcode: this.state.receiverZipcode,
@@ -327,32 +334,28 @@ class Order extends Component {
             receiver_phone: this.state.receiverPhone,
             status: 1,
             payment_type: this.state.paymentMethod,
-            // total_price: rsp.paid_amount,
-            // imp_uid: rsp.imp_uid,
-            // merchant_uid: rsp.merchant_uid,
-            // card_confirm_num: rsp.apply_num,
+            total_price: rsp.paid_amount,
+            imp_uid: rsp.imp_uid,
+            merchant_uid: rsp.merchant_uid,
+            card_confirm_num: rsp.apply_num,
             items: this.state.productList
           };
 
-      console.log(paymentData);
+          this.props.postOrder(paymentData).then(res => {
+            // 여기서 응답 값에 따라 alert 띄워주는 거 설정
+            // 실패시 에러처리
+            this.props.history.push("/my/order");
+          });
+        } else {
+          var msg = '결제에 실패하였습니다.';
+          msg += '에러내용: ' + rsp.error_msg;
+          msg += '다시 시도해보세요.';
 
-          // this.props.postOrder(paymentData).then(res => {
-          //   this.props.history.push("/my/order")
-          // });
-      //   } else {
-      //     var msg = '결제에 실패하였습니다.';
-      //     msg += '에러내용: ' + rsp.error_msg;
-      //     msg += '다시 시도해보세요.';
-      //
-      //     alert(msg);
-      //   }
-      // });
+          alert(msg);
+        }
+      });
     }
-
-
   }
-
-
 
 
   renderMyAddressList() {
@@ -427,11 +430,27 @@ class Order extends Component {
     if (this.state.productList === null)
       return <CircularProgress />;
 
+    const alertWrongAccessActions = [
+      <FlatButton
+        label="OK"
+        primary={true}
+        onClick={this.onWrongAccessDialogClose}
+      />
+    ];
+
     // 여기서는 장바구니 내용 없다고 보여줘야해
-    if (this.props.paymentClicked === undefined && this.state.productList.length === 0)
+    if (this.props.paymentButtonClicked === undefined && this.state.productList.length === 0) {
       return (
-        <div>장바구니에 담긴 제품이 없습니다.</div>
+        <Dialog
+          actions={alertWrongAccessActions}
+          modal={false}
+          open={this.state.WrongAccessDialogOpen}
+          onRequestClose={this.onWrongAccessDialogClose}
+        >
+          {this.wrongApproachMessage}
+        </Dialog>
       );
+    }
 
     const styles = {
       id: {width: "10%", textAlign: "center"},

@@ -110,11 +110,12 @@ class Item extends Component {
       selectedOptions: this.state.selectedOptions
     };
 
-    // 요일 데이터 맞춰서 api call 해주는 것도 해야 해
     this.props.postCart(postCartData).then((results) => {
       if (results.error) {
+        // 에러 났을 시,
         // 여기다가 관리자한테 직접 alert 갈수 있는 기능 추가해
         // results 안에 call 정보 다 들어있어.
+        // ex) sentry
 
         this.setState({alertServerErrorOpen: true});
       } else {
