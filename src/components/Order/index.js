@@ -296,14 +296,15 @@ class Order extends Component {
         status: 1,
         payment_type: this.state.paymentMethod,
         total_price: this.state.totalPrice, // 여기서 나중에 적립금 적용한 금액으로 넣어야해
-        items: this.state.productList
+        items: this.state.productList,
+        fromCart: this.props.paymentButtonClicked === undefined
       };
 
-        this.props.postOrder(paymentData).then(res => {
-          // 여기서 응답 값에 따라 alert 띄워주는 거 설정
-          // 실패시 에러처리
-          this.props.history.push("/my/order");
-        })
+      this.props.postOrder(paymentData).then(res => {
+        // 여기서 응답 값에 따라 alert 띄워주는 거 설정
+        // 실패시 에러처리
+        this.props.history.push("/my/order");
+      })
 
 
     } else { // 카드결제 (현재는 계좌이체 아니면 계좌이체 밖에 안된다.
@@ -338,7 +339,8 @@ class Order extends Component {
             imp_uid: rsp.imp_uid,
             merchant_uid: rsp.merchant_uid,
             card_confirm_num: rsp.apply_num,
-            items: this.state.productList
+            items: this.state.productList,
+            fromCart: this.props.paymentButtonClicked === undefined
           };
 
           this.props.postOrder(paymentData).then(res => {
