@@ -223,7 +223,11 @@ class Item extends Component {
     } else {
       return (
         <div className={className}>
-          <UpperBar backgroundColor="#F4F4F4" textColor="black" text="여러 세트를 구매하는데 다른 요일로 주문하고 싶으면 전화문의 주세요" />
+          <UpperBar
+            backgroundColor="#F4F4F4"
+            textColor="black"
+            text="여러 세트를 구매하는데 다른 요일로 주문하고 싶으면 전화문의 주세요"
+          />
           <PaymentBar
             backgroundColor="#A3A3A3"
             {...this.props}

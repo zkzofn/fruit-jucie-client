@@ -283,19 +283,21 @@ class Order extends Component {
     // 계좌이체 선택
     if (this.state.paymentMethod === "cash") {
       const paymentData = {
-        user_id: user.id,
-        sender_name: this.state.senderName,
-        sender_phone: this.state.senderPhone,
-        sender_email: this.state.senderEmail,
-        receiver_name: this.state.receiverName,
-        receiver_nickname: this.state.receiverNickname,
-        receiver_zipcode: this.state.receiverZipcode,
-        receiver_address1: this.state.receiverAddress1,
-        receiver_address2: this.state.receiverAddress2,
-        receiver_phone: this.state.receiverPhone,
-        status: 1,
-        payment_type: this.state.paymentMethod,
-        total_price: this.state.totalPrice, // 여기서 나중에 적립금 적용한 금액으로 넣어야해
+        orderInfo: {
+          user_id: user.id,
+          sender_name: user.name,
+          sender_phone: user.phone,
+          sender_email: user.email,
+          receiver_name: this.state.receiverName,
+          receiver_nickname: this.state.receiverNickname,
+          receiver_zipcode: this.state.receiverZipcode,
+          receiver_address1: this.state.receiverAddress1,
+          receiver_address2: this.state.receiverAddress2,
+          receiver_phone: this.state.receiverPhone,
+          status: 1,
+          payment_type: this.state.paymentMethod,
+          total_price: this.state.totalPrice // 여기서 나중에 적립금 적용한 금액으로 넣어야해
+        },
         items: this.state.productList,
         fromCart: this.props.paymentButtonClicked === undefined
       };
@@ -323,22 +325,24 @@ class Order extends Component {
       }, rsp => {
         if ( rsp.success ) {
           const paymentData = {
-            user_id: user.id,
-            sender_name: user.name,
-            sender_phone: user.phone,
-            sender_email: user.email,
-            receiver_name: this.state.receiverName,
-            receiver_nickname: this.state.receiverNickname,
-            receiver_zipcode: this.state.receiverZipcode,
-            receiver_address1: this.state.receiverAddress1,
-            receiver_address2: this.state.receiverAddress2,
-            receiver_phone: this.state.receiverPhone,
-            status: 1,
-            payment_type: this.state.paymentMethod,
-            total_price: rsp.paid_amount,
-            imp_uid: rsp.imp_uid,
-            merchant_uid: rsp.merchant_uid,
-            card_confirm_num: rsp.apply_num,
+            orderInfo: {
+              user_id: user.id,
+              sender_name: user.name,
+              sender_phone: user.phone,
+              sender_email: user.email,
+              receiver_name: this.state.receiverName,
+              receiver_nickname: this.state.receiverNickname,
+              receiver_zipcode: this.state.receiverZipcode,
+              receiver_address1: this.state.receiverAddress1,
+              receiver_address2: this.state.receiverAddress2,
+              receiver_phone: this.state.receiverPhone,
+              status: 1,
+              payment_type: this.state.paymentMethod,
+              total_price: rsp.paid_amount,
+              imp_uid: rsp.imp_uid,
+              merchant_uid: rsp.merchant_uid,
+              card_confirm_num: rsp.apply_num
+            },
             items: this.state.productList,
             fromCart: this.props.paymentButtonClicked === undefined
           };
