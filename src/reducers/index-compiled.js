@@ -22,9 +22,9 @@ var _ReducerProduct = require('./ReducerProduct');
 
 var _ReducerProduct2 = _interopRequireDefault(_ReducerProduct);
 
-var _ReducerCount = require('./ReducerCount');
+var _ReducerMyOrderList = require('./ReducerMyOrderList');
 
-var _ReducerCount2 = _interopRequireDefault(_ReducerCount);
+var _ReducerMyOrderList2 = _interopRequireDefault(_ReducerMyOrderList);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -33,7 +33,7 @@ var rootReducer = (0, _redux.combineReducers)({
   validate: _ReducerValidate2.default,
   addressList: _ReducerAddressList2.default,
   product: _ReducerProduct2.default,
-  count: _ReducerCount2.default
+  myOrderList: _ReducerMyOrderList2.default
 });
 
 exports.default = rootReducer;

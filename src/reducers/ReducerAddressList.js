@@ -1,6 +1,6 @@
 import { GET_ADDRESS_LIST } from '../actions/RequestManager';
 
-const INITIAL_STATE = { isLogin: null };
+const INITIAL_STATE = { addressList: null };
 
 export default function (state = INITIAL_STATE, action) {
   switch (action.type) {

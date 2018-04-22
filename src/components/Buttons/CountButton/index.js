@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { addCount, removeCount } from "../../../actions/RequestManager";
 import { FloatingActionButton } from 'material-ui';
 import Add from 'material-ui/svg-icons/content/add';
 import Remove from 'material-ui/svg-icons/content/remove';
@@ -75,14 +74,11 @@ class CountButton extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    count: state.count.value
   }
 };
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
-    addCount,
-    removeCount
   }, dispatch)
 };
 

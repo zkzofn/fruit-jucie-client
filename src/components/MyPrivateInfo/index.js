@@ -1,19 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
 import UpperBar from '../UpperBar';
-import MyOrderList from '../MyOrderList'
-import MyPrivateInfo from '../MyPrivateInfo';
 
-class MyPage extends Component {
+class MyPrivateInfo extends Component {
   constructor(props) {
     super(props);
 
   }
 
   componentWillMount() {
-    // 로그인상태인지 먼저 체크하고 정보 불러오자
 
   }
 
@@ -23,12 +19,9 @@ class MyPage extends Component {
         <UpperBar
           backgroundColor="#333333"
           textColor="white"
-          text="마이 페이지"
+          text="개인정보수정"
         />
-        <MyOrderList />
-        <MyPrivateInfo />
 
-        
       </div>
     )
   }
@@ -47,6 +40,6 @@ const mapDispatchToProps = (dispatch) => {
   }, dispatch)
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MyPage);
+export default connect(mapStateToProps, mapDispatchToProps)(MyPrivateInfo);
 
 

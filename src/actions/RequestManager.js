@@ -14,7 +14,7 @@ export const GET_ADDRESS_LIST = "GET_ADDRESS_LIST";
 export const POST_ORDER = "POST_ORDER";
 export const GET_VALIDATE = "GET_VALIDATE";
 export const POST_LOGIN = "POST_LOGIN";
-
+export const GET_MY_ORDER_LIST = "GET_MY_ORDER_LIST";
 
 // export const getSomethings = ({pageNo, length, indexBy, indexType, values}) => {
 //   const query = {
@@ -153,10 +153,12 @@ export const postLogin = (data) => {
     payload: request
   }
 };
-// export const getMyOrderList = (params) => {
-//   const request = SessionManager.instance().get(`/`)
-//
-//   return {
-//     type: GET_
-//   }
-// };
+
+export const getMyOrderList = (params) => {
+  const request = SessionManager.instance().get(`/order/user`);
+
+  return {
+    type: GET_MY_ORDER_LIST,
+    payload: request
+  }
+};

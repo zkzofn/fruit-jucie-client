@@ -3,14 +3,14 @@ import UserReducer from './ReducerUser';
 import ValidateReducer from './ReducerValidate';
 import AddressListReducer from './ReducerAddressList';
 import ProductReducer from './ReducerProduct';
-import CountReducer from './ReducerCount';
+import MyOrderListReducer from './ReducerMyOrderList';
 
 const rootReducer = combineReducers({
   user: UserReducer,
   validate: ValidateReducer,
   addressList: AddressListReducer,
   product: ProductReducer,
-  count: CountReducer
+  myOrderList: MyOrderListReducer
 });
 
 export default rootReducer;

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 /**
  * @props
  *    className
+ *    fontSize
  *    backgroundColor
  *    textColor
  *    text
@@ -20,7 +21,7 @@ export default class UpperBar extends Component {
       padding: 80,
       textAlign: "center",
       fontWeight: "bold",
-      fontSize: 25,
+      fontSize: this.props.fontSize ? this.props.fontSize : 25,
       backgroundColor: this.props.backgroundColor ? this.props.backgroundColor : "#3B574F",
       color: this.props.textColor ? this.props.textColor : "white"
     };

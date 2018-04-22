@@ -483,8 +483,8 @@ class Order extends Component {
     };
 
 
-    const renderCount = (id, count, index) => {
-      return <div>{count} 개</div>
+    const renderCount = (id, count, index, optionIndex = 0) => {
+      return <div key={optionIndex}>{count} 개</div>
     };
 
 
