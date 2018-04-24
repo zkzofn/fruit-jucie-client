@@ -138,6 +138,9 @@
     border-color: #d1d5da;
 }
 
+.inline {
+    display: inline !important;
+}
 
 .inlineBlock {
     display: inline-block !important;
@@ -331,6 +334,10 @@
 
 .border-bottom {
     border-bottom: 1px #e1e4e8 solid !important;
+}
+
+.floatLeft {
+    float: left;
 }
 
 .floatRight {

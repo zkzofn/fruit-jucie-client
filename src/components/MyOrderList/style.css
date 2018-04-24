@@ -1,0 +1,52 @@
+/* lg-page */
+@media (min-width: 1200px) {
+    .orderDatePrice {
+        margin-top: 40px;
+        font: 20px bold;
+    }
+}
+
+/* md-page */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .orderDatePrice {
+        margin-top: 40px;
+        font: 20px bold;
+    }
+
+}
+
+/* sm-page */
+@media (min-width: 768px) and (max-width: 991px) {
+    .orderDatePrice {
+        margin-top: 30px;
+        font-size: 20px;
+        font-weight: bold;
+    }
+    .productImage {
+        float: left;
+        width: 25%;
+    }
+    .productList {
+        float: left;
+        width: 75%;
+    }
+    .productTitle {
+
+    }
+}
+
+/* xs-page */
+@media (max-width: 767px) {
+    .orderDatePrice {
+        margin-top: 20px;
+        font-size: 14px;
+        font-weight: bold;
+    }
+    .productImage {
+        margin: 8px 20px;
+    }
+    .productTitle {
+        font-size: 18px;
+        font-weight: bold;
+    }
+}

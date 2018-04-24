@@ -8,7 +8,7 @@ module.exports = {
     path: __dirname,
     filename: 'bundle.js'
   },
-  pulgins: [new webpack.optimize.DedupePlugin({
+  plugins1: [new webpack.optimize.DedupePlugin({
     "process.env": {
       NODE_ENV: JSON.stringify("production")
     }
@@ -32,7 +32,10 @@ module.exports = {
     }, {
       test: /\.(eot|svg|ttf|woff|woff2)$/,
       loader: 'file?name=public/fonts/[name].[ext]'
-    }, { test: /\.(jpe?g|png|gif|svg)$/i, loader: "file-loader?name=/public/icons/[name].[ext]" }]
+    }, {
+      test: /\.(jpe?g|png|gif|svg)$/i,
+      loader: "file-loader?name=/public/icons/[name].[ext]"
+    }]
   },
   resolve: {
     extensions: ['', '.js', '.jsx']

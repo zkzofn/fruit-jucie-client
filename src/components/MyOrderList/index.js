@@ -5,33 +5,51 @@ import { getMyOrderList } from '../../actions/RequestManager';
 import CircularProgress from '../CircularProgress';
 import UpperBar from '../UpperBar';
 import { enumDelivery } from '../Enum';
+import styles from './style.css';
 
 class MyOrderList extends Component {
   constructor(props) {
     super(props);
 
+    this.styles = {
+      orderByDate: {
+        borderBottom: "2px solid darkGray"
+      },
+      orderByProduct: {
+        borderBottom: "1px solid gray"
+      }
+    };
   }
 
   componentWillMount() {
     this.props.getMyOrderList();
   }
 
+
+
   renderOrderByProduct(productsObject) {
-    return Object.keys(productsObject).map(productId => {
+    return Object.keys(productsObject).map((productId, index, array) => {
       const productOptions = productsObject[productId];
       const product = productOptions[0];
 
       return (
-        <div key={productId}>
-          <img
-            src={`../../assets/img/${product.image_path}`}
-            className="inlineBlock alignCenter"
-            style={{width: "30%"}}
-          />
-          <div>{product.product_name}</div>
-          <div>옵션</div>
-          <div>{enumDelivery(product.status)}</div>
-          <div>배송확인(배송중일때)</div>
+        <div
+          key={productId}
+          className="clearfix"
+          style={index < array.length - 1 ? this.styles.orderByProduct : null}
+        >
+          <div className={["", styles.productImage].join(" ")}>
+            <img
+              src={`../../assets/img/${product.image_path}`}
+              style={{width: "100%"}}
+            />
+          </div>
+          <div className={styles.productList}>
+            <div className={styles.productTitle}>{product.product_name}</div>
+            <div>옵션</div>
+            <div>{enumDelivery(product.status)}</div>
+            <div>배송확인(배송중일때)</div>
+          </div>
         </div>
       )
     });
@@ -49,20 +67,28 @@ class MyOrderList extends Component {
 
     console.log(orderList);
 
-    return Object.keys(this.props.myOrderList).reverse().map(orderId => {
+
+
+    return Object.keys(this.props.myOrderList).reverse().map((orderId, index, array) => {
       const productsIds = Object.keys(orderList[orderId]);
 
       return (
-        <div key={orderId}>
-          <div>
+        <div
+          key={orderId}
+          className="clearfix"
+          style={index < array.length - 1 ? this.styles.orderByDate : null}
+        >
+          <div
+            className={["col-3", styles.orderDatePrice].join(" ")}
+          >
             <div>
               {orderList[orderId][productsIds[0]][0].date.slice(0, 10)}
             </div>
             <div>
-              {orderList[orderId][productsIds[0]][0].total_price.toLocaleString()}
+              {orderList[orderId][productsIds[0]][0].total_price.toLocaleString()}원
             </div>
           </div>
-          <div>
+          <div className="col-9">
             {this.renderOrderByProduct(orderList[orderId])}
           </div>
         </div>
@@ -82,7 +108,7 @@ class MyOrderList extends Component {
           fontSize={40}
           text="주문내역"
         />
-        <div>
+        <div className="container">
           {this.renderOrderByDate()}
         </div>
       </div>
