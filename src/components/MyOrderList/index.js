@@ -32,6 +32,18 @@ class MyOrderList extends Component {
       const productOptions = productsObject[productId];
       const product = productOptions[0];
 
+      console.log(productOptions);
+
+      const renderProductOptions = () => {
+        const optionsString = productOptions.filter(option => {
+          return option.product_option_id !== null;
+        }).map(option => {
+          return option.description;
+        }).join(", ");
+
+        return <span>{optionsString}</span>
+      };
+
       return (
         <div
           key={productId}
@@ -46,7 +58,10 @@ class MyOrderList extends Component {
           </div>
           <div className={styles.productList}>
             <div className={styles.productTitle}>{product.product_name}</div>
-            <div>옵션</div>
+            <div>
+              <span className={styles.optionTitle}>옵션: </span>
+              {renderProductOptions()}
+            </div>
             <div>{enumDelivery(product.status)}</div>
             <div>배송확인(배송중일때)</div>
           </div>
