@@ -64,7 +64,7 @@
         width: 70%;
     }
     .productTitle {
-        font-size: 21px;
+        font-size: 22px;
         font-weight: bold;
     }
 }
@@ -86,4 +86,11 @@
         font-size: 18px;
         font-weight: bold;
     }
+    .optionTitle {
+
+    }
+    .optionsContents {
+
+    }
+
 }

@@ -305,7 +305,7 @@ class Order extends Component {
       this.props.postOrder(paymentData).then(res => {
         // 여기서 응답 값에 따라 alert 띄워주는 거 설정
         // 실패시 에러처리
-        this.props.history.push("/my/order");
+        this.props.history.push("/myPage");
       })
 
 
