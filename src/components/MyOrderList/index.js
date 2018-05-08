@@ -28,6 +28,19 @@ class MyOrderList extends Component {
 
 
   renderOrderByProduct(productsObject) {
+    const renderDelivery = (status) => {
+      if (status === 2) {
+        return (
+          <div>
+            <div>{enumDelivery(status)}</div>
+            <div>배송확인</div>
+          </div>
+        );
+      } else {
+        return <div>{enumDelivery(status)}</div>;
+      }
+    };
+
     return Object.keys(productsObject).map((productId, index, array) => {
       const productOptions = productsObject[productId];
       const product = productOptions[0];
@@ -35,7 +48,7 @@ class MyOrderList extends Component {
       return (
         <div
           key={productId}
-          className="clearfix"
+          className={["clearfix", styles.orderByProduct].join(" ")}
           style={index < array.length - 1 ? this.styles.orderByProduct : null}
         >
           <div className={["", styles.productImage].join(" ")}>
@@ -47,8 +60,7 @@ class MyOrderList extends Component {
           <div className={styles.productList}>
             <div className={styles.productTitle}>{product.product_name}</div>
             <div>옵션</div>
-            <div>{enumDelivery(product.status)}</div>
-            <div>배송확인(배송중일때)</div>
+            {renderDelivery(product.status)}
           </div>
         </div>
       )

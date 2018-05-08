@@ -1,42 +1,79 @@
 /* lg-page */
 @media (min-width: 1200px) {
+    .orderByProduct {
+        margin: 10px 0;
+    }
     .orderDatePrice {
         margin-top: 40px;
         font: 20px bold;
+    }
+    .productImage {
+        float: left;
+        width: 30%;
+    }
+    .productList {
+        float: left;
+        width: 70%;
+    }
+    .productTitle {
+        font-size: 27px;
+        font-weight: bold;
     }
 }
 
 /* md-page */
 @media (min-width: 992px) and (max-width: 1199px) {
+    .orderByProduct {
+        margin: 7px 0;
+    }
     .orderDatePrice {
         margin-top: 40px;
-        font: 20px bold;
-    }
-
-}
-
-/* sm-page */
-@media (min-width: 768px) and (max-width: 991px) {
-    .orderDatePrice {
-        margin-top: 30px;
         font-size: 20px;
         font-weight: bold;
     }
     .productImage {
         float: left;
-        width: 25%;
+        width: 30%;
     }
     .productList {
         float: left;
-        width: 75%;
+        width: 70%;
     }
     .productTitle {
+        font-size: 24px;
+        font-weight: bold;
+    }
+}
 
+/* sm-page */
+@media (min-width: 768px) and (max-width: 991px) {
+    .orderByProduct {
+        margin: 7px 0;
+    }
+    .orderDatePrice {
+        margin-top: 25px;
+        font-size: 20px;
+        font-weight: bold;
+    }
+    .productImage {
+        float: left;
+        width: 30%;
+    }
+    .productList {
+        float: left;
+        width: 70%;
+    }
+    .productTitle {
+        font-size: 21px;
+        font-weight: bold;
     }
 }
 
 /* xs-page */
 @media (max-width: 767px) {
+    .orderByProduct {
+        margin: 7px 0;
+    }
     .orderDatePrice {
         margin-top: 20px;
         font-size: 14px;
