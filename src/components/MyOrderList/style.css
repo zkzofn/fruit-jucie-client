@@ -1,17 +1,26 @@
+.orderDatePrice, .orderByProduct {
+    float: left;
+}
+
 /* lg-page */
 @media (min-width: 1200px) {
-    .orderByProduct {
-        margin: 10px 0;
-    }
     .orderDatePrice {
+        width: 25%;
         margin-top: 40px;
-        font: 20px bold;
+        font-size: 20px;
+        font-weight: bold;
+    }
+    .orderByProduct {
+        width: 75%;
+    }
+    .productList {
+        margin: 20px 0;
     }
     .productImage {
         float: left;
         width: 30%;
     }
-    .productList {
+    .productDesc {
         float: left;
         width: 70%;
     }
@@ -23,19 +32,23 @@
 
 /* md-page */
 @media (min-width: 992px) and (max-width: 1199px) {
-    .orderByProduct {
-        margin: 7px 0;
-    }
     .orderDatePrice {
+        width: 25%;
         margin-top: 40px;
         font-size: 20px;
         font-weight: bold;
+    }
+    .orderByProduct {
+        width: 75%;
+    }
+    .productList {
+        margin: 15px 0;
     }
     .productImage {
         float: left;
         width: 30%;
     }
-    .productList {
+    .productDesc {
         float: left;
         width: 70%;
     }
@@ -47,19 +60,23 @@
 
 /* sm-page */
 @media (min-width: 768px) and (max-width: 991px) {
-    .orderByProduct {
-        margin: 7px 0;
-    }
     .orderDatePrice {
         margin-top: 25px;
         font-size: 20px;
         font-weight: bold;
+        width: 25%;
+    }
+    .orderByProduct {
+        width:75%;
+    }
+    .productList {
+        margin: 13px 0;
     }
     .productImage {
         float: left;
         width: 30%;
     }
-    .productList {
+    .productDesc {
         float: left;
         width: 70%;
     }
@@ -71,16 +88,22 @@
 
 /* xs-page */
 @media (max-width: 767px) {
-    .orderByProduct {
-        margin: 7px 0;
-    }
     .orderDatePrice {
+        width: 25%;
         margin-top: 20px;
         font-size: 14px;
         font-weight: bold;
     }
+    .orderByProduct {
+        width: 75%;
+    }
+    .productList {
+        margin: 10px 0;
+    }
     .productImage {
         margin: 8px 20px;
+    }
+    .productDesc {
     }
     .productTitle {
         font-size: 18px;

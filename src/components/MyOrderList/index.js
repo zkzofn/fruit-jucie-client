@@ -48,19 +48,30 @@ class MyOrderList extends Component {
       console.log(productOptions);
 
       const renderProductOptions = () => {
-        const optionsString = productOptions.filter(option => {
+        const options = productOptions.filter(option => {
           return option.product_option_id !== null;
-        }).map(option => {
+        });
+
+        const optionsString = options.map(option => {
           return option.description;
         }).join(", ");
 
-        return <span>{optionsString}</span>
+        if (options.length > 0) {
+          return (
+            <div>
+              <span className={styles.optionTitle}>옵션: </span>
+              <span>{optionsString}</span>
+            </div>
+          )
+        } else {
+          return null;
+        }
       };
 
       return (
         <div
           key={productId}
-          className={["clearfix", styles.orderByProduct].join(" ")}
+          className={["clearfix", styles.productList].join(" ")}
           style={index < array.length - 1 ? this.styles.orderByProduct : null}
         >
           <div className={["", styles.productImage].join(" ")}>
@@ -69,12 +80,9 @@ class MyOrderList extends Component {
               style={{width: "100%"}}
             />
           </div>
-          <div className={styles.productList}>
+          <div className={styles.productDesc}>
             <div className={styles.productTitle}>{product.product_name}</div>
-            <div>
-              <span className={styles.optionTitle}>옵션: </span>
-              {renderProductOptions()}
-            </div>
+            {renderProductOptions()}
             {renderDelivery(product.status)}
           </div>
         </div>
@@ -94,8 +102,6 @@ class MyOrderList extends Component {
 
     console.log(orderList);
 
-
-
     return Object.keys(this.props.myOrderList).reverse().map((orderId, index, array) => {
       const productsIds = Object.keys(orderList[orderId]);
 
@@ -105,9 +111,7 @@ class MyOrderList extends Component {
           className="clearfix"
           style={index < array.length - 1 ? this.styles.orderByDate : null}
         >
-          <div
-            className={["col-3", styles.orderDatePrice].join(" ")}
-          >
+          <div className={styles.orderDatePrice}>
             <div>
               {orderList[orderId][productsIds[0]][0].date.slice(0, 10)}
             </div>
@@ -115,7 +119,7 @@ class MyOrderList extends Component {
               {orderList[orderId][productsIds[0]][0].total_price.toLocaleString()}원
             </div>
           </div>
-          <div className="col-9">
+          <div className={styles.orderByProduct}>
             {this.renderOrderByProduct(orderList[orderId])}
           </div>
         </div>
