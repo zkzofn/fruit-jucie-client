@@ -4,7 +4,6 @@ import { bindActionCreators } from 'redux';
 import { TextField, RaisedButton, FlatButton, Dialog } from 'material-ui';
 import { postLogin } from '../../actions/RequestManager';
 import SessionManager from '../../actions/SessionManager';
-
 import crypto from 'crypto-js';
 
 class SignIn extends React.Component {
@@ -112,7 +111,7 @@ class SignIn extends React.Component {
           onChange={this.onChangeAccount}
           onKeyPress={this.onKeyEnter}
           ref="loginAccount"
-        /><br />
+        />
         <TextField
           floatingLabelText="Password"
           type="password"
@@ -120,13 +119,21 @@ class SignIn extends React.Component {
           onChange={this.onChangePassword}
           onKeyPress={this.onKeyEnter}
           ref="loginPassword"
-        /><br />
+        />
         <RaisedButton
-          label="Sign In"
+          label="로그인"
           primary={true}
           onTouchTap={this.submit}
           fullWidth={true}
         />
+        <RaisedButton
+          label="회원가입"
+          className="mt-2"
+          secondary={true}
+          onTouchTap={() => this.props.history.push("/signup")}
+          fullWidth={true}
+        />
+
 
         <Dialog
           actions={alertActions}

@@ -26,7 +26,7 @@ export default class UpperBar extends Component {
       color: this.props.textColor ? this.props.textColor : "white"
     };
 
-    const text = this.props.text ? this.props.text : "test text"
+    const text = this.props.text ? this.props.text : ""
 
     return (
       <div className={className}>

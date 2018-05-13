@@ -40,7 +40,7 @@ var _Header = require('./containers/Header');
 
 var _Header2 = _interopRequireDefault(_Header);
 
-var _Home = require('./containers/Home');
+var _Home = require('./containers/Home/index');
 
 var _Home2 = _interopRequireDefault(_Home);
 

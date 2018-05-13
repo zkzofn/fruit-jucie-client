@@ -1,0 +1,30 @@
+
+/* lg-page */
+@media (min-width: 1200px) {
+    .productDetailImage {
+        width: 70%;
+    }
+}
+
+/* md-page */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .productDetailImage {
+        width: 80%;
+    }
+}
+
+/* sm-page */
+@media (min-width: 768px) and (max-width: 991px) {
+    .productDetailImage {
+        width: 100%;
+    }
+
+}
+
+/* xs-page */
+@media (max-width: 767px) {
+    .productDetailImage {
+        width: 100%;
+    }
+
+}

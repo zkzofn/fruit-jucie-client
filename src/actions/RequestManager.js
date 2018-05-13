@@ -5,6 +5,8 @@ export const GET_PRODUCTS = "GET_PRODUCTS";
 export const GET_PRODUCT = "GET_PRODUCT";
 export const GET_PRODUCT_CHECK = "GET_PRODUCT_CHECK";
 export const GET_USER = "GET_USER";
+export const POST_USER = "POST_USER";
+export const PATCH_USER = "PATCH_USER";
 export const POST_CART = "POST_CART";
 export const GET_CART = "GET_CART";
 export const PATCH_CART = "PATCH_CART";
@@ -74,6 +76,24 @@ export const getUser = () => {
 
   return {
     type: GET_USER,
+    payload: request
+  }
+};
+
+export const postUser = (data) => {
+  const request = SessionManager.instance().post(`/user`, data);
+
+  return {
+    type: POST_USER,
+    payload: request
+  }
+};
+
+export const patchUser = (data) => {
+  const request = SessionManager.instance().patch(`/user`, data);
+
+  return {
+    type: PATCH_USER,
     payload: request
   }
 };

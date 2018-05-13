@@ -11,13 +11,14 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 
 import reducers from './reducers';
 import Header from './containers/Header';
-import Home from './containers/Home';
+import Home from './containers/Home/index';
 import Footer from './containers/Footer';
 import Shop from './containers/Shop';
 import Item from './components/Item';
 
 import Products from './components/Products';
 import SignIn from './components/SignIn';
+import SignUp from './components/SignUp';
 import ProductDetail from './components/ProductDetail';
 import Cart from './components/Cart';
 import Order from './components/Order';
@@ -47,6 +48,7 @@ ReactDOM.render(
           <Route path="/product/:productId" component={ProductDetail} />
           <Route path="/products" component={Products} />
           <Route path="/signin" component={SignIn} />
+          <Route path="/signup" component={SignUp} />
           <Route path="/cart" component={Cart} />
           <Route path="/order" component={Order} />
           <Route path="/payment" component={Payment} />

@@ -199,7 +199,6 @@ class Order extends Component {
           </li>
           {renderAddressElements()}
         </ul>
-
       );
     }
   }
@@ -227,10 +226,6 @@ class Order extends Component {
 
   setReceiverZipcode = (event) => {
     this.setState({receiverZipcode: event.target.value})
-  };
-
-  setReceiverAddress1 = (event) => {
-
   };
 
   setReceiverAddress2 = (event) => {
@@ -719,20 +714,20 @@ class Order extends Component {
               </Table>
             </div>
 
-          <div className="visible-small-flex">
-            <Table>
-              <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-                <TableRow>
-                  <TableHeaderColumn className="alignCenter">상품정보</TableHeaderColumn>
-                </TableRow>
-              </TableHeader>
-              <TableBody displayRowCheckbox={false}>
-                {renderCartListXs()}
-              </TableBody>
-              {renderFooter()}
-            </Table>
+            <div className="visible-small-flex">
+              <Table>
+                <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+                  <TableRow>
+                    <TableHeaderColumn className="alignCenter">상품정보</TableHeaderColumn>
+                  </TableRow>
+                </TableHeader>
+                <TableBody displayRowCheckbox={false}>
+                  {renderCartListXs()}
+                </TableBody>
+                {renderFooter()}
+              </Table>
+            </div>
           </div>
-        </div>
 
           <div>
             <h4>주문자 정보</h4>
@@ -793,20 +788,20 @@ class Order extends Component {
                 />
               </RadioButtonGroup>
 
-              <RaisedButton
-                className="inlineBlock"
-                label="배송지 리스트에서 확인"
-                onTouchTap={this.onMyAddressListDialogOpen}
-                primary={true}
-              />
-              <Dialog
-                title="나의 배송지 리스트"
-                modal={false}
-                open={this.state.myAddressListDialogOpen}
-                onRequestClose={this.onMyAddressListDialogClose}
-              >
-                {this.renderMyAddressList()}
-              </Dialog>
+              {/*<RaisedButton*/}
+                {/*className="inlineBlock"*/}
+                {/*label="배송지 리스트에서 확인"*/}
+                {/*onTouchTap={this.onMyAddressListDialogOpen}*/}
+                {/*primary={true}*/}
+              {/*/>*/}
+              {/*<Dialog*/}
+                {/*title="나의 배송지 리스트"*/}
+                {/*modal={false}*/}
+                {/*open={this.state.myAddressListDialogOpen}*/}
+                {/*onRequestClose={this.onMyAddressListDialogClose}*/}
+              {/*>*/}
+                {/*{this.renderMyAddressList()}*/}
+              {/*</Dialog>*/}
             </div>
             <div>
               <TextField
@@ -844,7 +839,6 @@ class Order extends Component {
                 floatingLabelText="주소"
                 floatingLabelFixed={true}
                 value={this.state.receiverAddress1}
-                onChange={this.setReceiverAddress1}
                 disabled={true}
               />
             </div>

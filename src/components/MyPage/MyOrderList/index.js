@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getMyOrderList } from '../../actions/RequestManager';
-import CircularProgress from '../CircularProgress';
-import UpperBar from '../UpperBar';
-import { enumDelivery } from '../Enum';
+import { getMyOrderList } from '../../../actions/RequestManager';
+import CircularProgress from '../../CircularProgress';
+import UpperBar from '../../UpperBar/index';
+import { enumDelivery } from '../../Enum';
 import styles from './style.css';
 
 class MyOrderList extends Component {
@@ -133,15 +133,7 @@ class MyOrderList extends Component {
 
     return (
       <div>
-        <UpperBar
-          backgroundColor="gray"
-          textColor="white"
-          fontSize={40}
-          text="주문내역"
-        />
-        <div className="container">
-          {this.renderOrderByDate()}
-        </div>
+        {this.renderOrderByDate()}
       </div>
     )
   }

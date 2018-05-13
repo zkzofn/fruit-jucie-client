@@ -36,7 +36,7 @@ export default class Shop extends Component {
 
     return (
       <div className={className}>
-        <UpperBar text="3. 여기도 그림&멘트나 그림 들어가야 한다." />
+        <UpperBar text="" />
         <ShopTabs handleDivider={(divider) => this.handleDivider(divider)} />
         <ShopItems {...this.props} divider={this.state.divider} />
       </div>
