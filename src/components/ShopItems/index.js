@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import CardImage from '../../components/CardImage';
 import { enumSalad, enumJuice } from "../Enum";
+import styles from './style.css';
 
 /**
  * @props
@@ -86,7 +87,7 @@ export default class ShopItems extends Component {
     const className = this.props.className ? this.props.className : "";
 
     return (
-      <div className={className}>
+      <div className={[className, "container"].join(", ")}>
         {this.renderItems()}
       </div>
     )
