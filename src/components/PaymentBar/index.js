@@ -61,7 +61,7 @@ class PaymentBar extends Component {
               {...this.props}
               className="inlineBlock"
             />
-            <div>
+            <div style={{fontSize: 18, paddingBottom: 10}}>
               {(this.props.product.price_sale * this.props.productCount).toLocaleString()} 원
             </div>
           </div>

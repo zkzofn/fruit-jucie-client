@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { TextField, RaisedButton, FlatButton, Dialog } from 'material-ui';
-import { postUser, getAddressFromAPI } from '../../actions/RequestManager';
+import { postUser, getAddressFromAPI, getCheckUserId, getCheckUserNickname } from '../../actions/RequestManager';
 import SessionManager from '../../actions/SessionManager';
 import _ from 'lodash';
 import crypto from 'crypto-js';
@@ -25,19 +25,38 @@ class SignUp extends React.Component {
       address2: "",
       searchAddressDialogOpen: false,
       searchAddressTerm: "",
+      accountErrorMessage: "",
       passwordErrorMessage: "",
-      confirmPasswordErrorMessage: ""
+      confirmPasswordErrorMessage: "",
+      nicknameErrorMessage: "",
+      emailErrorMessage: "",
+      phoneErrorMessage: ""
     }
   };
 
-  setAccount = (event) => {
-    // 여기서 user id check 하는 로직 어
-    this.setState({account: event.target.value})
-    const checkAccount = _.debounce(() => {
-      console.log(event.target.value);
-    }, 200)
+  checkAccount = _.debounce((value) => {
+    const params = {
+      account: value
+    };
 
-    checkAccount();
+    this.props.getCheckUserId(params).then(res => {
+      if (res.payload.data.results.length > 0) {
+        this.setState({accountErrorMessage: "중복된 아이디가 존재합니다."});
+      } else {
+        this.setState({accountErrorMessage: ""});
+      }
+    })
+  }, 300);
+
+  setAccount = (event) => {
+    if (!/^[A-Za-z0-9._-]+$/i.test(event.target.value)) {
+      this.setState({accountErrorMessage: "사용할 수 없는 형식의 아이디입니다."})
+    } else {
+      this.setState({accountErrorMessage: ""});
+      this.checkAccount(event.target.value);
+    }
+
+    this.setState({account: event.target.value});
   };
 
 
@@ -58,20 +77,53 @@ class SignUp extends React.Component {
   };
 
   setName = (event) => {
-    this.setState({name: event.target.value})
+    this.setState({name: event.target.value});
   };
 
+  checkNickname = _.debounce((value) => {
+    const params = {
+      nickname: value
+    };
+
+    this.props.getCheckUserNickname(params).then(res => {
+      console.log(res.payload.data);
+      if (res.payload.data.results.length > 0) {
+        this.setState({nicknameErrorMessage: "중복된 닉네임이 존재합니다."});
+      } else {
+        this.setState({nicknameErrorMessage: ""});
+      }
+    })
+  }, 300);
+
   setNickname = (event) => {
-    this.setState({nickname: event.target.value})
+    this.setState({nickname: event.target.value});
+    this.checkNickname(event.target.value);
   };
 
   setEmail = (event) => {
     this.setState({email: event.target.value})
   };
 
+  checkEmailValidate = () => {
+    if (!/^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/i.test(this.state.email)) {
+      this.setState({emailErrorMessage: "사용할 수 없는 형식의 이메일 주소입니다."})
+    } else {
+      this.setState({emailErrorMessage: ""})
+    }
+  };
+
   setPhone = (event) => {
     this.setState({phone: event.target.value})
   };
+
+  checkPhoneValidate = () => {
+    if (!/^([0-9-]{10,14})$/i.test(this.state.phone)) {
+      this.setState({phoneErrorMessage: "사용할 수 없는 형식의 연락처입니다."});
+    } else {
+      this.setState({phoneErrorMessage: ""})
+    }
+  };
+
 
   setZipcode = (event) => {
     this.setState({zipcode: event.target.value})
@@ -165,7 +217,7 @@ class SignUp extends React.Component {
   submit = () => {
     const data = {
       account: this.state.account,
-      password: this.state.password,
+      password: crypto.SHA1(this.state.password).toString(),
       name: this.state.name,
       nickname: this.state.nickname,
       email: this.state.email,
@@ -175,49 +227,10 @@ class SignUp extends React.Component {
       address2: this.state.address2
     };
 
+    // error 처리 필요
     this.props.postUser(data).then(() => {
       this.props.history.push("/signin");
     });
-
-    // if (this.state.account === "") {
-    //   this.refs.loginAccount.focus();
-    // } else if (this.state.password === "") {
-    //   this.refs.loginPassword.focus();
-    // } else {
-    //   // 로그인 시도
-    //   const data = {
-    //     account: this.state.account,
-    //     password: crypto.SHA1(this.state.password).toString()
-    //   };
-    //
-    //   this.props.postLogin(data).then(result => {
-    //     const { sessionKey, user } = result.payload.data;
-    //
-    //     if (user) {
-    //       SessionManager.instance().setSession({sessionKey, user}).then(() => {
-    //         window.location.reload();
-    //         this.props.history.push("/");
-    //       });
-    //     } else {
-    //       this.setState({
-    //         alertMessage: result.payload.data.msg,
-    //         alertOpen: true
-    //       })
-    //     }
-    //
-    //     // if (this.props.user) {
-    //     //   // 여기서 user 정보 local에 저장해
-    //     //   console.log(result);
-    //     //
-    //     //   this.props.history.push("/");
-    //     // } else {
-    //     //   this.setState({
-    //     //     alertMessage: result.payload.data.msg,
-    //     //     alertOpen: true
-    //     //   })
-    //     // }
-    //   })
-    // }
   };
 
   render() {
@@ -242,7 +255,7 @@ class SignUp extends React.Component {
           floatingLabelText="아이디"
           value={this.state.account}
           onChange={this.setAccount}
-          ref="loginAccount"
+          errorText={this.state.accountErrorMessage}
         />
         <TextField
           floatingLabelText="비밀번호"
@@ -250,7 +263,6 @@ class SignUp extends React.Component {
           value={this.state.password}
           onChange={this.setPassword}
           errorText={this.state.passwordErrorMessage}
-          ref="loginPassword"
         />
         <TextField
           floatingLabelText="비밀번호 확인"
@@ -258,31 +270,31 @@ class SignUp extends React.Component {
           value={this.state.confirmPassword}
           onChange={this.setConfirmPassword}
           errorText={this.state.confirmPasswordErrorMessage}
-          ref="loginPassword"
         />
         <TextField
           floatingLabelText="이름"
           value={this.state.name}
           onChange={this.setName}
-          ref="loginPassword"
         />
         <TextField
           floatingLabelText="닉네임"
           value={this.state.nickname}
           onChange={this.setNickname}
-          ref="loginPassword"
+          errorText={this.state.nicknameErrorMessage}
         />
         <TextField
           floatingLabelText="이메일"
           value={this.state.email}
           onChange={this.setEmail}
-          ref="loginPassword"
+          onBlur={this.checkEmailValidate}
+          errorText={this.state.emailErrorMessage}
         />
         <TextField
           floatingLabelText="연락처"
           value={this.state.phone}
           onChange={this.setPhone}
-          ref="loginPassword"
+          onBlur={this.checkPhoneValidate}
+          errorText={this.state.phoneErrorMessage}
         />
         <div>
           <TextField
@@ -351,7 +363,13 @@ class SignUp extends React.Component {
             this.state.phone === "" ||
             this.state.zipcode === "" ||
             this.state.address1 === "" ||
-            this.state.address2 === ""
+            this.state.address2 === "" ||
+            this.state.accountErrorMessage !== "" ||
+            this.state.passwordErrorMessage !== "" ||
+            this.state.confirmPasswordErrorMessage !== "" ||
+            this.state.nicknameErrorMessage !== "" ||
+            this.state.emailErrorMessage !== "" ||
+            this.state.phoneErrorMessage !== ""
           }
         />
       </div>
@@ -369,7 +387,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     postUser,
-    getAddressFromAPI
+    getAddressFromAPI,
+    getCheckUserId,
+    getCheckUserNickname
   }, dispatch)
 };
 

@@ -7,6 +7,8 @@ export const GET_PRODUCT_CHECK = "GET_PRODUCT_CHECK";
 export const GET_USER = "GET_USER";
 export const POST_USER = "POST_USER";
 export const PATCH_USER = "PATCH_USER";
+export const GET_CHECK_USER_ID = "GET_CHECK_USER_ID";
+export const GET_CHECK_USER_NICKNAME = "GET_CHECK_USER_NICKNAME";
 export const POST_CART = "POST_CART";
 export const GET_CART = "GET_CART";
 export const PATCH_CART = "PATCH_CART";
@@ -94,6 +96,24 @@ export const patchUser = (data) => {
 
   return {
     type: PATCH_USER,
+    payload: request
+  }
+};
+
+export const getCheckUserId = (params) => {
+  const request = SessionManager.instance().get(`/user/check/id`, params);
+
+  return {
+    type: GET_CHECK_USER_ID,
+    payload: request
+  }
+};
+
+export const getCheckUserNickname = (params) => {
+  const request = SessionManager.instance().get(`/user/check/nickname`, params);
+
+  return {
+    type: GET_CHECK_USER_NICKNAME,
     payload: request
   }
 };

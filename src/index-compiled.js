@@ -40,9 +40,9 @@ var _Header = require('./containers/Header');
 
 var _Header2 = _interopRequireDefault(_Header);
 
-var _Home = require('./containers/Home/index');
+var _index = require('./containers/Home/index');
 
-var _Home2 = _interopRequireDefault(_Home);
+var _index2 = _interopRequireDefault(_index);
 
 var _Footer = require('./containers/Footer');
 
@@ -63,6 +63,10 @@ var _Products2 = _interopRequireDefault(_Products);
 var _SignIn = require('./components/SignIn');
 
 var _SignIn2 = _interopRequireDefault(_SignIn);
+
+var _SignUp = require('./components/SignUp');
+
+var _SignUp2 = _interopRequireDefault(_SignUp);
 
 var _ProductDetail = require('./components/ProductDetail');
 
@@ -109,12 +113,13 @@ _reactDom2.default.render(_react2.default.createElement(
           null,
           _react2.default.createElement(_reactRouter.Route, { path: '*', component: _Header2.default })
         ),
-        _react2.default.createElement(_reactRouter.Route, { exact: true, path: '/', component: _Home2.default }),
+        _react2.default.createElement(_reactRouter.Route, { exact: true, path: '/', component: _index2.default }),
         _react2.default.createElement(_reactRouter.Route, { exact: true, path: '/shop/:productId', component: _Item2.default }),
         _react2.default.createElement(_reactRouter.Route, { exact: true, path: '/shop', component: _Shop2.default }),
         _react2.default.createElement(_reactRouter.Route, { path: '/product/:productId', component: _ProductDetail2.default }),
         _react2.default.createElement(_reactRouter.Route, { path: '/products', component: _Products2.default }),
         _react2.default.createElement(_reactRouter.Route, { path: '/signin', component: _SignIn2.default }),
+        _react2.default.createElement(_reactRouter.Route, { path: '/signup', component: _SignUp2.default }),
         _react2.default.createElement(_reactRouter.Route, { path: '/cart', component: _Cart2.default }),
         _react2.default.createElement(_reactRouter.Route, { path: '/order', component: _Order2.default }),
         _react2.default.createElement(_reactRouter.Route, { path: '/payment', component: _Payment2.default }),
