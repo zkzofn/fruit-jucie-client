@@ -13,10 +13,9 @@ export default class ShopTabs extends Component {
     super(props);
 
     this.state = {
-      value: enumSalad.value,
+      value: props.tabList[0].value,
       slideIndex: 0
     };
-
   }
 
   handleChange = (value) => {
@@ -40,6 +39,17 @@ export default class ShopTabs extends Component {
       }
     };
 
+    const renderTabList = () => {
+      return this.props.tabList.map((tab, index) => {
+        return (
+          <Tab
+            key={index}
+            label={tab.label}
+            value={tab.value}
+            style={styles.tabStyle} />
+        )
+      })
+    };
 
     return (
       <div
@@ -52,8 +62,7 @@ export default class ShopTabs extends Component {
           style={styles.tabStyle}
           inkBarStyle={styles.inkBarStyle}
         >
-          <Tab label={enumSalad.label} value={enumSalad.value} style={styles.tabStyle} />
-          <Tab label={enumJuice.label} value={enumJuice.value} style={styles.tabStyle} />
+          {renderTabList()}
         </Tabs>
       </div>
     )

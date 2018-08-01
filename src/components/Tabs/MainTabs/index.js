@@ -71,7 +71,6 @@ class MainTab extends Component {
       value: "myPage"
     };
 
-
     return (
       <div
         style={styles.allStyle}

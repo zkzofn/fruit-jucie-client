@@ -24,7 +24,6 @@ export default class Shop extends Component {
   }
 
   render() {
-    const className = this.props.className ? this.props.className : "";
     const styles = {
       shopTabs: {
         height: 200,
@@ -33,11 +32,16 @@ export default class Shop extends Component {
 
       }
     };
+    
+    const tabList = [enumSalad, enumJuice];
 
     return (
-      <div className={className}>
+      <div>
         <UpperBar text="" />
-        <ShopTabs handleDivider={(divider) => this.handleDivider(divider)} />
+        <ShopTabs
+          tabList={tabList}
+          handleDivider={(divider) => this.handleDivider(divider)}
+        />
         <ShopItems {...this.props} divider={this.state.divider} />
       </div>
     )

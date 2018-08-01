@@ -14,8 +14,9 @@ import Header from './containers/Header';
 import Home from './containers/Home/index';
 import Footer from './containers/Footer';
 import Shop from './containers/Shop';
-import Item from './components/Item';
+import Admin from './containers/Admin';
 
+import Item from './components/Item';
 import Products from './components/Products';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
@@ -24,6 +25,7 @@ import Cart from './components/Cart';
 import Order from './components/Order';
 import Payment from './components/Payment';
 import MyPage from './components/MyPage';
+import AdminProductEdit from './components/Admin/EditProduct'
 
 injectTapEventPlugin();
 
@@ -53,6 +55,8 @@ ReactDOM.render(
           <Route path="/order" component={Order} />
           <Route path="/payment" component={Payment} />
           <Route path="/myPage" component={MyPage} />
+          <Route path="/admin/products/edit/:productId" component={AdminProductEdit} />
+          <Route path="/admin" component={Admin} />
           <Footer />
         </div>
       </MuiThemeProvider>

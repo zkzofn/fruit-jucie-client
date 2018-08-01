@@ -52,6 +52,10 @@ var _Shop = require('./containers/Shop');
 
 var _Shop2 = _interopRequireDefault(_Shop);
 
+var _Admin = require('./containers/Admin');
+
+var _Admin2 = _interopRequireDefault(_Admin);
+
 var _Item = require('./components/Item');
 
 var _Item2 = _interopRequireDefault(_Item);
@@ -87,6 +91,10 @@ var _Payment2 = _interopRequireDefault(_Payment);
 var _MyPage = require('./components/MyPage');
 
 var _MyPage2 = _interopRequireDefault(_MyPage);
+
+var _EditProduct = require('./components/Admin/EditProduct');
+
+var _EditProduct2 = _interopRequireDefault(_EditProduct);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -124,6 +132,8 @@ _reactDom2.default.render(_react2.default.createElement(
         _react2.default.createElement(_reactRouter.Route, { path: '/order', component: _Order2.default }),
         _react2.default.createElement(_reactRouter.Route, { path: '/payment', component: _Payment2.default }),
         _react2.default.createElement(_reactRouter.Route, { path: '/myPage', component: _MyPage2.default }),
+        _react2.default.createElement(_reactRouter.Route, { path: '/admin/products/edit/:productId', component: _EditProduct2.default }),
+        _react2.default.createElement(_reactRouter.Route, { path: '/admin', component: _Admin2.default }),
         _react2.default.createElement(_Footer2.default, null)
       )
     )

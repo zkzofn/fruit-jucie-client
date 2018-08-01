@@ -19,4 +19,7 @@ export const enumDelivery = (status) => {
     default:
       return "관리자에게 문의";
   }
-}
+};
+export const enumAdminProducts = { value: "products", label: "products"};
+export const enumAdminShipping = { value: "shipping", label: "shipping"};
+export const enumAdminCustomers = { value: "customers", label: "customers"};
