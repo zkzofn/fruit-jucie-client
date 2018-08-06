@@ -9,7 +9,7 @@ export default class EditProduct extends Component {
   render() {
     return (
       <div>
-
+        Edit product page
       </div>
     )
   }

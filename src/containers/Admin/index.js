@@ -21,7 +21,7 @@ export default class Admin extends Component {
   renderAdmin() {
     switch (this.state.divider) {
       case enumAdminProducts.value:
-        return <AdminProducts />;
+        return <AdminProducts {...this.props} />;
       case enumAdminShipping.value:
         return <AdminShipping />;
       case enumAdminCustomers.value:
