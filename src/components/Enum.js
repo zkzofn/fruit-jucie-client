@@ -1,5 +1,31 @@
-export const enumSalad = { value: "salad", label: "SALAD" };
-export const enumJuice = { value: "juice", label: "JUICE" };
+export const enumCategory = {
+  salad: {
+    code: 0,
+    value: "salad",
+    label: "SALAD"
+  },
+  juice: {
+    code: 1,
+    value: "juice",
+    label: "JUICE"
+  },
+  fruits: {
+    code: 2,
+    value: "fruits",
+    label: "FRUITS"
+  },
+  soup: {
+    code: 3,
+    value: "soup",
+    label: "SOUP"
+  },
+  etc: {
+    code: 4,
+    value: "etc",
+    label: "ETC"
+  }
+};
+
 export const enumDelivery = (status) => {
   switch (status) {
     case 0:

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import CardImage from '../../components/CardImage';
-import { enumSalad, enumJuice } from "../Enum";
+import { enumCategory } from "../Enum";
 import styles from './style.css';
 
 /**
@@ -51,7 +51,7 @@ export default class ShopItems extends Component {
 
 
   renderItems() {
-    if (this.props.divider === enumSalad.value) {
+    if (this.props.divider === enumCategory.salad.value) {
       // componentWillMount 에서 불러온 변수에 따라 여기서 map 하는 변수명이 달라져야한다.
       return this.info.salad.map((info, index) => {
         return (

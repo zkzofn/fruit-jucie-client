@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import { Switch, Route } from "react-router";
 import ShopTabs from '../../components/Tabs/ShopTabs';
 import { enumAdminProducts, enumAdminCustomers, enumAdminShipping } from '../../components/Enum';
 import AdminProducts from '../../components/Admin/AdminProducts';
 import AdminShipping from '../../components/Admin/AdminShipping';
 import AdminCustomers from '../../components/Admin/AdminCustomers';
+import AdminEditProduct from '../../components/Admin/AdminEditProduct';
 
 export default class Admin extends Component {
   constructor(props) {
@@ -14,22 +16,15 @@ export default class Admin extends Component {
     }
   }
 
-  handleDivider(divider) {
-    this.setState({divider});
+  componentDidMount() {
+    this.setState({divider: this.props.location.pathname.split("/")[2]});
   }
 
-  renderAdmin() {
-    switch (this.state.divider) {
-      case enumAdminProducts.value:
-        return <AdminProducts {...this.props} />;
-      case enumAdminShipping.value:
-        return <AdminShipping />;
-      case enumAdminCustomers.value:
-        return <AdminCustomers />;
-      default:
-        return <AdminProducts />;
-    }
+  handleDivider(divider) {
+    this.setState({divider});
+    this.props.history.push(`/admin/${divider}`)
   }
+
 
   render() {
     const tabList = [enumAdminProducts, enumAdminShipping, enumAdminCustomers];
@@ -38,10 +33,36 @@ export default class Admin extends Component {
       <div>
         <ShopTabs
           tabList={tabList}
+          selectedTab={this.props.location.pathname.split("/")[2]}
           handleDivider={(divider) => this.handleDivider(divider)}
           width={300}
         />
-        { this.renderAdmin() }
+        <Switch>
+          <Route
+            path="/admin/products"
+            component={props => (
+              <AdminProducts {...props} />
+            )}
+          />
+          <Route
+            path="/admin/product/:productId"
+            component={props => (
+              <AdminEditProduct {...props} />
+            )}
+          />
+          <Route
+            path="/admin/shipping"
+            component={props => (
+              <AdminShipping {...props} />
+            )}
+          />
+          <Route
+            path="/admin/customers"
+            component={props => (
+              <AdminCustomers {...props} />
+            )}
+          />
+        </Switch>
       </div>
     )
   }

@@ -92,7 +92,7 @@ var _MyPage = require('./components/MyPage');
 
 var _MyPage2 = _interopRequireDefault(_MyPage);
 
-var _EditProduct = require('./components/Admin/EditProduct');
+var _EditProduct = require('./components/Admin/AdminEditProduct');
 
 var _EditProduct2 = _interopRequireDefault(_EditProduct);
 

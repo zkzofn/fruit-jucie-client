@@ -25,7 +25,7 @@ import Cart from './components/Cart';
 import Order from './components/Order';
 import Payment from './components/Payment';
 import MyPage from './components/MyPage';
-import AdminProductEdit from './components/Admin/EditProduct'
+import AdminProductEdit from './components/Admin/AdminEditProduct'
 
 injectTapEventPlugin();
 
@@ -55,8 +55,8 @@ ReactDOM.render(
           <Route path="/order" component={Order} />
           <Route path="/payment" component={Payment} />
           <Route path="/myPage" component={MyPage} />
-          <Route path="/admin/products/edit/:productId" component={AdminProductEdit} />
           <Route path="/admin" component={Admin} />
+          <Route path="/admin/products/edit/:productId" component={AdminProductEdit} />
           <Footer />
         </div>
       </MuiThemeProvider>

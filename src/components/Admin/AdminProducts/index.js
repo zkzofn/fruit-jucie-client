@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
 import {
   Table,
   TableBody,
@@ -16,8 +18,7 @@ import Right from 'material-ui/svg-icons/navigation/chevron-right';
 import First from 'material-ui/svg-icons/navigation/first-page';
 import Last from 'material-ui/svg-icons/navigation/last-page';
 import {getProducts} from "../../../actions/RequestManager";
-import {connect} from "react-redux";
-import {bindActionCreators} from "redux";
+
 
 class AdminProducts extends Component {
   constructor(props) {
@@ -42,8 +43,6 @@ class AdminProducts extends Component {
 
   }
 
-
-
   render() {
     const styles = {
       table: {
@@ -54,10 +53,8 @@ class AdminProducts extends Component {
       }
     };
 
-    console.log(this.props);
-
     const onSelectProduct = (productId) => {
-      this.props.history.push(`/admin/products/edit/${productId}`);
+      this.props.history.push(`/admin/product/${productId}`);
     };
 
     return (

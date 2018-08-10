@@ -1,19 +1,21 @@
 import React, { Component } from 'react';
 import { Tabs, Tab } from 'material-ui/Tabs';
-import { enumSalad, enumJuice } from "../../Enum";
 
 /**
  * @props
  *    props
  *    width
  *    className
+ *    tabList
+ *    selectedTab?
+ *    handleDivider
  */
 export default class ShopTabs extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      value: props.tabList[0].value,
+      value: props.selectedTab ? props.selectedTab : props.tabList[0].value,
       slideIndex: 0
     };
   }

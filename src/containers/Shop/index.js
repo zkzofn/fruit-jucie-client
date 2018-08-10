@@ -4,7 +4,7 @@ import UpperBar from '../../components/UpperBar';
 import ShopTabs from '../../components/Tabs/ShopTabs';
 import CardImage from '../../components/CardImage';
 import ShopItems from '../../components/ShopItems';
-import { enumSalad, enumJuice } from "../../components/Enum";
+import { enumCategory} from "../../components/Enum";
 
 /**
  * @props
@@ -15,7 +15,7 @@ export default class Shop extends Component {
     super(props);
 
     this.state = {
-      divider: enumSalad.value  //salad, juice Tabs를 구분하는 구분자
+      divider: enumCategory.salad.value  //salad, juice Tabs를 구분하는 구분자
     }
   }
 
@@ -33,12 +33,13 @@ export default class Shop extends Component {
       }
     };
     
-    const tabList = [enumSalad, enumJuice];
+    const tabList = [enumCategory.salad, enumCategory.juice, enumCategory.fruits];
 
     return (
       <div>
         <UpperBar text="" />
         <ShopTabs
+          width={260}
           tabList={tabList}
           handleDivider={(divider) => this.handleDivider(divider)}
         />
