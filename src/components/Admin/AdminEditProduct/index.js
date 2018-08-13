@@ -7,7 +7,6 @@ import { enumCategory } from '../../Enum';
 import { getProduct, getProducts } from "../../../actions/RequestManager";
 import { Editor } from 'react-draft-wysiwyg';
 import { EditorState } from 'draft-js';
-import styles  from  './style.css';
 
 class AdminEditProduct extends Component {
   constructor(props) {
@@ -15,7 +14,7 @@ class AdminEditProduct extends Component {
 
     this.state = {
       category: "",
-      editorState: EditorState.createEmpty(),
+      editorState: EditorState.createEmpty()
     }
   }
 
@@ -58,6 +57,22 @@ class AdminEditProduct extends Component {
     console.log("clicked cancel button");
   };
 
+  handleDescription = (event) => {
+    this.setState({description: event.target.value});
+  };
+
+  handleName = (event) => {
+    this.setState({name: event.target.value});
+  };
+
+  handleDays = (event) => {
+    this.setState({days: event.target.value});
+  };
+
+  handlePrice = (event) => {
+    this.setState({price: event.target.value});
+  };
+
   render() {
     const { product } = this.props;
     const categoryList = _.map(enumCategory);
@@ -80,6 +95,7 @@ class AdminEditProduct extends Component {
           <span>Description: </span>
           <TextField
             value={this.state.description}
+            onChange={this.handleDescription}
           />
         </div>
 
@@ -87,6 +103,7 @@ class AdminEditProduct extends Component {
           <span>name: </span>
           <TextField
             value={this.state.name}
+            onChange={this.handleName}
           />
         </div>
 
@@ -95,30 +112,27 @@ class AdminEditProduct extends Component {
           <span>days: </span>
           <TextField
             value={this.state.days}
+            onChange={this.handleDays}
           />
         </div>
 
         <div>
-          <span>options: </span>
+          <span>price: (이거 수정해야해)</span>
           <TextField
-            value={this.state.options}
+            value={parseInt(this.state.price).toLocaleString()}
+            onChange={this.handlePrice}
           />
         </div>
+        <div>
 
-        <div>
-          <span>price: </span>
-          <TextField
-            value={this.state.price}
-          />
-        </div>
-        <div>
           <Editor
             editorState={this.state.editorState}
-            toolbarClassName={styles["rdw-editor-toolbar"]}
-            wrapperClassName={styles["rdw-editor-wrapper"]}
-            editorClassName={styles["rdw-editor-main"]}
+            toolbarClassName="rdw-storybook-toolbar"
+            wrapperClassName="rdw-storybook-wrapper"
+            editorClassName="rdw-storybook-editor"
             onEditorStateChange={this.onEditorStateChange}
-          />
+          />}
+
         </div>
         <div>
           <RaisedButton primary={true} label="SAVE" onClick={this.handleSave} />

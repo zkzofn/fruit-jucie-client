@@ -92,9 +92,9 @@ var _MyPage = require('./components/MyPage');
 
 var _MyPage2 = _interopRequireDefault(_MyPage);
 
-var _EditProduct = require('./components/Admin/AdminEditProduct');
+var _AdminEditProduct = require('./components/Admin/AdminEditProduct');
 
-var _EditProduct2 = _interopRequireDefault(_EditProduct);
+var _AdminEditProduct2 = _interopRequireDefault(_AdminEditProduct);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -132,8 +132,8 @@ _reactDom2.default.render(_react2.default.createElement(
         _react2.default.createElement(_reactRouter.Route, { path: '/order', component: _Order2.default }),
         _react2.default.createElement(_reactRouter.Route, { path: '/payment', component: _Payment2.default }),
         _react2.default.createElement(_reactRouter.Route, { path: '/myPage', component: _MyPage2.default }),
-        _react2.default.createElement(_reactRouter.Route, { path: '/admin/products/edit/:productId', component: _EditProduct2.default }),
         _react2.default.createElement(_reactRouter.Route, { path: '/admin', component: _Admin2.default }),
+        _react2.default.createElement(_reactRouter.Route, { path: '/admin/products/edit/:productId', component: _AdminEditProduct2.default }),
         _react2.default.createElement(_Footer2.default, null)
       )
     )

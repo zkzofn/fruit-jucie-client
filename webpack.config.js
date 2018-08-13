@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   entry: [
@@ -31,10 +32,27 @@ module.exports = {
           presets: ['react', 'es2015', 'stage-1']
         }
       },
+      // {
+      //   test: /\.css$/,
+      //   exclude: /Draft\.css$/,
+      //   loader: ExtractTextPlugin.extract({
+      //     fallback: "style-loader",
+      //     use: "css-loader?modules&importLoaders=1&localIdentName=[local]!postcss-loader"
+      //   }),
+      // },
       {
         test: /\.css$/,
-        loader: 'style!css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]'
+        loader: 'style-loader!css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]'
       },
+      {
+        test: /Draft\.css$/,
+        loader: 'style-loader!css-loader'
+      },
+      // {
+      //   test: /\.css$/,
+      //   loader: 'css-loader',
+      //   query: {modules: true, localIdentName: '[name][local]_[hash:base64:5]'}
+      // },
       {
         test: /\.(eot|svg|ttf|woff|woff2)$/,
         loader: 'file?name=public/fonts/[name].[ext]'

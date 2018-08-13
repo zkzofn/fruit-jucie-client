@@ -72,6 +72,7 @@ class AdminProducts extends Component {
             enableSelectAll={false}
           >
             <TableRow>
+              <TableHeaderColumn>Image</TableHeaderColumn>
               <TableHeaderColumn>Category</TableHeaderColumn>
               <TableHeaderColumn>Name</TableHeaderColumn>
               <TableHeaderColumn>Days</TableHeaderColumn>
@@ -87,6 +88,7 @@ class AdminProducts extends Component {
           >
             {this.props.products.map((product, index) => (
               <TableRow key={index} onMouseDown={() => onSelectProduct(product.id)}>
+                <TableHeaderColumn><img src="http://via.placeholder.com/80x80" alt=""/></TableHeaderColumn>
                 <TableRowColumn>{product.category_name_en}</TableRowColumn>
                 <TableRowColumn>{product.name}</TableRowColumn>
                 <TableRowColumn>{product.days}</TableRowColumn>
