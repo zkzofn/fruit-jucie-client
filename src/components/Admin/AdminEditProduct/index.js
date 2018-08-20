@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { DropDownMenu, MenuItem, RaisedButton, TextField } from 'material-ui'
+import { DropDownMenu, MenuItem, RaisedButton, TextField, SelectField } from 'material-ui'
 import _ from 'lodash';
 import { enumCategory } from '../../Enum';
-import { getProduct, getProducts } from "../../../actions/RequestManager";
+import { getProduct, getProducts, postUpload } from "../../../actions/RequestManager";
 import { Editor } from 'react-draft-wysiwyg';
 import { EditorState } from 'draft-js';
 
@@ -14,7 +14,9 @@ class AdminEditProduct extends Component {
 
     this.state = {
       category: "",
-      editorState: EditorState.createEmpty()
+      editorState: EditorState.createEmpty(),
+      priceErrorMessage: "",
+      uploadedImages: []
     }
   }
 
@@ -43,11 +45,39 @@ class AdminEditProduct extends Component {
     });
   };
 
+  handleUploadImage = (file) => {
+    // let { uploadedImages } = this.state;
+
+    // const data = new FormData();
+    // data.append('image', file);
+
+    // const imageObject = {
+    //   file: data,
+    //   localSrc: URL.createObjectURL(file),
+    // };
+
+    // uploadedImages.push(imageObject);
+
+    // this.setState({uploadedImages});
+
+    // const imageFile = new Blob(file,  { type: 'image/png' })
+    let data = new FormData();
+    data.append(file.name, file);
+
+    return new Promise((resolve, reject) => {
+      this.props.postUpload(data).then(res => {
+        console.log(res);
+      });
+
+      resolve({ data: { link: "http://test.com" } });
+    });
+  };
+
   componentDidMount() {
     this.setState({category: this.props.product.category_name_en});
   }
 
-  handleCategory = (event, index, value) => this.setState({value});
+  handleCategory = (event, index, category) => this.setState({category});
 
   handleSave = () => {
     console.log("clicked save button");
@@ -65,43 +95,51 @@ class AdminEditProduct extends Component {
     this.setState({name: event.target.value});
   };
 
-  handleDays = (event) => {
-    this.setState({days: event.target.value});
+  handleDays = (event, index, days) => {
+    this.setState({days: days === 0 ? null : days});
   };
 
   handlePrice = (event) => {
-    this.setState({price: event.target.value});
+    this.setState({
+      price: event.target.value === "" ? 0 : parseInt(event.target.value),
+    });
   };
+
+
 
   render() {
     const { product } = this.props;
     const categoryList = _.map(enumCategory);
 
-    console.log(product);
+    console.log(this.state);
 
     return (
       <div className="alignCenter">
         <div>
-          <span>Category: </span>
-          <DropDownMenu value={this.state.category} onChange={this.handleCategory}>
+          <SelectField
+            floatingLabelText="Category"
+            value={this.state.category}
+            onChange={this.uploadCallback}
+            style={{textAlign: "left"}}
+          >
             {
               categoryList.map((category, index) => {
                 return <MenuItem key={index} value={category.value} primaryText={category.label} />
               })
             }
-          </DropDownMenu>
+          </SelectField>
         </div>
         <div>
-          <span>Description: </span>
           <TextField
+            floatingLabelText="Description"
             value={this.state.description}
             onChange={this.handleDescription}
           />
         </div>
 
         <div>
-          <span>name: </span>
           <TextField
+            floatingLabelText="Name"
             value={this.state.name}
             onChange={this.handleName}
           />
@@ -109,34 +147,48 @@ class AdminEditProduct extends Component {
 
 
         <div>
-          <span>days: </span>
-          <TextField
+          <SelectField
+            floatingLabelText="Days"
             value={this.state.days}
             onChange={this.handleDays}
-          />
+            style={{textAlign: "left"}}
+          >
+            <MenuItem value={0} primaryText="단품(정기배송 X)" />
+            <MenuItem value={3} primaryText="주 3회" />
+            <MenuItem value={5} primaryText="주 5회" />
+          </SelectField>
         </div>
 
         <div>
-          <span>price: (이거 수정해야해)</span>
           <TextField
-            value={parseInt(this.state.price).toLocaleString()}
+            floatingLabelText="Price (수정 필)"
+            value={parseInt(this.state.price)}
             onChange={this.handlePrice}
+            style={{textAlign: "left"}}
+            errorText={this.state.priceErrorMessage}
           />
         </div>
-        <div>
-
+        <div className="flex">
           <Editor
             editorState={this.state.editorState}
-            toolbarClassName="rdw-storybook-toolbar"
-            wrapperClassName="rdw-storybook-wrapper"
-            editorClassName="rdw-storybook-editor"
+            wrapperClassName="home-wrapper"
+            editorClassName="home-editor"
             onEditorStateChange={this.onEditorStateChange}
-          />}
-
+            toolbar={{image: {uploadCallback: this.handleUploadImage}}}
+          />
         </div>
         <div>
-          <RaisedButton primary={true} label="SAVE" onClick={this.handleSave} />
-          <RaisedButton secondary={true} label="CANCEL" onClick={this.handleCancel} />
+          <RaisedButton
+            className="mr-4"
+            primary={true}
+            label="SAVE"
+            onClick={this.handleSave}
+          />
+          <RaisedButton
+            secondary={true}
+            label="CANCEL"
+            onClick={this.handleCancel}
+          />
         </div>
       </div>
     )
@@ -153,7 +205,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
-    getProduct
+    getProduct,
+    postUpload
   }, dispatch)
 };
 

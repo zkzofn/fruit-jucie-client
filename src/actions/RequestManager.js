@@ -19,6 +19,7 @@ export const POST_ORDER = "POST_ORDER";
 export const GET_VALIDATE = "GET_VALIDATE";
 export const POST_LOGIN = "POST_LOGIN";
 export const GET_MY_ORDER_LIST = "GET_MY_ORDER_LIST";
+export const POST_UPLOAD = "POST_UPLOAD";
 
 // export const getSomethings = ({pageNo, length, indexBy, indexType, values}) => {
 //   const query = {
@@ -199,6 +200,15 @@ export const getMyOrderList = (params) => {
 
   return {
     type: GET_MY_ORDER_LIST,
+    payload: request
+  }
+};
+
+export const postUpload = (data) => {
+  const request = SessionManager.instance().post(`/upload`, data);
+
+  return {
+    type: POST_UPLOAD,
     payload: request
   }
 };
