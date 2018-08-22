@@ -3,6 +3,7 @@ import axios from 'axios';
 
 export const GET_PRODUCTS = "GET_PRODUCTS";
 export const GET_PRODUCT = "GET_PRODUCT";
+export const PATCH_PRODUCT = "PATCH_PRODUCT";
 export const GET_PRODUCT_CHECK = "GET_PRODUCT_CHECK";
 export const GET_USER = "GET_USER";
 export const POST_USER = "POST_USER";
@@ -55,6 +56,15 @@ export const getProduct = (params) => {
     payload: request
   }
 };
+
+export const patchProduct = (params) => {
+  const request = SessionManager.instance().patch(`/product`, params);
+
+  return {
+    type: PATCH_PRODUCT,
+    payload: request
+  }
+}
 
 export const getProductCheck = (params) => {
   const request = SessionManager.instance().get(`/product/check`, params);

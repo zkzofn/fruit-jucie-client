@@ -3,10 +3,14 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { DropDownMenu, MenuItem, RaisedButton, TextField, SelectField } from 'material-ui'
 import _ from 'lodash';
-import { enumCategory } from '../../Enum';
-import { getProduct, getProducts, postUpload } from "../../../actions/RequestManager";
 import { Editor } from 'react-draft-wysiwyg';
-import { EditorState } from 'draft-js';
+import { EditorState, convertToRaw, ContentState } from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
+import htmlToDraft from 'html-to-draftjs';
+
+import { enumCategory } from '../../Enum';
+import { getProduct, patchProduct, postUpload } from "../../../actions/RequestManager";
+
 
 class AdminEditProduct extends Component {
   constructor(props) {
@@ -14,6 +18,10 @@ class AdminEditProduct extends Component {
 
     this.state = {
       category: "",
+      name: "",
+      days: "",
+      price: "",
+      description: "",
       editorState: EditorState.createEmpty(),
       priceErrorMessage: "",
       uploadedImages: []
@@ -29,6 +37,7 @@ class AdminEditProduct extends Component {
       console.log(result);
 
       const { product } = result.payload.data;
+
       this.setState({
         category: product.category_name_en,
         description: product.description,
@@ -36,40 +45,33 @@ class AdminEditProduct extends Component {
         days: product.days,
         price: product.price_sale
       });
+
+      const contentBlock = htmlToDraft(product.description);
+      if (contentBlock) {
+        const contentState = ContentState.createFromBlockArray(contentBlock);
+        const editorState = EditorState.createWithContent(contentState);
+        this.setState({
+          editorState
+        });
+      }
     });
   }
 
   onEditorStateChange = (editorState) => {
     this.setState({
       editorState,
+      description: draftToHtml(convertToRaw(editorState.getCurrentContent()))
     });
   };
 
   handleUploadImage = (file) => {
-    // let { uploadedImages } = this.state;
-
-    // const data = new FormData();
-    // data.append('image', file);
-
-    // const imageObject = {
-    //   file: data,
-    //   localSrc: URL.createObjectURL(file),
-    // };
-
-    // uploadedImages.push(imageObject);
-
-    // this.setState({uploadedImages});
-
-    // const imageFile = new Blob(file,  { type: 'image/png' })
     let data = new FormData();
     data.append(file.name, file);
 
     return new Promise((resolve, reject) => {
       this.props.postUpload(data).then(res => {
-        console.log(res);
+        resolve({ data: { link: res.payload.data.imagePath } });
       });
-
-      resolve({ data: { link: "http://test.com" } });
     });
   };
 
@@ -81,14 +83,24 @@ class AdminEditProduct extends Component {
 
   handleSave = () => {
     console.log("clicked save button");
+    // 먼저 확인 창 한번 띄우고 가자
+
+    const params = {
+      productId: this.props.match.params.productId,
+      category: this.state.category,
+      description: this.state.description,
+      name: this.state.name,
+      days: this.state.days,
+      price: this.state.price_sale
+    };
+
+    this.props.patchProduct(params).then(res => {
+      console.log(res.payload.data);
+    });
   };
 
   handleCancel = () => {
     console.log("clicked cancel button");
-  };
-
-  handleDescription = (event) => {
-    this.setState({description: event.target.value});
   };
 
   handleName = (event) => {
@@ -100,6 +112,9 @@ class AdminEditProduct extends Component {
   };
 
   handlePrice = (event) => {
+    // 가격수정 안되는거 해야한다
+
+
     this.setState({
       price: event.target.value === "" ? 0 : parseInt(event.target.value),
     });
@@ -108,7 +123,6 @@ class AdminEditProduct extends Component {
 
 
   render() {
-    const { product } = this.props;
     const categoryList = _.map(enumCategory);
 
     console.log(this.state);
@@ -119,7 +133,7 @@ class AdminEditProduct extends Component {
           <SelectField
             floatingLabelText="Category"
             value={this.state.category}
-            onChange={this.uploadCallback}
+            onChange={this.handleCategory}
             style={{textAlign: "left"}}
           >
             {
@@ -129,13 +143,7 @@ class AdminEditProduct extends Component {
             }
           </SelectField>
         </div>
-        <div>
-          <TextField
-            floatingLabelText="Description"
-            value={this.state.description}
-            onChange={this.handleDescription}
-          />
-        </div>
+
 
         <div>
           <TextField
@@ -161,7 +169,7 @@ class AdminEditProduct extends Component {
 
         <div>
           <TextField
-            floatingLabelText="Price (수정 필)"
+            floatingLabelText="Price"
             value={parseInt(this.state.price)}
             onChange={this.handlePrice}
             style={{textAlign: "left"}}
@@ -206,6 +214,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     getProduct,
+    patchProduct,
     postUpload
   }, dispatch)
 };
