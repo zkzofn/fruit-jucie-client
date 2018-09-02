@@ -18,7 +18,7 @@ import Right from 'material-ui/svg-icons/navigation/chevron-right';
 import First from 'material-ui/svg-icons/navigation/first-page';
 import Last from 'material-ui/svg-icons/navigation/last-page';
 import {getProducts} from "../../../actions/RequestManager";
-
+import BackgroundImage from '../../BackgroundImage';
 
 class AdminProducts extends Component {
   constructor(props) {
@@ -46,7 +46,7 @@ class AdminProducts extends Component {
   render() {
     const styles = {
       table: {
-        headerHeight: "400px"
+        headerHeight: "800px"
       },
       pageNation: {
         textAlign: "center"
@@ -88,7 +88,9 @@ class AdminProducts extends Component {
           >
             {this.props.products.map((product, index) => (
               <TableRow key={index} onMouseDown={() => onSelectProduct(product.id)}>
-                <TableHeaderColumn><img src="http://via.placeholder.com/80x80" alt=""/></TableHeaderColumn>
+                <TableHeaderColumn>
+                  <BackgroundImage url={product.image_path} height={201} />
+                </TableHeaderColumn>
                 <TableRowColumn>{product.category_name_en}</TableRowColumn>
                 <TableRowColumn>{product.name}</TableRowColumn>
                 <TableRowColumn>{product.days}</TableRowColumn>

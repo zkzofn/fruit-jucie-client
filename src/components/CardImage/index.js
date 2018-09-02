@@ -9,6 +9,7 @@ import FlatButton from 'material-ui/FlatButton';
  *    height
  *    title
  *    subtitle
+ *    productId
  */
 export default class CardImage extends Component {
   constructor(props) {
@@ -17,10 +18,12 @@ export default class CardImage extends Component {
   }
 
   onClickItem() {
-    this.props.history.push("/shop/1");
+    this.props.history.push(`/shop/${this.props.productId}`);
   }
 
   render() {
+    console.log(this.props);
+
     const className = this.props.className ? this.props.className : "";
     const url = this.props.url ? this.props.url : "https://i.imgur.com/tG6Sw83.jpg";
     const height = this.props.height ? this.props.height : 500;

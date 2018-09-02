@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Dialog, FlatButton } from 'material-ui';
+import htmlParser from 'html-react-parser';
+
 import UpperBar from '../UpperBar';
 import SelectDay from '../Buttons/SelectDay';
 import PaymentBar from '../PaymentBar';
 import Order from '../Order';
 import CircularProgress from '../CircularProgress';
 import styleCSS from './style.css';
-
 import { getProduct, getProductCheck, postCart } from '../../actions/RequestManager';
 
 /**
@@ -243,15 +244,8 @@ class Item extends Component {
             onClickPaymentButton={this.onClickPaymentButton.bind(this)}
             onClickAddCartButton={this.onClickAddCartButton.bind(this)}
           />
-          <div
-            style={{textAlign: "center"}}
-
-          >
-            <img
-              src="https://i.imgur.com/x80XR2r.png"
-              className={styleCSS.productDetailImage}
-              // style={{width: "100%"}} // 화면 크기에 따라 폭 비율 셋팅해야해
-            />
+          <div style={{textAlign: "center"}}>
+            {htmlParser(this.props.product.description)}
           </div>
           <Dialog
             actions={cartAlertActions}

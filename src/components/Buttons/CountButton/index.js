@@ -48,7 +48,7 @@ class CountButton extends Component {
     };
 
     return (
-      <div className={className}>
+      <div className={className, "pt-2"}>
         <FloatingActionButton
           mini={true}
           style={styles.remove}
