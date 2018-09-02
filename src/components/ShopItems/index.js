@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import {connect} from "react-redux";
-import {bindActionCreators} from "redux";
+import { bindActionCreators } from "redux";
 
-import {getProducts} from "../../actions/RequestManager";
+import { getProducts } from "../../actions/RequestManager";
 import CardImage from '../../components/CardImage';
 import { enumCategory } from "../Enum";
 import CircularProgress from '../CircularProgress';

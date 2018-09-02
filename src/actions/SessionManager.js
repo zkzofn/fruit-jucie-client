@@ -9,10 +9,10 @@ let secretToken = Crypto.SHA1("fRu1t_token_privacy");
 let secretProfile = Crypto.SHA1("fRu1t_profile_privacy");
 
 // For production
-// const END_POINT = "http://13.124.237.236:3000";
+const END_POINT = "http://13.124.237.236:3000";
 
 // For dev-web-server
-const END_POINT = "http://localhost:3000";
+// const END_POINT = "http://localhost:3000";
 
 // For React dev server
 // const END_POINT = "/api";
