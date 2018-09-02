@@ -46,7 +46,7 @@ class ShopItems extends Component {
   }
 
   render() {
-    if (this.props.products.length === 0) {
+    if (this.props.products === undefined) {
       return <CircularProgress />
     }
 
